@@ -1,13 +1,24 @@
 import os
 import pprint as ppr
 import re
+from os.path import isdir, isfile
 from os.path import join as pj
 from os.path import sep as sep
+from shutil import copyfile, rmtree
 from subprocess import PIPE, Popen
 from sys import exit as x
 
+import toml
 import yaml
 from tabulate import tabulate
+
+
+def colgre(s):
+    return '\033[92m' + str(s) + '\033[0m'
+
+
+def colmag(s):
+    return '\033[95m' + str(s) + '\033[0m'
 
 
 def find(root, filter='.*', filter_type='f'):
@@ -24,6 +35,26 @@ def find(root, filter='.*', filter_type='f'):
                 if bool(re.search(filter, rdir)) is True:
                     detected.append(rdir)
     return(sorted(detected))
+
+
+def listdirs_only(root):
+    p = os.listdir(root)
+    r = []
+    for i in p:
+        fil = pj(root, i)
+        if isdir(fil):
+            r.append(fil)
+    return sorted(r)
+
+
+def listfiles_only(root):
+    p = os.listdir(root)
+    r = []
+    for i in p:
+        fil = pj(root, i)
+        if isfile(fil):
+            r.append(fil)
+    return sorted(r)
 
 
 def run_cmd(cmd, silent=True, debug=False):
@@ -58,17 +89,53 @@ def is_git(folder):
     return (True, out)
 
 
+def copy_file(src,  trg):
+    if exists(trg) is False:
+        mkdir(trg)
+    if isdir(trg) is True:
+        sn = shortname(src)
+        trg = pj(trg, sn)
+    print('Copy file ' + colmag(src) + ' to ' + colgre(trg))
+    copyfile(src, trg)
+
+
+def empty_dir(dir):
+    for f in os.listdir(dir):
+        os.remove(os.path.join(dir, f))
+
+
+def exists(dir):
+    return os.path.exists(dir)
+
+
 def mkdir(dir):
-    if not os.path.exists(dir):
+    if exists(dir) is False:
         os.makedirs(dir)
 
 
-def read_yaml(filename):
-    with open(filename, 'r') as stream:
-        try:
-            return(yaml.safe_load(stream))
-        except yaml.YAMLError as exc:
-            print(exc)
+def remove_dir(dir):
+    if exists(dir) is True:
+        rmtree(dir)
+
+
+def read_toml(filename):
+    if os.path.isfile(filename) is False:
+        print('yaml file does not exist: ' + filename)
+    else:
+        with open(filename) as filedata:
+            try:
+                data = filedata.read()
+                d = toml.loads(data)
+                return(d)
+            except Exception as e:
+                print('toml decode error: ' + str(filename))
+                raise(e)
+    return None
+
+
+def write_toml(data, filename):
+    with open(filename, 'w') as toml_file:
+        toml.dump(data, toml_file)
 
 
 def write_yaml(data, filename):
@@ -80,6 +147,29 @@ def write_array_to_file(data, filename, mode='w'):
     with open(filename, mode) as fp:
         for line in data:
             fp.write(line + '\n')
+
+
+def is_port_no(s):
+    try:
+        i = int(s)
+    except (TypeError, ValueError):
+        return False
+    else:
+        if i <= 65535:
+            return True
+    return False
+
+
+def lookup_env_value(env, rx):
+    r = None
+    for el in env:
+        if rxbool(rx, el):
+            r = env[el]
+    return r
+
+
+def shortname(p):
+    return re.search(r'[^/]+$', p).group(0)
 
 
 def rxsearch(rx, s, gr=0):

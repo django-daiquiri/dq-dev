@@ -2,7 +2,8 @@ import os
 import re
 from os.path import join as pj
 
-from util import find, rxsearch, uncomment_line
+from . import fixpath  # noqa
+from util import find, rxsearch, uncomment_line  # noqa
 
 scriptname = os.path.realpath(__file__)
 scriptdir = '/'.join(scriptname.split('/')[:-1])
@@ -14,7 +15,7 @@ def test_find():
 
 
 def assert_find(filter, alen, aelf, aell):
-    tf = pj(scriptdir, '..', 'testdata', 'find')
+    tf = pj(scriptdir, 'testdata', 'find')
     res = find(tf, filter)
     assert len(res) == alen
     assert \

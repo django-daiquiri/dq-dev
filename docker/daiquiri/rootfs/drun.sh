@@ -14,8 +14,10 @@ if [[ ! -f "${tfil}" ]]; then
 fi
 
 # render config files
-${HOME}/sh/expand-env-vars.sh \
-    "${HOME}/tpl/wp-config.php" "${WORDPRESS_PATH}/wp-config.php"
+if [[ ! -f "${WORDPRESS_PATH}/wp-config.php" ]]; then
+    ${HOME}/sh/expand-env-vars.sh \
+        "${HOME}/tpl/wp-config.php" "${WORDPRESS_PATH}/wp-config.php"
+fi
 
 ${HOME}/sh/expand-env-vars.sh \
     "${HOME}/tpl/Caddyfile.tpl" "${HOME}/Caddyfile"
@@ -27,10 +29,10 @@ if [[ "${ASYNC}" == "True" ]]; then
 fi
 
 # install custom and fixture app scripts if there
-if [ -f "${DQAPP}/install-custom.sh" ]; then
-    echo "Run ${DQAPP} custom installation and fixture script..."
-    ${DQAPP}/install-custom.sh
-fi
+# if [ -f "${DQAPP}/install-custom.sh" ]; then
+#     echo "Run ${DQAPP} custom installation and fixture script..."
+#     ${DQAPP}/install-custom.sh
+# fi
 
 cd "${DQAPP}"
 if [[ -z "$(ps aux | grep "[g]unicorn")" ]]; then
@@ -49,4 +51,9 @@ if [[ "${ASYNC}" == "True" ]]; then
 fi
 
 /usr/sbin/php-fpm7.3
+
+# execute custom scripts
+find /tmp/custom_scripts/up -type f -executable | sort | xargs -i /bin/bash {}
+
+# launch caddy
 caddy run --config ${HOME}/Caddyfile --adapter caddyfile --watch

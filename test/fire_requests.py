@@ -5,8 +5,9 @@ from os.path import join as pj
 
 import requests
 
-from py.colours import Colours
-from py.util import ptable, read_yaml
+import fixpath  # noqa
+from colours import Colours
+from util import ptable, read_yaml
 
 
 class ReqCheck():
@@ -18,7 +19,7 @@ class ReqCheck():
             'user-agent': self.conf['ua']
         }
         self.s_in = self.session_login()
-        self.s_out = requests.session()
+        self.s_out = requests.Session()
 
     def get(self, url, login=False):
         rqu = self.conf['urls']['base'] + url
@@ -62,7 +63,7 @@ class ReqCheck():
         return tab
 
     def session_login(self):
-        sess = requests.session()
+        sess = requests.Session()
         src = sess.get(self.conf['urls']['base'] + '/accounts/login/')
         formtoken = re.search(
             r'(csrfmiddlewaretoken.*value=")([a-zA-Z0-9]+)', src.text
@@ -93,7 +94,7 @@ class ReqCheck():
 if __name__ == '__main__':
     scriptname = os.path.realpath(__file__)
     scriptdir = '/'.join(scriptname.split('/')[:-1])
-    conffile = pj(scriptdir, 'py', 'testconf', 'request_test.yaml')
+    conffile = pj(scriptdir, 'testconf', 'request_test.yaml')
 
     parser = argparse.ArgumentParser(
         description=os.path.basename(__file__).title() + ': ' +

@@ -34,6 +34,10 @@ RUN apt update -y && apt install -y \
 
 RUN pear install http_request2
 
+COPY ./rootfs /
+RUN chmod -R 777 /tmp
+RUN find /tmp/custom_scripts/build -type f -executable | sort | xargs -i /bin/bash {}
+
 RUN mkdir -p /run/php \
  && sed -i "s|.*listen =.*|listen = /run/php/php.sock|g" "${PHP_CONF}"
 
@@ -57,7 +61,6 @@ RUN git clone \
 
 # RUN apt install -y <ADDITIONAL_PACKAGES>
 
-COPY ./rootfs /
 RUN ln -s /vol/tools/shed/caddy /bin/caddy
 
 RUN groupadd -g "${GID}" "${GNAME}" \

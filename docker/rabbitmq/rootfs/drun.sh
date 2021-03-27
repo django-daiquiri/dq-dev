@@ -7,5 +7,8 @@
 
 ${HOME}/sh/init-rabbitmq.sh &
 
-# Launch
+# execute custom scripts
+find /tmp/custom_scripts/up -type f -executable | sort | xargs -i /bin/bash {}
+
+# launch
 /usr/local/bin/docker-entrypoint.sh rabbitmq-server

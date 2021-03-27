@@ -1,0 +1,119 @@
+# folder of the app's source code is looked up
+# in the 'folders_on_host' entry below
+active_app = "daiquiri"
+
+[enable_containers]
+daiquiri = true
+pgapp = true
+pgdata = true
+wpdb = true
+rabbitmq = false
+
+[enable_database_volumes]
+pgapp = false
+pgdata = true
+wpdb = true
+
+[folders_on_host]
+# daiquiri source repo
+dq_source = "<HOME>/rolling/aip/github/daiquiri"
+# possible app repos
+applause = "<HOME>/rolling/aip/gitlab/applause-app"
+daiquiri = "<HOME>/rolling/aip/github/daiquiri-app"
+rave = "<HOME>/rolling/aip/gitlab/rave-app"
+xmmssc = "<HOME>/rolling/aip/gitlab/xmmssc-app"
+# others
+shed = "<HOME>/tools/shed"
+testdata = "<HOME>/rolling/aip/self/app-testdata-importer"
+
+[docker_volume_mountpoints]
+dq_source = "/home/dq/source"
+dq_app = "/home/dq/app"
+shed = "/vol/tools/shed"
+testdata = "/vol/testdata"
+
+# please make sure the daiquiri port matches the one in the base_url below
+# db ports do not have to be exposed, but it's nice for test and development
+[exposed_ports]
+daiquiri = 9280
+# pgapp = 9281
+# pgdata = 9282
+# wpdb = 9283
+# rabbitmq = 9284
+
+[env.daiquiri]
+url_base = "http://localhost:9280"
+site_url = "<URL_BASE>"
+server_https = "on"
+wordpress_title = "dqdev"
+wordpress_url = "/cms/"
+wordpress_cli = "/usr/bin/wp"
+wordpress_db_host = "<CONTAINER_WPDB>:3306"
+wordpress_db_name = "wordpress"
+wordpress_table_prefix = "wp_"
+database_app = "postgresql://daiquiri_app:daiquiri_app@<CONTAINER_PGAPP>/daiquiri_app"
+database_data = "postgresql://daiquiri_data:daiquiri_data@<CONTAINER_PGDATA>/daiquiri_data"
+allowed_hosts = "*"
+secret_key = "verysecretkey"
+debug = true
+account_email_verification = "optional"
+archive_base_path = "/tmp/files"
+archive_download_dir = "/tmp/download"
+files_base_path = "/tmp/files"
+files_base_url = "<URL_BASE>/files"
+query_download_dir = "/tmp/download"
+query_upload_dir = "/tmp/upload"
+log_dir = "/var/log"
+log_level = "INFO"
+tap_schema = "tap_schema"
+oai_schema = "oai_schema"
+tap_upload = "tap_upload"
+async = false
+celery_broker_url = "amqp://gaia:password@<CONTAINER_RABBITMQ>:5672/gaia"
+
+[env]
+[env.pgapp]
+postgres_host = "pgapp"
+postgres_port = 5432
+postgres_db = "daiquiri_app"
+
+[env.pgdata]
+postgres_host = "pgdata"
+postgres_port = 5432
+postgres_db = "daiquiri_data"
+
+[env.wpdb]
+mysql_hostname = "<CONTAINER_WPDB>"
+mysql_port = 3306
+mysql_database = "wordpress"
+
+[env.rabbitmq]
+rabbitmq_vhost = "gaia"
+rabbitmq_node_port = 5672
+rabbitmq_logs = "-"
+
+# define additional packages that are installed during the docker container
+# build process from the base image's repositories, uncomment below
+[additional_packages]
+# daiquiri = [ "wget", "procps" ]
+# pgapp = [ "procps" ]
+# pgdata = [ "procps" ]
+# wpdb = [ "procps" ]
+
+# the following entries define folders that contain custom scripts
+# these can be run during docker build or when everything is up
+# the key corresponds to the container name, the value is the folder
+# all scripts in the folder will be executed in alphabetically order
+# scripts in sub folders won't be considered
+[custom_scripts]
+[custom_scripts.build]
+# daiquiri = "/tmp/bash_scripts/build"
+# pgapp = "<HOME>/bash_scripts/build"
+# pgdata = "<HOME>/<ACTIVE_APP>/bash_scripts/build"
+# wpdb = "/tmp/bash_scripts/build"
+
+[custom_scripts.up]
+# daiquiri = ""
+# pgapp = ""
+# pgdata = ""
+# wpdb = ""

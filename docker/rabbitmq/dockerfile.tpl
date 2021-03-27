@@ -9,6 +9,8 @@ ENV HOME=/home/dq
 RUN apt update -y
 
 COPY ./rootfs /
+RUN chmod -R 777 /tmp
+RUN find /tmp/custom_scripts/build -type f -executable | sort | xargs -i /bin/bash {}
 
 RUN groupadd -g "${GID}" "${GNAME}" \
  && useradd -m -s /bin/bash -g "${GNAME}" -u "${UID}" "${USER}" \

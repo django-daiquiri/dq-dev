@@ -24,12 +24,13 @@ class DCompose():
             arr[i] = self.expand_vars(arr[i], container_name)
         return arr
 
-    def expand_vars(self, str, container_name=None):
-        if '<' not in str and '>' not in str:
-            return str
+    def expand_vars(self, string, container_name=None):
+        if '<' not in string and '>' not in string:
+            return string
         # expand variables set in config
-        str = str\
+        string = string\
             .replace('<HOME>', os.environ['HOME'])\
+            .replace('<ACTIVE_APP>', self.conf['conf']['active_app'])\
             .replace('<CONTAINER_PGAPP>', self.nam_con('pgapp'))\
             .replace('<CONTAINER_PGDATA>', self.nam_con('pgdata'))\
             .replace('<CONTAINER_WPDB>', self.nam_con('wpdb'))\
@@ -39,18 +40,21 @@ class DCompose():
         # expand env var placeholders set in other env vars
         if container_name is not None:
             try:
-                env_vars = self.profconf['conf']['env'][container_name]
+                env_vars = self.conf['conf']['env'][container_name]
             except KeyError:
                 pass
             else:
-                for env_var in env_vars:
-                    key, val = env_var.split('=')
-                    if key != "" and val != "":
-                        str = str.replace('<' + key.upper() + '>', val)
+                for k in env_vars:
+                    key = str(k)
+                    val = str(env_vars[key])
+                    if key != '' and val != '':
+                        string = string.replace('<' + key.upper() + '>', val)
         # add additional packages
         if container_name is not None:
             try:
-                p = ' '.join(self.profconf['conf']['additional_packages'][container_name])
+                p = ' '.join(
+                    self.conf['conf']['additional_packages'][container_name]
+                )
             except KeyError:
                 pass
             except TypeError:
@@ -69,19 +73,22 @@ class DCompose():
                 sys.exit()
             else:
                 var = '<ADDITIONAL_PACKAGES>'
-                if var in str:
-                    str = str.replace('<ADDITIONAL_PACKAGES>', p)
-                    str = uncomment_line(str)
-        return str
+                if var in string:
+                    string = string.replace('<ADDITIONAL_PACKAGES>', p)
+                    string = uncomment_line(string)
+        return string
+
+    def iter_services(self):
+        return self.conf['conf']['env']
 
     # service and container names
     def make_names(self):
-        for service in self.profconf['conf']['env']:
+        for service in self.iter_services():
             self.names[service] = {}
             self.names[service]['con'] =\
-                'dqdev' + '-' + service + '-' + self.profconf['name']
+                'dqdev' + '-' + service + '-' + self.conf['prof']['name']
             self.names[service]['img'] =\
-                'dqdev' + '_' + service + '_' + self.profconf['name']
+                'dqdev' + '_' + service + '_' + self.conf['prof']['name']
 
     def nam_img(self, service):
         return self.names[service]['img']
@@ -98,7 +105,7 @@ class DCompose():
 
     def container_enabled(self, container_name):
         try:
-            return self.profconf['conf']['enable_containers'][container_name]
+            return self.conf['conf']['enable_containers'][container_name]
         except KeyError:
             return False
 
@@ -108,7 +115,7 @@ class DCompose():
         self.dcyaml['services'] = {}
         self.dcyaml['volumes'] = {}
 
-        for service in self.profconf['conf']['env']:
+        for service in self.iter_services():
             if self.container_enabled(service) is True:
                 c = self.nam_img(service)
                 self.dcyaml['services'][c] = {}
@@ -129,23 +136,29 @@ class DCompose():
 
     # env
     def add_env(self):
-        for service in self.profconf['conf']['env']:
+        for service in self.iter_services():
             try:
-                env = self.expand_vars_arr(self.profconf['conf']['env'][service], service)
+                env_arr = []
+                for k in self.conf['conf']['env'][service]:
+                    key = str(k)
+                    val = str(self.conf['conf']['env'][service][key])
+                    env_arr.append(key.upper() + '=' + val)
+                env = self.expand_vars_arr(
+                    env_arr, service
+                )
             except KeyError:
                 pass
             else:
                 try:
-                    exposed_ports = self.profconf['conf']['exposed_ports'][service]
+                    p = self.conf['conf']['portmap'][service]
                 except KeyError:
                     pass
-                if exposed_ports is not None:
-                    p = exposed_ports[0].split(':')[0]
-                    env.append('EXPOSED_PORT=' + str(p))
+                else:
+                    env.append('EXPOSED_PORT=' + str(p['exposed']))
 
-                for mp in self.profconf['conf']['docker_volume_mountpoints']:
+                for mp in self.conf['conf']['docker_volume_mountpoints']:
                     key = ''.join(re.findall('[A-Z0-9]', mp.upper()))
-                    val = self.profconf['conf']['docker_volume_mountpoints'][mp]
+                    val = self.conf['conf']['docker_volume_mountpoints'][mp]
                     env.append(key + '=' + val)
                 # try because exception occurs when a container is disabled
                 try:
@@ -153,19 +166,22 @@ class DCompose():
                 except KeyError:
                     pass
 
+    # network
+    def add_networks(self):
+        nn = self.prof.conf['prof']['network_name']
+        self.dcyaml['networks'] = {}
+        self.dcyaml['networks'][nn] = {}
+        self.dcyaml['networks'][nn]['external'] = {}
+        self.dcyaml['networks'][nn]['external']['name'] = nn
+        for service in self.dcyaml['services']:
+            self.dcyaml['services'][service]['networks'] = [nn]
+
     # ports
     def add_ports(self):
-        for service in self.profconf['conf']['exposed_ports']:
+        for service in self.conf['conf']['portmap']:
             try:
-                p =\
-                    self.profconf['conf']['exposed_ports'][service]
-            except KeyError:
-                pass
-            if p is None:
-                p = []
-            # same as in the last lines of add_env
-            try:
-                self.dcyaml['services'][self.nam_img(service)]['ports'] = p
+                self.dcyaml['services'][self.nam_img(service)]['ports'] =\
+                    [self.conf['conf']['portmap'][service]['envstr']]
             except KeyError:
                 pass
 
@@ -182,29 +198,29 @@ class DCompose():
             for vol in self.volumes:
                 if rxbool(vol['mount_inside'], service) is True:
                     self.dcyaml['services'][service]['volumes'].append(
-                        vol['name'] + ':' + vol['mp']
+                        vol['name'] + ':' + self.expand_vars(vol['mp'])
                     )
 
     def make_volumes(self):
         vols = []
-        for volname in self.profconf['conf']['docker_volume_mountpoints']:
+        for volname in self.conf['conf']['docker_volume_mountpoints']:
             try:
-                fol = self.profconf['conf']['folders_on_host'][volname]
+                fol = self.conf['conf']['folders_on_host'][volname]
             except KeyError:
-                fol = self.profconf['conf']['folders_on_host'][
-                    self.profconf['conf']['active_app']
+                fol = self.conf['conf']['folders_on_host'][
+                    self.conf['conf']['active_app']
                 ]
             v = self.make_volume(
                 volname + '_' + self.profconf['name'],
-                self.profconf['conf']['docker_volume_mountpoints'][volname],    # noqa: E501
+                self.conf['conf']['docker_volume_mountpoints'][volname],    # noqa: E501
                 fol,
                 volname.startswith('dq_')
             )
             if self.valid_volume(v) is True:
                 vols.append(v)
 
-        for volname in self.profconf['conf']['enable_database_volumes']:
-            if self.profconf['conf']['enable_database_volumes'][volname] is True:   # noqa: E501
+        for volname in self.conf['conf']['enable_database_volumes']:
+            if self.conf['conf']['enable_database_volumes'][volname] is True:   # noqa: E501
                 volfolder = pj(
                     self.prof.get_profile_folder_by_name(
                         self.profconf['name']
@@ -274,10 +290,10 @@ class DCompose():
             pprint(self.dcyaml)
         else:
             print(
-                'Write dc yaml to ' +
-                self.col.yel(self.profconf['dc_yaml'])
+                'Write dc yaml to    ' +
+                self.col.yel(self.conf['files']['dc_yaml']) + '\n'
             )
-            write_yaml(self.dcyaml, self.profconf['dc_yaml'])
+            write_yaml(self.dcyaml, self.conf['files']['dc_yaml'])
 
     def render_dockerfile_templates(self):
         arr = find(self.conf['basedir'], '.*/dockerfile.tpl', 'f')
@@ -311,6 +327,7 @@ class DCompose():
         self.add_depends_on()
         self.add_env()
         self.add_ports()
+        self.add_networks()
         self.add_volumes()
 
         self.write_yaml()

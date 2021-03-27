@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 import argparse
 import os
+from sys import exit as x
 
 from py.colours import Colours
 from py.dcompose import DCompose
@@ -12,7 +13,8 @@ from py.util import pprint
 parser = argparse.ArgumentParser(
     description=os.path.basename(__file__).title() + ': ' +
     'dq-dev, daiquiri docker compose dev setup',
-    formatter_class=argparse.RawTextHelpFormatter
+    epilog='If used without arg, profile list is displayed\n',
+    formatter_class=argparse.RawDescriptionHelpFormatter
 )
 parser.add_argument(
     '-r', '--run', type=str, nargs='*', default=None,
@@ -32,7 +34,11 @@ parser.add_argument(
 )
 parser.add_argument(
     '-rmi', '--remove_images', action='store_true', default=False,
-    help='remove images when running "down", used in combination "-d -rmi"\n\n'
+    help='remove images when running "down", use in combination "-d -rmi"\n\n'
+)
+parser.add_argument(
+    '-rmn', '--remove_network', action='store_true', default=False,
+    help='remove daiquiri containers\' network'
 )
 parser.add_argument(
     '-g', '--tail_logs', type=str, nargs='*', default=None,
@@ -55,10 +61,6 @@ parser.add_argument(
     help='display currently active profile'
 )
 parser.add_argument(
-    '-l', '--list_profiles', action='store_true', default=False,
-    help='list all available profiles'
-)
-parser.add_argument(
     '-n', '--dry_run', action='store_true', default=False,
     help=(
         'do not run any docker-compose commands nor ' +
@@ -73,9 +75,10 @@ if __name__ == '__main__':
     conf = init(args)
     prof = Profile(conf)
     dco = DCompose(conf, prof)
-    pprint(conf)
-    if args.list_profiles is True:
+
+    if conf['args']['list'] is True:
         prof.list()
+        x()
 
     if args.create_profile is not None:
         prof.create(args.create_profile)
@@ -85,10 +88,7 @@ if __name__ == '__main__':
 
     if args.display_profile is not None:
         c = prof.read_profile_config(conf['args']['display_profile'])
-        print(
-            'Currently set profile',
-            col.yel(c['name'])
-        )
+        print('Currently set profile', col.yel(c['name']))
         pprint(c)
 
     if args.render is not None:
@@ -98,26 +98,27 @@ if __name__ == '__main__':
     if args.run is not None:
         dco.render_dc_yaml(conf['args']['run'])
         dco.render_dockerfile_templates()
-        run = Runner(
-            prof.get_profile_yaml_by_name(conf['args']['run']),
-            args.dry_run
-        )
+        run = Runner(conf)
+        run.create_network()
         run.start()
 
     if args.stop is not None:
-        run = Runner(
-            prof.get_profile_yaml_by_name(conf['args']['stop']),
-            args.dry_run
-        )
+        run = Runner(conf)
         run.stop()
 
     if args.down is not None:
-        run = Runner(
-            prof.get_profile_yaml_by_name(conf['args']['down']),
-            args.dry_run
-        )
-        run.down(args.remove_images)
+        run = Runner(conf)
+        run.down()
 
-    if args.tail_logs is True:
-        run = Runner(prof.get_profile_conf_by_name(conf['args']['tail_logs']))
+    if conf['args']['tail_logs'] is True:
+        print('hello')
+        run = Runner(conf)
         run.tail_logs()
+
+    if args.remove_images is True:
+        run = Runner(conf)
+        run.remove_images()
+
+    if args.remove_network is True:
+        run = Runner(conf)
+        run.remove_network()

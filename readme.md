@@ -11,9 +11,11 @@
 
 ## Synopsis
 
-My personal daiquiri dev setup. Shell tools are mounted by a volume called `shed` and reside in the equally named folder. The mountpoint of this folder is in $PATH.
+A daiquiri docker containerisation that started as development setup. It brings quite a few configuration options that can be found looking into the toml files in the `conf` folder. An abstraction layer that is written in python aims to provide an easier access to all the different functions supporting multiple profiles and other things.
 
-[docker compose](https://github.com/docker/compose/releases) is required to run the containers.
+Please make sure that you have [docker](https://www.docker.com/) and [docker compose](https://github.com/docker/compose/releases) to make use of dq dev.
+
+The required python libraries can be installed as usual `pip install -r requirements.txt`.
 
 ## How to use
 
@@ -38,7 +40,7 @@ Profiles are saved in `usr/profiles/PROFILENAME`. Make sure you edit the `conf.y
 
 ## From scratch
 
-Following directories should be present for a default app setup. 
+Following directories should be present for a default app setup.
 
 ```bash
 mkdir dq-project
@@ -61,9 +63,9 @@ nano tpl/conf.yaml
 ```
 You can have multiple apps on the system. Active app is set via `active_app` entry, `daiquiri` is the default app. Make sure, to check the paths n `folders_on_host` section pointing them to your directories. In case it is needed, make the DB persistent in the `enable_database_volumes` section.
 
-Set and activate the profile as shown in the previous section. Run the setup. 
+Set and activate the profile as shown in the previous section. Run the setup.
 
-The instance will be available on `localhost:9280` for the default settings. 
+The instance will be available on `localhost:9280` for the default settings.
 
 ## Tech background
 

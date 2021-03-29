@@ -36,7 +36,8 @@ RUN pear install http_request2
 
 COPY ./rootfs /
 RUN chmod -R 777 /tmp
-RUN find /tmp/custom_scripts/build -type f -executable | sort | xargs -i /bin/bash {}
+RUN find /tmp -type f -executable -regex ".*\/custom_scripts\/build.*" \
+    | sort | xargs -i /bin/bash {}
 
 RUN mkdir -p /run/php \
  && sed -i "s|.*listen =.*|listen = /run/php/php.sock|g" "${PHP_CONF}"

@@ -53,7 +53,8 @@ fi
 /usr/sbin/php-fpm7.3
 
 # execute custom scripts
-find /tmp/custom_scripts/up -type f -executable | sort | xargs -i /bin/bash {}
+find /tmp -type f -executable -regex ".*\/custom_scripts\/up.*" |
+    sort | xargs -i /bin/bash {}
 
 # launch caddy
 caddy run --config ${HOME}/Caddyfile --adapter caddyfile --watch

@@ -7,12 +7,12 @@ import requests
 
 import fixpath  # noqa
 from colours import Colours
-from util import ptable, read_yaml
+from util import ptable, read_toml
 
 
 class ReqCheck():
     def __init__(self, conffile):
-        self.conf = read_yaml(conffile)
+        self.conf = read_toml(conffile)
         self.col = Colours()
         self.req = {}
         self.req['headers'] = {
@@ -94,7 +94,7 @@ class ReqCheck():
 if __name__ == '__main__':
     scriptname = os.path.realpath(__file__)
     scriptdir = '/'.join(scriptname.split('/')[:-1])
-    conffile = pj(scriptdir, 'testconf', 'request_test.yaml')
+    conffile = pj(scriptdir, 'testconf', 'request_test.toml')
 
     parser = argparse.ArgumentParser(
         description=os.path.basename(__file__).title() + ': ' +

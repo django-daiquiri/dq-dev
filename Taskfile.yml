@@ -29,7 +29,7 @@ tasks:
             - test/*
         method: timestamp
         cmds:
-            - cmd: python test/fire_requests.py -c req_simple_9280
+            - cmd: python test/fire_requests.py -c req_test
 
     test_req_rp:
         desc: run request tests, requires spinned up dq dev containers

@@ -23,14 +23,14 @@ daiquiri = "<HOME>/rolling/aip/github/daiquiri-app"
 rave = "<HOME>/rolling/aip/gitlab/rave-app"
 xmmssc = "<HOME>/rolling/aip/gitlab/xmmssc-app"
 # others
-shed = "<HOME>/tools/shed"
-testdata = "<HOME>/rolling/aip/self/app-testdata-importer"
+# shed = "<HOME>/tools/shed"
+# testdata = "<HOME>/rolling/aip/self/app-testdata-importer"
 
 [docker_volume_mountpoints]
 dq_source = "/home/dq/source"
 dq_app = "/home/dq/app"
-shed = "/vol/tools/shed"
-testdata = "/vol/testdata"
+# shed = "/vol/tools/shed"
+# testdata = "/vol/testdata"
 
 # please make sure the daiquiri port matches the one in the base_url below
 # db ports do not have to be exposed, but it's nice for test and development

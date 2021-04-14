@@ -12,10 +12,10 @@ $table_prefix  = 'wp_';
 define('WP_DEBUG', true);
 define('SCRIPT_DEBUG', true );
 
-if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') {
-    $_SERVER['HTTPS'] = '<SERVER_HTTPS>';
-    $_SERVER['HTTP_HOST'] = '<URL_BASE>';
-    $_SERVER['SERVER_NAME'] = '<URL_BASE>';
+// if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') {
+//     $_SERVER['HTTPS'] = '<SERVER_HTTPS>';
+//     $_SERVER['HTTP_HOST'] = '<URL_BASE>';
+//     $_SERVER['SERVER_NAME'] = '<URL_BASE>';
 
 define('CONCATENATE_SCRIPTS', false);
 define('DAIQUIRI_DEBUG', True);

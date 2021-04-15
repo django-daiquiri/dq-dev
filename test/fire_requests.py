@@ -107,7 +107,7 @@ class ReqCheck():
 if __name__ == '__main__':
     scriptname = os.path.realpath(__file__)
     scriptdir = '/'.join(scriptname.split('/')[:-1])
-    conffile = 'req_simple_9280.toml'
+    conffile = 'req_test'
 
     parser = argparse.ArgumentParser(
         description=os.path.basename(__file__).title() + ': ' +

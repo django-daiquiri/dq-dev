@@ -42,9 +42,10 @@ daiquiri = 9280
 # rabbitmq = 9284
 
 [env.daiquiri]
-url_base = "http://localhost:9280"
-site_url = "<URL_BASE>"
-server_https = "on"
+# if you have a tls reverse proxy before dq-dev
+# enter your hostname below and set 'url_protocol' to 'https'
+url_hostname = "localhost:9280"
+url_protocol = "http"
 wordpress_title = "dqdev"
 wordpress_url = "/cms/"
 wordpress_cli = "/usr/bin/wp"

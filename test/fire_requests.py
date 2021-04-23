@@ -1,8 +1,9 @@
 import argparse
 import os
 import re
+import ssl
 from os.path import join as pj
-
+import urllib3
 import requests
 
 import fixpath  # noqa
@@ -12,6 +13,7 @@ from util import ptable, read_toml
 
 class ReqCheck():
     def __init__(self, conffile):
+        urllib3.disable_warnings()
         self.conf = read_toml(conffile)
         self.col = Colours()
         self.req = {}
@@ -24,16 +26,24 @@ class ReqCheck():
     def get(self, url, login=False):
         rqu = self.conf['urls']['base'] + url
         if login is False:
-            return self.s_out.get(rqu, headers=self.req['headers'])
+            return self.s_out.get(
+                rqu, headers=self.req['headers'], verify=False
+            )
         else:
-            return self.s_in.get(rqu, headers=self.req['headers'])
+            return self.s_in.get(
+                rqu, headers=self.req['headers'], verify=False
+            )
 
     def post(self, url, data=None, login=False):
         rqu = self.conf['urls']['base'] + url
         if login is False:
-            return self.s_out.post(rqu, data=data, headers=self.req['headers'])
+            return self.s_out.post(
+                rqu, data=data, headers=self.req['headers'], verify=False
+            )
         else:
-            return self.s_in.post(rqu, data=data, headers=self.req['headers'])
+            return self.s_in.post(
+                rqu, data=data, headers=self.req['headers'], verify=False
+            )
 
     def assert_page(self, url, rx, login=False):
         try:
@@ -64,7 +74,9 @@ class ReqCheck():
 
     def session_login(self):
         sess = requests.Session()
-        src = sess.get(self.conf['urls']['base'] + '/accounts/login/')
+        src = sess.get(
+            self.conf['urls']['base'] + '/accounts/login/', verify=False
+        )
         formtoken = re.search(
             r'(csrfmiddlewaretoken.*value=")([a-zA-Z0-9]+)', src.text
         ).group(2)
@@ -79,7 +91,8 @@ class ReqCheck():
         src = sess.post(
             self.conf['urls']['base'] + self.conf['urls']['login'],
             data=login_data,
-            headers=self.req['headers']
+            headers=self.req['headers'],
+            verify=False
         )
         if bool(re.search(r'If you forgot your password', src.text)) is True:
             print(
@@ -94,7 +107,7 @@ class ReqCheck():
 if __name__ == '__main__':
     scriptname = os.path.realpath(__file__)
     scriptdir = '/'.join(scriptname.split('/')[:-1])
-    conffile = pj(scriptdir, 'testconf', 'request_test.toml')
+    conffile = 'req_test'
 
     parser = argparse.ArgumentParser(
         description=os.path.basename(__file__).title() + ': ' +
@@ -107,7 +120,9 @@ if __name__ == '__main__':
     )
     args = parser.parse_args()
 
-    rq = ReqCheck(args.config)
+    rq = ReqCheck(
+        pj(scriptdir, 'testconf', args.config + '.toml')
+    )
     res = rq.assert_all()
     ptable(['result', 'login', 'url', 'expectation'], res)
 

@@ -1,0 +1,11 @@
+{
+    # admin :9090
+    debug
+    # http_port  9298
+    https_port 443
+}
+
+:443 {
+    tls /dqdev-rp.pem /dqdev-rp-key.pem
+    reverse_proxy http://dqdev-daiquiri-test:9280
+}

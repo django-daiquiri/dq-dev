@@ -107,7 +107,7 @@ def init(args):
             )
 
     if isfile(conf['files']['prof_secrets']) is True:
-        print('Read prof secrets   ' + col.yel(conf['files']['prof_conf']))
+        print('Read prof secrets   ' + col.yel(conf['files']['prof_secrets']))
         prof_secrets = read_toml(conf['files']['prof_secrets'])
         conf['conf']['env'] =\
             merge_dictionaries(conf['conf']['env'], prof_secrets)

@@ -4,10 +4,6 @@
     auto_https disable_redirects
 }
 
-:<EXPOSED_PORT> {
-    reverse_proxy * :8000
-}
-
 :<EXPOSED_PORT>/static* {
     uri strip_prefix /static
     rewrite /static/ /
@@ -17,7 +13,6 @@
 }
 
 :<EXPOSED_PORT>/cms* {
-
     redir /cms /cms/
     redir /cms/admin /cms/wp-admin/
     redir /cms/admin/ /cms/wp-admin/
@@ -31,4 +26,8 @@
     # socket for production, port for debug
     php_fastcgi unix//run/php/php.sock
     # php_fastcgi 127.0.0.1:9000
+}
+
+:<EXPOSED_PORT> {
+    reverse_proxy * :8000
 }

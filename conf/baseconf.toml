@@ -52,8 +52,8 @@ wordpress_cli = "/usr/bin/wp"
 wordpress_db_host = "<CONTAINER_WPDB>:3306"
 wordpress_db_name = "wordpress"
 wordpress_table_prefix = "wp_"
-database_app = "postgresql://daiquiri_app:daiquiri_app@<CONTAINER_PGAPP>/daiquiri_app"
-database_data = "postgresql://daiquiri_data:daiquiri_data@<CONTAINER_PGDATA>/daiquiri_data"
+database_app = "postgresql://<PGAPP_DB_USER>:<PGAPP_DB_PASS>@<CONTAINER_PGAPP>/daiquiri_app"
+database_data = "postgresql://<PGDATA_DB_USER>:<PGDATA_DB_PASS>@<CONTAINER_PGDATA>/daiquiri_data"
 allowed_hosts = "*"
 secret_key = "verysecretkey"
 debug = true
@@ -70,7 +70,7 @@ tap_schema = "tap_schema"
 oai_schema = "oai_schema"
 tap_upload = "tap_upload"
 async = false
-celery_broker_url = "amqp://gaia:password@<CONTAINER_RABBITMQ>:5672/gaia"
+celery_broker_url = "amqp://<RABBITMQ_USER>:<RABBITMQ_PASS>@<CONTAINER_RABBITMQ>:5672/gaia"
 
 [env]
 [env.pgapp]

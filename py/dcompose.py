@@ -17,7 +17,7 @@ class DCompose():
         self.dcyaml = {}
         self.profconf = {}
         self.names = {}
-        self.volumes = []
+        # self.volumes = []
 
     def expand_vars_arr(self, arr, container_name=None):
         for i, el in enumerate(arr):
@@ -135,7 +135,7 @@ class DCompose():
 
     # template
     def make_template(self):
-        self.dcyaml['version'] = '3.7'
+        self.dcyaml['version'] = '3.9'
         self.dcyaml['services'] = {}
         self.dcyaml['volumes'] = {}
 
@@ -210,11 +210,12 @@ class DCompose():
                 pass
 
     # volumes
-    def add_volumes(self):
-        for vol in self.volumes:
-            self.dcyaml['volumes'][vol['name']] = {}
-            self.dcyaml['volumes'][vol['name']]['driver_opts'] =\
-                vol['driver_opts']
+    # def add_volumes(self):
+    #     for vol in self.volumes:
+    #         self.dcyaml['volumes'][vol['name']] = {}
+    #         self.dcyaml['volumes'][vol['name']]['driver'] = 'local'
+    #         self.dcyaml['volumes'][vol['name']]['driver_opts'] =\
+    #             vol['driver_opts']
 
         for service in self.dcyaml['services']:
             self.dcyaml['services'][service]['volumes'] = []
@@ -222,7 +223,7 @@ class DCompose():
             for vol in self.volumes:
                 if rxbool(vol['mount_inside'], service) is True:
                     self.dcyaml['services'][service]['volumes'].append(
-                        vol['name'] + ':' + self.expand_vars(vol['mp'])
+                        vol['driver_opts']['device'] + ':' + self.expand_vars(vol['mp'])
                     )
 
     def make_volumes(self):
@@ -274,6 +275,7 @@ class DCompose():
         vol['mp'] = mp
         vol['required_git'] = required_git
         vol['mount_inside'] = mount_inside
+        vol['driver'] = 'local'
         vol['driver_opts'] = {}
         vol['driver_opts']['o'] = 'bind'
         vol['driver_opts']['type'] = 'none'
@@ -352,6 +354,6 @@ class DCompose():
         self.add_env()
         self.add_ports()
         self.add_networks()
-        self.add_volumes()
+        # self.add_volumes()
 
         self.write_yaml()

@@ -7,17 +7,18 @@ ENV GID=<GID>
 ENV HOME=/home/dq
 
 ENV PATH=${PATH}:/home/dq/sh:/home/dq/.local/bin:${HOME}/bin:${HOME}/sh:/vol/tools/shed
-ENV PHP_CONF=/etc/php/7.3/fpm/pool.d/www.conf
+ENV PHP_CONF=/etc/php/7.4/fpm/pool.d/www.conf
 ENV WORDPRESS_PATH=/home/dq/wp
 
+RUN apt update -y
 RUN apt update -y && apt install -y \
     curl \
     git \
     netcat \
-    php7.3 \
-    php7.3-cli \
-    php7.3-fpm \
-    php7.3-mysql \
+    php \
+    php-cli \
+    php-fpm \
+    php-mysql \
     php-pear \
     python3 \
     python3-dev \
@@ -71,9 +72,9 @@ RUN groupadd -g "${GID}" "${GNAME}" \
 
 RUN mkdir -p /run/php \
  && chown -R ${USER}:${USER} /run/php/
-RUN sed -i "s/user = .*/user = dq/g" /etc/php/7.3/fpm/pool.d/www.conf \
- && sed -i "s/group = .*/group = dq/g" /etc/php/7.3/fpm/pool.d/www.conf \
- && sed -i "s/listen.owner = .*/listen.owner = dq/g" /etc/php/7.3/fpm/pool.d/www.conf
+RUN sed -i "s/user = .*/user = dq/g" /etc/php/7.4/fpm/pool.d/www.conf \
+ && sed -i "s/group = .*/group = dq/g" /etc/php/7.4/fpm/pool.d/www.conf \
+ && sed -i "s/listen.owner = .*/listen.owner = dq/g" /etc/php/7.4/fpm/pool.d/www.conf
 
 USER ${USER}
 

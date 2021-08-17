@@ -50,7 +50,7 @@ if [[ "${ASYNC}" == "True" ]]; then
     ${HOME}/sh/init-rabbitmq-workers.sh &
 fi
 
-/usr/sbin/php-fpm7.3
+/usr/sbin/php-fpm7.4
 
 # execute custom scripts
 find /tmp -type f -executable -regex ".*\/custom_scripts\/up.*" |

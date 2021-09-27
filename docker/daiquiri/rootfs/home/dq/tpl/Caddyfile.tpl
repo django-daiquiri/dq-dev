@@ -1,5 +1,5 @@
 {
-    debug
+    # debug
     http_port <EXPOSED_PORT>
     auto_https disable_redirects
 }

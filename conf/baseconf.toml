@@ -71,6 +71,7 @@ oai_schema = "oai_schema"
 tap_upload = "tap_upload"
 async = false
 celery_broker_url = "amqp://<RABBITMQ_USER>:<RABBITMQ_PASS>@<CONTAINER_RABBITMQ>:5672/gaia"
+enable_gunicorn = false
 
 [env]
 [env.pgapp]

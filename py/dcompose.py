@@ -48,6 +48,10 @@ class DCompose():
                 self.conf['conf']['env']['pgdata']['postgres_password']
             )\
             .replace(
+                '<RABBITMQ_VHOST>',
+                self.conf['conf']['env']['rabbitmq']['rabbitmq_vhost']
+            )\
+            .replace(
                 '<RABBITMQ_USER>',
                 self.conf['conf']['env']['rabbitmq']['rabbitmq_user']
             )\

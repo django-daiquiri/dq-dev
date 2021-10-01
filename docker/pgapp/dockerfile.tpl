@@ -1,4 +1,4 @@
-FROM postgres:latest
+FROM postgres:13
 
 ENV PATH="${PATH}:/opt:/vol/tools/shed"
 

@@ -36,6 +36,14 @@ RUN apt update -y && apt install -y \
 RUN pear install http_request2
 
 COPY ./rootfs /
+RUN mkdir ${HOME}/log
+
+RUN ${HOME}/sh/install-from-github.sh \
+    "ochinchina/supervisord/releases/latest" \
+    "(?<=href\=\").*Linux_64-bit.tar.gz" \
+    "${HOME}/bin" "1"
+RUN mv -f ${HOME}/bin/supervisord_static ${HOME}/bin/supervisord
+
 RUN chmod -R 777 /tmp
 RUN find /tmp -type f -executable -regex ".*\/custom_scripts\/build.*" \
     | sort | xargs -i /bin/bash {}
@@ -81,4 +89,4 @@ USER ${USER}
 HEALTHCHECK --timeout=3s --interval=60s --retries=3 \
    CMD pgrep php-fpm && pgrep caddy
 
-CMD ["/drun.sh"]
+CMD ["/home/dq/bin/supervisord", "-c", "/home/dq/conf/supervisord.conf"]

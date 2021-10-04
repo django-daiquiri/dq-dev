@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [[ -f "/tmp/init.pid" ]]; then
+if [[ -f "${INIT_PID_FILE}" ]]; then
     exit 1
 fi
 

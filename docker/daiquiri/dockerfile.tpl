@@ -6,6 +6,8 @@ ENV GNAME=dq
 ENV GID=<GID>
 ENV HOME=/home/dq
 
+ENV INIT_PID_FILE=/tmp/init.pid
+
 ENV PATH=${PATH}:/home/dq/sh:/home/dq/.local/bin:${HOME}/bin:${HOME}/sh:/vol/tools/shed
 ENV PHP_CONF=/etc/php/7.4/fpm/pool.d/www.conf
 ENV WORDPRESS_PATH=/home/dq/wp
@@ -37,6 +39,7 @@ RUN pear install http_request2
 
 COPY ./rootfs /
 RUN mkdir ${HOME}/log
+RUN echo "docker build" > "${INIT_PID_FILE}"
 
 RUN ${HOME}/sh/install-from-github.sh \
     "ochinchina/supervisord/releases/latest" \

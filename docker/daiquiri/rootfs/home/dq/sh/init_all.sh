@@ -2,7 +2,7 @@
 
 source "${HOME}/.bashrc"
 
-echo $$ >"/tmp/init.pid"
+echo $$ >"${INIT_PID_FILE}"
 
 ${HOME}/sh/install-caddy.sh
 ${HOME}/sh/install-daiquiri.sh
@@ -34,4 +34,4 @@ fi
 find /tmp -type f -executable -regex ".*\/custom_scripts\/up.*" |
     sort | xargs -i /bin/bash {}
 
-rm -f "/tmp/init.pid"
+rm -f "${INIT_PID_FILE}"

@@ -5,7 +5,7 @@ if [[ "$(echo ${ASYNC} | tr '[:upper:]' '[:lower:]')" != "true" ]]; then
     exit 255
 fi
 
-if [[ -f "/tmp/init.pid" ]]; then
+if [[ -f "${INIT_PID_FILE}" ]]; then
     exit 1
 fi
 

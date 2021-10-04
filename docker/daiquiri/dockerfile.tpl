@@ -42,10 +42,9 @@ RUN mkdir ${HOME}/log
 RUN echo "docker build" > "${INIT_PID_FILE}"
 
 RUN ${HOME}/sh/install-from-github.sh \
-    "ochinchina/supervisord/releases/latest" \
-    "(?<=href\=\").*Linux_64-bit.tar.gz" \
-    "${HOME}/bin" "1"
-RUN mv -f ${HOME}/bin/supervisord_static ${HOME}/bin/supervisord
+    "triole/supervisord/releases/latest" \
+    "(?<=href\=\").*_linux_x86_64.tar.gz" \
+    "${HOME}/bin"
 
 RUN chmod -R 777 /tmp
 RUN find /tmp -type f -executable -regex ".*\/custom_scripts\/build.*" \

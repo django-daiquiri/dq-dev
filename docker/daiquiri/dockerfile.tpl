@@ -6,6 +6,8 @@ ENV GNAME=dq
 ENV GID=<GID>
 ENV HOME=/home/dq
 
+ENV INIT_PID_FILE=/tmp/init.pid
+
 ENV PATH=${PATH}:/home/dq/sh:/home/dq/.local/bin:${HOME}/bin:${HOME}/sh:/vol/tools/shed
 ENV PHP_CONF=/etc/php/7.4/fpm/pool.d/www.conf
 ENV WORDPRESS_PATH=/home/dq/wp
@@ -36,6 +38,14 @@ RUN apt update -y && apt install -y \
 RUN pear install http_request2
 
 COPY ./rootfs /
+RUN mkdir ${HOME}/log
+RUN echo "docker build" > "${INIT_PID_FILE}"
+
+RUN ${HOME}/sh/install-from-github.sh \
+    "triole/supervisord/releases/latest" \
+    "(?<=href\=\").*_linux_x86_64.tar.gz" \
+    "${HOME}/bin"
+
 RUN chmod -R 777 /tmp
 RUN find /tmp -type f -executable -regex ".*\/custom_scripts\/build.*" \
     | sort | xargs -i /bin/bash {}
@@ -81,4 +91,4 @@ USER ${USER}
 HEALTHCHECK --timeout=3s --interval=60s --retries=3 \
    CMD pgrep php-fpm && pgrep caddy
 
-CMD ["/drun.sh"]
+CMD ["/home/dq/bin/supervisord", "-c", "/home/dq/conf/supervisord.conf"]

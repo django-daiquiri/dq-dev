@@ -89,6 +89,6 @@ RUN sed -i "s/user = .*/user = dq/g" /etc/php/7.4/fpm/pool.d/www.conf \
 USER ${USER}
 
 HEALTHCHECK --timeout=3s --interval=60s --retries=3 \
-   CMD pgrep php-fpm && pgrep caddy
+   CMD pgrep php-fpm && pgrep caddy && pgrep celery
 
 CMD ["/home/dq/bin/supervisord", "-c", "/home/dq/conf/supervisord.conf"]

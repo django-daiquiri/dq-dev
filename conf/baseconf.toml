@@ -6,13 +6,15 @@ active_app = "daiquiri"
 daiquiri = true
 pgapp = true
 pgdata = true
-wpdb = true
+# wpdb = true
+docs = true
 rabbitmq = false
 
 [enable_database_volumes]
 pgapp = false
 pgdata = true
-wpdb = true
+docs = true
+# wpdb = true
 
 [folders_on_host]
 # daiquiri source repo
@@ -46,12 +48,13 @@ daiquiri = 9280
 # enter your hostname below and set 'url_protocol' to 'https'
 url_hostname = "localhost:9280"
 url_protocol = "http"
-wordpress_title = "dqdev"
-wordpress_url = "/cms/"
-wordpress_cli = "/usr/bin/wp"
-wordpress_db_host = "<CONTAINER_WPDB>:3306"
-wordpress_db_name = "wordpress"
-wordpress_table_prefix = "wp_"
+container_docs = "<CONTAINER_DOCS>"
+# wordpress_title = "dqdev"
+# wordpress_url = "/cms/"
+# wordpress_cli = "/usr/bin/wp"
+# wordpress_db_host = "<CONTAINER_WPDB>:3306"
+# wordpress_db_name = "wordpress"
+# wordpress_table_prefix = "wp_"
 database_app = "postgresql://<PGAPP_DB_USER>:<PGAPP_DB_PASS>@<CONTAINER_PGAPP>/daiquiri_app"
 database_data = "postgresql://<PGDATA_DB_USER>:<PGDATA_DB_PASS>@<CONTAINER_PGDATA>/daiquiri_data"
 allowed_hosts = "*"
@@ -84,10 +87,8 @@ postgres_host = "pgdata"
 postgres_port = 5432
 postgres_db = "daiquiri_data"
 
-[env.wpdb]
-mysql_hostname = "<CONTAINER_WPDB>"
-mysql_port = 3306
-mysql_database = "wordpress"
+[env.docs]
+git_url = "git@gitlab.aip.de:escience/cars-content.git"
 
 [env.rabbitmq]
 rabbitmq_vhost = "daiquiri"

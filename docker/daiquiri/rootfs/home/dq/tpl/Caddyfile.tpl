@@ -12,20 +12,9 @@
     root * <DQAPP>/static_root
 }
 
-:<EXPOSED_PORT>/cms* {
-    redir /cms /cms/
-    redir /cms/admin /cms/wp-admin/
-    redir /cms/admin/ /cms/wp-admin/
-    redir /cms/wp-admin /cms/wp-admin/
-
-    uri strip_prefix /cms
-
-    file_server
-    root * <WORDPRESS_PATH>
-
-    # socket for production, port for debug
-    php_fastcgi unix//run/php/php.sock
-    # php_fastcgi 127.0.0.1:9000
+:<EXPOSED_PORT>/docs* {
+    uri strip_prefix /docs
+    reverse_proxy * <CONTAINER_DOCS>:8080
 }
 
 :<EXPOSED_PORT> {

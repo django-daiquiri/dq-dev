@@ -1,0 +1,12 @@
+-
+    id: update-docs
+    execute-command: /home/docs/sh/update_content.sh
+    command-working-directory: "/vol/content"
+    include-command-output-in-response: true
+    trigger-rule:
+        match:
+            type: value
+            parameter:
+                source: header
+                name: X-Gitlab-Token
+            value: p6zB2HwfxNA04aN7VdsdpHXQZ1gqfI7geJWnc4v1LX2AihxjroDAy9V7sbYsob1E

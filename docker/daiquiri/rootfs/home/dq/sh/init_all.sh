@@ -16,11 +16,6 @@ if [[ ! -f "${tfil}" ]]; then
 fi
 
 # render config files
-if [[ ! -f "${WORDPRESS_PATH}/wp-config.php" ]]; then
-    ${HOME}/sh/expand-env-vars.sh \
-        "${HOME}/tpl/wp-config.php" "${WORDPRESS_PATH}/wp-config.php"
-fi
-
 ${HOME}/sh/expand-env-vars.sh \
     "${HOME}/tpl/Caddyfile.tpl" "${HOME}/Caddyfile"
 

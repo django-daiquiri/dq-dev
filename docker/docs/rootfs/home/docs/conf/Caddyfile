@@ -1,0 +1,19 @@
+:8080/api/hooks/* {
+	uri strip_prefix /api
+	reverse_proxy :9999
+}
+
+:8080 {
+	@serve {
+		not path */.git/*
+		not path */.gitignore
+		not path */README.md
+	}
+
+	root * /home/docs/content
+	file_server @serve
+	templates
+	header {
+		Content-Type text/plain
+	}
+}

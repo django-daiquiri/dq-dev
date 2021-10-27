@@ -1,7 +1,6 @@
 #!/bin/bash
 
 if [[ "$(echo ${ASYNC} | tr '[:upper:]' '[:lower:]')" != "true" ]]; then
-    echo "Async env var set to false. Won't run rabbitmq workers."
     exit 255
 fi
 

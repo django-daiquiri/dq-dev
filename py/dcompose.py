@@ -254,7 +254,9 @@ class DCompose():
                     volname
                 )
                 if volname == 'docs':
-                    volfolder = self.profconf['conf']['folders_on_host']['docs']
+                    volfolder = self.expand_vars(
+                        self.profconf['conf']['folders_on_host']['docs']
+                    )
                 mkdir(volfolder)
                 mp = '/var/lib/mysql'
                 if volname.startswith('pg'):

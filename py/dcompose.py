@@ -214,20 +214,15 @@ class DCompose():
                 pass
 
     # volumes
-    # def add_volumes(self):
-    #     for vol in self.volumes:
-    #         self.dcyaml['volumes'][vol['name']] = {}
-    #         self.dcyaml['volumes'][vol['name']]['driver'] = 'local'
-    #         self.dcyaml['volumes'][vol['name']]['driver_opts'] =\
-    #             vol['driver_opts']
-
+    def add_volumes(self):
         for service in self.dcyaml['services']:
             self.dcyaml['services'][service]['volumes'] = []
 
             for vol in self.volumes:
                 if rxbool(vol['mount_inside'], service) is True:
                     self.dcyaml['services'][service]['volumes'].append(
-                        vol['driver_opts']['device'] + ':' + self.expand_vars(vol['mp'])
+                        vol['driver_opts']['device'] + ':' +
+                        self.expand_vars(vol['mp'])
                     )
 
     def make_volumes(self):
@@ -241,25 +236,31 @@ class DCompose():
                 ]
             v = self.make_volume(
                 volname + '_' + self.profconf['name'],
-                self.conf['conf']['docker_volume_mountpoints'][volname],    # noqa: E501
+                self.conf['conf']['docker_volume_mountpoints'][volname],
                 fol,
-                volname.startswith('dq_')
+                volname.startswith('dq_'),
+                'daiquiri'
             )
             if self.valid_volume(v) is True:
                 vols.append(v)
 
-        for volname in self.conf['conf']['enable_database_volumes']:
-            if self.conf['conf']['enable_database_volumes'][volname] is True:   # noqa: E501
+        for volname in self.conf['conf']['enable_volumes']:
+            # TODO: do not hard code folders, improve structure
+            if self.conf['conf']['enable_volumes'][volname] is True:
                 volfolder = pj(
                     self.prof.get_profile_folder_by_name(
                         self.profconf['name']
                     ),
                     volname
                 )
+                if volname == 'docs':
+                    volfolder = self.profconf['conf']['folders_on_host']['docs']
                 mkdir(volfolder)
                 mp = '/var/lib/mysql'
                 if volname.startswith('pg'):
                     mp = '/var/lib/postgresql/data'
+                if volname == 'docs':
+                    mp = '/home/docs/content'
                 vols.append(
                     self.make_volume(
                         volname + '_' + self.profconf['name'],
@@ -358,6 +359,6 @@ class DCompose():
         self.add_env()
         self.add_ports()
         self.add_networks()
-        # self.add_volumes()
+        self.add_volumes()
 
         self.write_yaml()

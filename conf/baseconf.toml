@@ -10,10 +10,10 @@ pgdata = true
 docs = true
 rabbitmq = false
 
-[enable_database_volumes]
+[enable_volumes]
 pgapp = false
 pgdata = true
-docs = true
+docs = false   # do not forget to set `docs` correctly in the section below
 # wpdb = true
 
 [folders_on_host]
@@ -24,6 +24,8 @@ applause = "<HOME>/rolling/aip/gitlab/applause-app"
 daiquiri = "<HOME>/rolling/aip/github/daiquiri-app"
 rave = "<HOME>/rolling/aip/gitlab/rave-app"
 xmmssc = "<HOME>/rolling/aip/gitlab/xmmssc-app"
+# docs repo pointing the the documentation repo on your host machine
+docs = "<HOME>/rolling/aip/gitlab/cars-content"
 # others
 # shed = "<HOME>/tools/shed"
 # testdata = "<HOME>/rolling/aip/self/app-testdata-importer"

@@ -19,8 +19,6 @@ fi
 ${HOME}/sh/expand-env-vars.sh \
     "${HOME}/tpl/Caddyfile.tpl" "${HOME}/Caddyfile"
 
-${HOME}/sh/init-wordpress.sh
-
 if [[ "${ASYNC}" == "True" ]]; then
     ${HOME}/sh/init-folders.sh
 fi

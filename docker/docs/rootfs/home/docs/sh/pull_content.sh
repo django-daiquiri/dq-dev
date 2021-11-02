@@ -2,8 +2,8 @@
 
 con="${HOME}/content"
 
-if [[ ! -f "${con}" ]]; then
-    mkdir -p "${con}"
+mkdir -p "${con}"
+if [[ ! -f "${con}/.git" ]]; then
     cd "${con}"
     git clone ${GIT_URL} .
 else

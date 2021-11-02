@@ -2,12 +2,12 @@
 
 <!--- mdtoc: toc begin -->
 
-1.	[Synopsis](#synopsis)
-2.	[How to use](#how-to-use)
-3.	[From scratch](#from-scratch)
-4.	[Tech background](#tech-background)
-	1.	[Dependencies](#dependencies)
-	2.	[Tests](#tests)<!--- mdtoc: toc end -->
+1. [Synopsis](#synopsis)
+2. [How to use](#how-to-use)
+3. [From scratch](#from-scratch)
+4. [Tech background](#tech-background)
+   1. [Dependencies](#dependencies)
+   2. [Tests](#tests)<!--- mdtoc: toc end -->
 
 ## Synopsis
 
@@ -55,13 +55,15 @@ git clone git@github.com:django-daiquiri/app.git
 # clones the dq-dev setup into dq-dev folder
 git clone git@github.com:triole/dq-dev.git
 ```
+
 Edit the configuration for the dq-dev setup:
 
 ```bash
 cd dq-dev
 nano tpl/conf.yaml
 ```
-You can have multiple apps on the system. Active app is set via `active_app` entry, `daiquiri` is the default app. Make sure, to check the paths n `folders_on_host` section pointing them to your directories. In case it is needed, make the DB persistent in the `enable_database_volumes` section.
+
+You can have multiple apps on the system. Active app is set via `active_app` entry, `daiquiri` is the default app. Make sure, to check the paths n `folders_on_host` section pointing them to your directories. In case it is needed, make the DB persistent in the `enable_volumes` section.
 
 Set and activate the profile as shown in the previous section. Run the setup.
 

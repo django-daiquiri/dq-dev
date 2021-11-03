@@ -4,7 +4,9 @@ ENV VOLDIR="/vol"
 ENV TIMEZONE="Europe/Berlin"
 
 ENV USER=docs
+ENV UID=<UID>
 ENV GNAME=docs
+# ENV GID=<GID>
 ENV HOME=/home/docs
 
 ENV PATH=${PATH}:${HOME}/bin:${HOME}/sh
@@ -40,8 +42,8 @@ RUN ${HOME}/sh/install_from_github.sh \
     "(?<=href\=\").*_linux_amd64.tar.gz" \
     "${HOME}/bin"
 
-RUN addgroup -g "<GID>" -S "${USER}" \
- && adduser -s "/bin/false" -h "${HOME}" -G "${GNAME}" -u "<UID>" -S "${USER}"
+RUN addgroup -S "${USER}" \
+ && adduser -s "/bin/false" -h "${HOME}" -G "${GNAME}" -u "${UID}" -S "${USER}"
 
 RUN mkdir -p "${VOLDIR}" \
  && chown -R "${USER}":"${GNAME}" "${HOME}" "${VOLDIR}"

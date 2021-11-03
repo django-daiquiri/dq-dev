@@ -3,7 +3,7 @@ FROM debian:latest
 ENV USER=dq
 ENV UID=<UID>
 ENV GNAME=dq
-ENV GID=<GID>
+# ENV GID=<GID>
 ENV HOME=/home/dq
 
 ENV INIT_PID_FILE=/tmp/init.pid
@@ -48,7 +48,7 @@ RUN ln -sf /usr/bin/python3 /usr/bin/python
 
 RUN ln -s /vol/tools/shed/caddy /bin/caddy
 
-RUN groupadd -g "${GID}" "${GNAME}" \
+RUN groupadd "${GNAME}" \
  && useradd -m -s /bin/bash -g "${GNAME}" -u "${UID}" "${USER}" \
  && chown -R "${USER}:${GID}" "${HOME}" \
  && chmod -R 777 /tmp /var/log

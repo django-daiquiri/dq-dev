@@ -23,9 +23,9 @@ COPY ./rootfs /
 RUN ls ${HOME}/sh
 
 RUN ${HOME}/sh/install_from_github.sh \
-    "ochinchina/supervisord/releases/latest" \
-    "(?<=href\=\").*Linux_64-bit.tar.gz" \
-    "${HOME}/bin" "1"
+    "triole/supervisord/releases/latest" \
+    "(?<=href\=\").*_linux_x86_64.tar.gz" \
+    "${HOME}/bin"
 
 RUN ${HOME}/sh/install_from_github.sh \
     "caddyserver/caddy/releases/latest" \

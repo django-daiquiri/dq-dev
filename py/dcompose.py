@@ -17,7 +17,7 @@ class DCompose():
         self.dcyaml = {}
         self.profconf = {}
         self.names = {}
-        # self.volumes = []
+        self.volumes = []
 
     def expand_vars_arr(self, arr, container_name=None):
         for i, el in enumerate(arr):

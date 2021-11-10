@@ -1,26 +1,23 @@
 # folder of the app's source code is looked up
 # in the 'folders_on_host' entry below
-active_app = "daiquiri"
+active_app = "cosmosim"
 
 [enable_containers]
 daiquiri = true
 pgapp = true
 pgdata = true
-# wpdb = true
-docs = true
 rabbitmq = false
 
 [enable_volumes]
 pgapp = false
 pgdata = true
-docs = false   # do not forget to set `docs` correctly in the section below
-# wpdb = true
 
 [folders_on_host]
 # daiquiri source repo
 dq_source = "<HOME>/rolling/aip/github/daiquiri"
 # possible app repos
 applause = "<HOME>/rolling/aip/gitlab/applause-app"
+cosmosim = "<HOME>/rolling/aip/gitlab/cosmosim-app"
 daiquiri = "<HOME>/rolling/aip/github/daiquiri-app"
 rave = "<HOME>/rolling/aip/gitlab/rave-app"
 xmmssc = "<HOME>/rolling/aip/gitlab/xmmssc-app"
@@ -42,7 +39,6 @@ dq_app = "/home/dq/app"
 daiquiri = 9280
 # pgapp = 9281
 # pgdata = 9282
-# wpdb = 9283
 # rabbitmq = 9284
 
 [env.daiquiri]
@@ -51,12 +47,6 @@ daiquiri = 9280
 url_hostname = "localhost:9280"
 url_protocol = "http"
 container_docs = "<CONTAINER_DOCS>"
-# wordpress_title = "dqdev"
-# wordpress_url = "/cms/"
-# wordpress_cli = "/usr/bin/wp"
-# wordpress_db_host = "<CONTAINER_WPDB>:3306"
-# wordpress_db_name = "wordpress"
-# wordpress_table_prefix = "wp_"
 database_app = "postgresql://<PGAPP_DB_USER>:<PGAPP_DB_PASS>@<CONTAINER_PGAPP>/daiquiri_app"
 database_data = "postgresql://<PGDATA_DB_USER>:<PGDATA_DB_PASS>@<CONTAINER_PGDATA>/daiquiri_data"
 allowed_hosts = "*"
@@ -77,6 +67,7 @@ tap_upload = "tap_upload"
 async = false
 celery_broker_url = "amqp://<RABBITMQ_USER>:<RABBITMQ_PASS>@<CONTAINER_RABBITMQ>:5672/<RABBITMQ_VHOST>"
 enable_gunicorn = false
+docs_git_url = "https://gitlab.aip.de/django-daiquiri/cosmosim-content.git"
 
 [env]
 [env.pgapp]
@@ -89,9 +80,6 @@ postgres_host = "pgdata"
 postgres_port = 5432
 postgres_db = "daiquiri_data"
 
-[env.docs]
-git_url = "git@gitlab.aip.de:escience/cars-content.git"
-
 [env.rabbitmq]
 rabbitmq_vhost = "daiquiri"
 rabbitmq_node_port = 5672
@@ -103,7 +91,6 @@ rabbitmq_logs = "-"
 # daiquiri = [ "wget", "procps" ]
 # pgapp = [ "procps" ]
 # pgdata = [ "procps" ]
-# wpdb = [ "procps" ]
 
 # the following entries define folders that contain custom scripts
 # these can be run during docker build or when everything is up
@@ -115,10 +102,8 @@ rabbitmq_logs = "-"
 # daiquiri = "/tmp/bash_scripts/build"
 # pgapp = "<HOME>/bash_scripts/build"
 # pgdata = "<HOME>/<ACTIVE_APP>/bash_scripts/build"
-# wpdb = "/tmp/bash_scripts/build"
 
 [custom_scripts.up]
 # daiquiri = ""
 # pgapp = ""
 # pgdata = ""
-# wpdb = ""

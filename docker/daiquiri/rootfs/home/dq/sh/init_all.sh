@@ -4,6 +4,8 @@ source "${HOME}/.bashrc"
 
 echo $$ >"${INIT_PID_FILE}"
 
+mkdir -p "${FILES_BASE_PATH}"
+
 ${HOME}/sh/install-caddy.sh
 ${HOME}/sh/install-daiquiri.sh
 

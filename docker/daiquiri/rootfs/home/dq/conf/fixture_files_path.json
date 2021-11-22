@@ -1,0 +1,11 @@
+[{
+    "model": "daiquiri_files.directory",
+    "pk": 1,
+    "fields": {
+        "path": "cms",
+        "layout": false,
+        "access_level": "PUBLIC",
+        "depth": 1,
+        "groups": []
+    }
+}]

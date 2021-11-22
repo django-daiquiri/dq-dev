@@ -1,3 +1,4 @@
+alias ..="cd .."
 alias env="env | sort"
 alias p="python"
 alias pm="python manage.py"
@@ -13,7 +14,7 @@ alias wp="wp --path=${WORDPRESS_PATH}"
 export LS_COLORS=${LS_COLORS}:"di=1;34":"*.txt=1;36":"*.md=0;93"
 alias l="ls --color=auto -CF"
 alias ll="ls --color=auto -alF"
-alias la="ls --color=auto -A"
+alias la="ls --color=auto -AlF"
 
 # the following four functions are abstraction layers using wait_for
 # they cover a few typical use cases and serve as inspiration

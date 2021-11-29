@@ -10,3 +10,4 @@ vol/
 .imdone/
 
 docker/*/dockerfile
+docker/*/Dockerfile

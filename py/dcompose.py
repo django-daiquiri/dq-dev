@@ -342,6 +342,7 @@ class DCompose():
             r'[a-z0-9A-Z-]+(?=/dockerfile.tpl$)', filename
         )
         new_filename = rxsearch(r'.*(?=\.)', filename)
+        new_filename = new_filename.replace('/dockerfile', '/Dockerfile')
         arr = []
         try:
             filecontent = open(filename, 'r')

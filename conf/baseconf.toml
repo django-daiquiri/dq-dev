@@ -10,7 +10,9 @@ rabbitmq = false
 
 [enable_volumes]
 pgapp = false
-pgdata = true
+pgdata = false
+# using docs remember to set volume docs in folders_on_host section below
+docs = false
 
 [folders_on_host]
 # daiquiri source repo
@@ -21,7 +23,7 @@ cosmosim = "<HOME>/rolling/aip/gitlab/cosmosim-app"
 daiquiri = "<HOME>/rolling/aip/github/daiquiri-app"
 rave = "<HOME>/rolling/aip/gitlab/rave-app"
 xmmssc = "<HOME>/rolling/aip/gitlab/xmmssc-app"
-# docs repo pointing the the documentation repo on your host machine
+# folder that is mounted as docs volume
 docs = "<HOME>/rolling/aip/gitlab/cars-content"
 # others
 # shed = "<HOME>/tools/shed"

@@ -262,13 +262,16 @@ class DCompose():
                 if volname.startswith('pg'):
                     mp = '/var/lib/postgresql/data'
                 if volname == 'docs':
-                    mp = '/home/docs/content'
+                    mp = '/home/dq/docs'
+                mount_inside = volname
+                if volname == 'docs':
+                    mount_inside = 'daiquiri'
                 vols.append(
                     self.make_volume(
                         volname + '_' + self.profconf['name'],
                         mp,
                         volfolder,
-                        mount_inside=volname
+                        mount_inside=mount_inside
                     )
                 )
         self.volumes = vols

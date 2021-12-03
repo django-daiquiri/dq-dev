@@ -54,6 +54,7 @@ database_data = "postgresql://<PGDATA_DB_USER>:<PGDATA_DB_PASS>@<CONTAINER_PGDAT
 allowed_hosts = "*"
 secret_key = "verysecretkey"
 debug = true
+auto_create_admin_user = true
 account_email_verification = "optional"
 archive_base_path = "/tmp/files"
 archive_download_dir = "/tmp/download"

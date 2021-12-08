@@ -61,7 +61,6 @@ class DCompose():
             )\
             .replace('<CONTAINER_PGAPP>', self.nam_con('pgapp'))\
             .replace('<CONTAINER_PGDATA>', self.nam_con('pgdata'))\
-            .replace('<CONTAINER_DOCS>', self.nam_con('docs'))\
             .replace('<CONTAINER_RABBITMQ>', self.nam_con('rabbitmq'))\
             .replace('<UID>', self.conf['user']['idstr'])\
             .replace('<GID>', self.conf['user']['groupstr'])

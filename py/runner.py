@@ -64,7 +64,7 @@ class Runner():
         self.run_compose(['logs', '-f'])
 
     def remove_images(self):
-        self.run_compose(['down', '--volume'])
+        self.run_compose(['down', '--volumes'])
 
     def create_network(self):
         self.run_docker([

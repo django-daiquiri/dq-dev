@@ -35,6 +35,18 @@ dq_app = "/home/dq/app"
 # shed = "/vol/tools/shed"
 # testdata = "/vol/testdata"
 
+[docker_container_labels]
+daiquiri = [
+    # "traefik.enable=true",
+    # "traefik.http.routers.dqdev.entrypoints=websecure",
+    # "traefik.http.routers.dqdev.rule=\"Host(`dqdev.localhost`) || Host(`dqdev.aip.de`)\"",
+    # "traefik.http.routers.dqdev.service=\"dqdev\"",
+    # "traefik.http.services.dqdev.loadbalancer.server.port=8080"
+]
+pgapp = []
+pgdata = []
+rabbitmq = []
+
 # please make sure the daiquiri port matches the one in the base_url below
 # db ports do not have to be exposed, but it's nice for test and development
 [exposed_ports]

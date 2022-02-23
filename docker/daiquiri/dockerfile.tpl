@@ -56,6 +56,6 @@ RUN groupadd "${GNAME}" \
 USER ${USER}
 
 HEALTHCHECK --timeout=3s --interval=60s --retries=3 \
-   CMD pgrep caddy
+   CMD ${HOME}/sh/healthcheck.sh
 
 CMD ["/home/dq/bin/supervisord", "-c", "/home/dq/conf/supervisord.conf"]

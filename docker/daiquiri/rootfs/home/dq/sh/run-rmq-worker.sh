@@ -8,14 +8,23 @@ if [[ -f "${INIT_PID_FILE}" ]]; then
     exit 1
 fi
 
-worker="${1}"
+queue="${1}"
+concurrency="${2}"
 
-if [[ -z "${worker}" ]]; then
-    echo -e "\nA worker name is required. Please provide arg."
+if [[ -z "${queue}" ]]; then
+    echo -e "\nA queue name is required. Please provide arg."
     echo -e "i.e. default, query or download"
     exit 1
 fi
 
+rundir="${HOME}/run"
+mkdir -p "${rundir}"
+
 cd "${DQAPP}"
-echo "Start rabbit mq worker: ${worker}"
-python manage.py runworker ${worker}
+echo "[$(date +%Y%m%d_%H%M%S)] Start rmq queue: ${queue}, concurrency ${concurrency}"
+celery --app "config" worker \
+    -Q "${queue}" \
+    -c ${concurrency} \
+    --pidfile="${rundir}/${queue}.pid" \
+    --logfile="/dev/stdout" \
+    --loglevel="${CELERYD_LOG_LEVEL}"

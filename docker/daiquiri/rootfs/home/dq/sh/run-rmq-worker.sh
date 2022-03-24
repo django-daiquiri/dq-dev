@@ -26,12 +26,19 @@ mkdir -p "${rundir}"
 logdir="${HOME}/log"
 mkdir -p "${logdir}"
 
+pidfile="${rundir}/$(sanitize_string ${queue}).pid"
+
 cd "${DQAPP}"
 echo "[$(date +%Y%m%d_%H%M%S)] Start rmq queue: ${queue}, concurrency ${concurrency}"
 celery multi start ${queue} \
     -A config \
     -Q "${queue}" \
     -c ${concurrency} \
-    --pidfile="${rundir}/$(sanitize_string ${queue}).pid" \
+    --pidfile="${pidfile}" \
     --logfile="${logdir}/$(sanitize_string ${queue}).log" \
     --loglevel="${CELERYD_LOG_LEVEL}"
+
+sleep 30
+while [[ -n $(ps aux | grep "$(echo ${pidfile} | sed "s|d\$|[d]|g")") ]]; do
+    sleep 30
+done

@@ -14,6 +14,7 @@ RUN apt update -y
 RUN apt update -y && apt install -y \
     curl \
     git \
+    jq \
     netcat \
     python3 \
     python3-dev \
@@ -58,4 +59,4 @@ USER ${USER}
 HEALTHCHECK --timeout=3s --interval=60s --retries=3 \
    CMD ${HOME}/sh/healthcheck.sh
 
-CMD ["/home/dq/bin/supervisord", "-c", "/home/dq/conf/supervisord.conf"]
+CMD ["/bin/bash", "/drun.sh"]

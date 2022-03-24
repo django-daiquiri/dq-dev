@@ -8,6 +8,10 @@ if [[ -f "${INIT_PID_FILE}" ]]; then
     exit 1
 fi
 
+function sanitize_string() {
+    echo "${1}" | tr '[:upper:]' '[:lower:]' | sed "s|[^a-z0-9_-]|_|g"
+}
+
 queue="${1}"
 concurrency="${2}"
 
@@ -19,12 +23,15 @@ fi
 
 rundir="${HOME}/run"
 mkdir -p "${rundir}"
+logdir="${HOME}/log"
+mkdir -p "${logdir}"
 
 cd "${DQAPP}"
 echo "[$(date +%Y%m%d_%H%M%S)] Start rmq queue: ${queue}, concurrency ${concurrency}"
-celery --app "config" worker \
+celery multi start ${queue} \
+    -A config \
     -Q "${queue}" \
     -c ${concurrency} \
-    --pidfile="${rundir}/${queue}.pid" \
-    --logfile="/dev/stdout" \
+    --pidfile="${rundir}/$(sanitize_string ${queue}).pid" \
+    --logfile="${logdir}/$(sanitize_string ${queue}).log" \
     --loglevel="${CELERYD_LOG_LEVEL}"

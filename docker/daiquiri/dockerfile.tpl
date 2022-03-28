@@ -14,7 +14,6 @@ RUN apt update -y
 RUN apt update -y && apt install -y \
     curl \
     git \
-    jq \
     netcat \
     python3 \
     python3-dev \
@@ -38,7 +37,11 @@ RUN ${HOME}/sh/install-from-github.sh \
     "(?<=href\=\").*_linux_x86_64.tar.gz" \
     "${HOME}/bin"
 
-RUN chmod -R 777 /tmp
+RUN groupadd "${GNAME}" \
+ && useradd -m -s /bin/bash -g "${GNAME}" -u "${UID}" "${USER}"
+
+RUN chown -R ${USER}:${USER} /tmp
+
 RUN find /tmp -type f -executable -regex ".*\/custom_scripts\/build.*" \
     | sort | xargs -i /bin/bash {}
 
@@ -49,9 +52,7 @@ RUN ln -sf /usr/bin/python3 /usr/bin/python
 
 RUN ln -s /vol/tools/shed/caddy /bin/caddy
 
-RUN groupadd "${GNAME}" \
- && useradd -m -s /bin/bash -g "${GNAME}" -u "${UID}" "${USER}" \
- && chown -R "${USER}:${GID}" "${HOME}" \
+RUN chown -R "${USER}:${GID}" "${HOME}" \
  && chmod -R 777 /tmp /var/log
 
 USER ${USER}
@@ -59,4 +60,4 @@ USER ${USER}
 HEALTHCHECK --timeout=3s --interval=60s --retries=3 \
    CMD ${HOME}/sh/healthcheck.sh
 
-CMD ["/bin/bash", "/drun.sh"]
+CMD ["/home/dq/bin/supervisord", "-c", "/home/dq/conf/supervisord.conf"]

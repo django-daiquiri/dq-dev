@@ -54,6 +54,7 @@ RUN ln -sf /usr/bin/python3 /usr/bin/python
 RUN ln -s /vol/tools/shed/caddy /bin/caddy
 
 RUN chown -R "${USER}:${GID}" "${HOME}"
+RUN chmod -R 777 /var/log
 
 USER ${USER}
 

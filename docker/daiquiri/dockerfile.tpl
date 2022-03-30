@@ -10,7 +10,6 @@ ENV INIT_PID_FILE=/tmp/init.pid
 
 ENV PATH=${PATH}:/home/dq/sh:/home/dq/.local/bin:${HOME}/bin:${HOME}/sh:/vol/tools/shed
 
-
 RUN apt update -y
 RUN apt update -y && apt install -y \
     curl \
@@ -54,8 +53,7 @@ RUN ln -sf /usr/bin/python3 /usr/bin/python
 
 RUN ln -s /vol/tools/shed/caddy /bin/caddy
 
-RUN chown -R "${USER}:${GID}" "${HOME}" \
- && chmod -R 777 /tmp /var/log
+RUN chown -R "${USER}:${GID}" "${HOME}"
 
 USER ${USER}
 

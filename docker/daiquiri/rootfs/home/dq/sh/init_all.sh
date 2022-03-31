@@ -2,6 +2,10 @@
 
 source "${HOME}/.bashrc"
 
+if [[ -f "${INIT_FINISHED_FILE}" ]]; then
+    exit
+fi
+
 mkdir -p "${FILES_BASE_PATH}"
 
 ${HOME}/sh/install-caddy.sh

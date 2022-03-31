@@ -6,7 +6,7 @@ ENV GNAME=dq
 # ENV GID=<GID>
 ENV HOME=/home/dq
 
-ENV INIT_PID_FILE=/tmp/init.pid
+ENV INIT_FINISHED_FILE=${HOME}/run/init.finished
 
 ENV PATH=${PATH}:/home/dq/sh:/home/dq/.local/bin:${HOME}/bin:${HOME}/sh:/vol/tools/shed
 
@@ -30,8 +30,7 @@ RUN apt update -y && apt install -y \
     postgresql-client
 
 COPY ./rootfs /
-RUN mkdir ${HOME}/log
-RUN echo "docker build" > "${INIT_PID_FILE}"
+RUN mkdir ${HOME}/log ${HOME}/run
 
 RUN ${HOME}/sh/install-from-github.sh \
     "triole/supervisord/releases/latest" \

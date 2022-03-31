@@ -2,8 +2,6 @@
 
 source "${HOME}/.bashrc"
 
-echo $$ >"${INIT_PID_FILE}"
-
 mkdir -p "${FILES_BASE_PATH}"
 
 ${HOME}/sh/install-caddy.sh
@@ -29,4 +27,4 @@ fi
 find /tmp -type f -executable -regex ".*\/custom_scripts\/up.*" |
     sort | xargs -i /bin/bash {}
 
-rm -f "${INIT_PID_FILE}"
+echo "finished at $(date)" >"${INIT_FINISHED_FILE}"

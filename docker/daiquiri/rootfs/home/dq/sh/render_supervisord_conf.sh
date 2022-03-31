@@ -17,7 +17,7 @@ function extract_query_queues_entry() {
     echo $(cat ${source_basepy}) |
         grep -Po "(?<=QUERY_QUEUES).*\]" |
         sed "s|=||g" | sed "s|'|\"|g" | jq >"${tempfile}"
-    jq . "${tempfile}" || printerr
+    jq . "${tempfile}" >/dev/null 2>&1 || printerr
 }
 
 function get_list_entry() {

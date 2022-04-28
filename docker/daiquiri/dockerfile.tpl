@@ -37,6 +37,16 @@ RUN ${HOME}/sh/install-from-github.sh \
     "(?<=href\=\").*_linux_x86_64.tar.gz" \
     "${HOME}/bin"
 
+RUN ${HOME}/sh/install-from-github.sh \
+    "triole/lunr-indexer/releases/latest" \
+    "(?<=href\=\").*_linux_x86_64.tar.gz" \
+    "${HOME}/bin"
+
+RUN ${HOME}/sh/install-from-github.sh \
+    "triole/webhook/releases/latest" \
+    "(?<=href\=\").*_linux_amd64.tar.gz" \
+    "${HOME}/bin"
+
 RUN groupadd "${GNAME}" \
  && useradd -m -s /bin/bash -g "${GNAME}" -u "${UID}" "${USER}"
 

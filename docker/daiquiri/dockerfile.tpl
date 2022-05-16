@@ -13,6 +13,7 @@ ENV PATH=${PATH}:/home/dq/sh:/home/dq/.local/bin:${HOME}/bin:${HOME}/sh:/vol/too
 RUN apt update -y
 RUN apt update -y && apt install -y \
     curl \
+    file \
     git \
     jq \
     netcat \
@@ -46,6 +47,12 @@ RUN ${HOME}/sh/install-from-github.sh \
     "triole/webhook/releases/latest" \
     "(?<=href\=\").*_linux_amd64.tar.gz" \
     "${HOME}/bin"
+
+RUN ${HOME}/sh/install-from-github.sh \
+    "aptible/supercronic/releases/latest" \
+    "(?<=href\=\").*-linux-amd64" \
+    "${HOME}/bin/supercronic"
+
 
 RUN groupadd "${GNAME}" \
  && useradd -m -s /bin/bash -g "${GNAME}" -u "${UID}" "${USER}"

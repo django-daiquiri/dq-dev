@@ -26,8 +26,14 @@ RUN apt update -y && apt install -y \
     libxml2-dev \
     libxslt-dev \
     zlib1g-dev \
-    libssl-dev \
-    postgresql-client
+    libssl-dev
+
+RUN apt -y install gnupg2 wget vim
+RUN echo "deb http://apt.postgresql.org/pub/repos/apt \
+    $(cat /etc/os-release | grep -Po "(?<=VERSION_CODENAME=).*")-pgdg main" \
+    > /etc/apt/sources.list.d/pgdg.list
+RUN wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add
+RUN apt -y update && apt -y install postgresql-client
 
 COPY ./rootfs /
 RUN mkdir ${HOME}/log ${HOME}/run

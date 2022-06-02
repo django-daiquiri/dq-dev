@@ -46,7 +46,7 @@ if [[ "$(echo ${ASYNC} | tr '[:upper:]' '[:lower:]')" == "true" ]]; then
         key="$(get_list_entry "key" ${i})"
         san="$(sanitize_string ${key})"
         ap "\n[program:query_${san}]"
-        ap "command = run-rmq-worker.sh query.${key} 2"
+        ap "command = run-rmq-worker.sh query_${key} 2"
         ap "exitcodes = 255"
     done
 fi

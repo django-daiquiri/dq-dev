@@ -49,6 +49,9 @@ class Runner():
         self.run_cmd_fg(cmd_arr)
 
     # docker compose commands
+    def build(self):
+        self.run_compose(['build'])
+
     def start(self):
         self.run_compose(['up', '--build', '-d'])
         self.tail_logs()

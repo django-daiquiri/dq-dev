@@ -161,7 +161,10 @@ def get_group(user_id):
     if user_id in groups:
         return user_id
     else:
-        return groups[len(groups)-1]
+        try:
+            return groups[len(groups)-1]
+        except:
+            return ''
 
 
 def create_rootfs_folders(basedir):

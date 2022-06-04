@@ -48,11 +48,7 @@ RUN ln -sf /usr/bin/python3 /usr/bin/python
 
 RUN ln -s /vol/tools/shed/caddy /bin/caddy
 
-RUN groupadd "${GNAME}" \
- && useradd -m -s /bin/bash -g "${GNAME}" -u "${UID}" "${USER}" \
- && chown -R "${USER}:${GID}" "${HOME}" \
- && chmod -R 777 /tmp /var/log
-
+RUN ${HOME}/sh/add_user.sh
 USER ${USER}
 
 HEALTHCHECK --timeout=3s --interval=60s --retries=3 \

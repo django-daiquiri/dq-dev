@@ -53,7 +53,7 @@ git clone git@github.com:django-daiquiri/daiquiri.git
 git clone git@github.com:django-daiquiri/app.git
 
 # clones the dq-dev setup into dq-dev folder
-git clone git@github.com:triole/dq-dev.git
+git clone https://github.com/django-daiquiri/dq-dev.git
 ```
 
 Edit the configuration for the dq-dev setup:

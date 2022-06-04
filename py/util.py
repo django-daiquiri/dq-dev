@@ -8,11 +8,10 @@ from shutil import copyfile, rmtree
 from subprocess import PIPE, Popen
 from sys import exit as x
 
-import yaml
-from tabulate import tabulate
-
 # import toml
 import pytomlpp as toml
+import yaml
+from tabulate import tabulate
 
 
 def colgre(s):

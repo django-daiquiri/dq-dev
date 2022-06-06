@@ -1,4 +1,4 @@
-# Dq Dev
+# Dq Dev [![build](https://github.com/django-daiquiri/dq-dev/actions/workflows/build.yaml/badge.svg)](https://github.com/django-daiquiri/dq-dev/actions/workflows/build.yaml)
 
 <!--- mdtoc: toc begin -->
 

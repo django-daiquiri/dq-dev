@@ -3,6 +3,13 @@ name: build
 on:
     schedule:
         - cron: "0 7 * * 1,4"
+    push:
+        branches:
+            - master
+    workflow_dispatch:
+        inputs:
+            tags:
+                description: 'manual build test'
 
 jobs:
     build:
@@ -15,7 +22,7 @@ jobs:
                     fetch-depth: 0
             -
                 name: Install python and tools
-                run: apt update && apt install -y python3 python3-pip curl
+                run: apt update -y && apt install -y python3 python3-pip curl
             -
                 name: Install docker
                 run: |

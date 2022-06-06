@@ -56,15 +56,13 @@ jobs:
             -
                 name: Clone an app, symlink dq-dev source
                 run: |
-                    sudo git clone \
+                    git clone \
                         https://github.com/aipescience/daiquiri-app.git \
-                        /root/rolling/aip/github/daiquiri-app
-                    sudo ln -s $GITHUB_WORKSPACE /root/rolling/aip/github/daiquiri
+                        /home/runner/rolling/aip/github/daiquiri-app
+                    ln -s ${GITHUB_WORKSPACE} /home/runner/rolling/aip/github/daiquiri
             -
                 name: Build dq-dev containers
                 run: |
-                    whoami
-                    groups
                     export PATH=${PATH}:/home/.local/bin
                     python3 manage.py -c test
                     python3 manage.py -s test

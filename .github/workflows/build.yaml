@@ -28,7 +28,7 @@ jobs:
                 run: |
                     sudo mkdir -p /etc/apt/keyrings
                     curl -fsSL https://download.docker.com/linux/ubuntu/gpg \
-                        | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+                        | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
                     echo \
                     "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
                     $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
@@ -41,9 +41,9 @@ jobs:
                     GREP_SCHEME: "(?<=href\\=\").*linux-x86_64\""
                     TARGET_FOLDER: /home/.local/bin
                 run: |
+                    sudo mkdir -p ${TARGET_FOLDER}
                     curl https://raw.githubusercontent.com/triole/ghwfe/master/sh/install_from_github.sh | bash
-                    mkdir -p ${TARGET_FOLDER}
-                    mv \
+                    sudo mv \
                         $(find ${TARGET_FOLDER} -type f | grep "docker-compose") \
                         ${TARGET_FOLDER}/docker-compose
                     sudo chmod +x ${TARGET_FOLDER}/docker-compose

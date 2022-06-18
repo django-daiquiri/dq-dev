@@ -1,0 +1,69 @@
+name: build
+
+on:
+    schedule:
+        - cron: "0 7 * * 1,4"
+    push:
+        branches:
+            - master
+    workflow_dispatch:
+        inputs:
+            tags:
+                description: 'manual build test'
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        steps:
+            -
+                name: Checkout
+                uses: actions/checkout@v3
+                with:
+                    fetch-depth: 0
+            -
+                name: Install python and tools
+                run: sudo apt update -y && sudo apt install -y python3 python3-pip curl
+            -
+                name: Install docker
+                run: |
+                    sudo mkdir -p /etc/apt/keyrings
+                    curl -fsSL https://download.docker.com/linux/ubuntu/gpg \
+                        | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+                    echo \
+                    "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+                    $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+                    sudo apt update -y && sudo apt install -y docker-ce docker-ce-cli containerd.io
+                    docker --version
+            -
+                name: Install docker-compose
+                env:
+                    URL: docker/compose/releases
+                    GREP_SCHEME: "(?<=href\\=\").*linux-x86_64\""
+                    TARGET_FOLDER: /home/.local/bin
+                run: |
+                    sudo mkdir -p ${TARGET_FOLDER}
+                    curl https://raw.githubusercontent.com/triole/ghwfe/master/sh/install_from_github.sh | bash
+                    sudo mv \
+                        $(find ${TARGET_FOLDER} -type f | grep "docker-compose") \
+                        ${TARGET_FOLDER}/docker-compose
+                    sudo chmod +x ${TARGET_FOLDER}/docker-compose
+                    ls -la ${TARGET_FOLDER}
+                    export PATH=${PATH}:${TARGET_FOLDER}
+                    docker-compose --version
+            -
+                name: Install python requirements
+                run: sudo pip3 install -r requirements.txt
+            -
+                name: Clone an app, symlink dq-dev source
+                run: |
+                    git clone \
+                        https://github.com/aipescience/daiquiri-app.git \
+                        /home/runner/rolling/aip/github/daiquiri-app
+                    ln -s ${GITHUB_WORKSPACE} /home/runner/rolling/aip/github/daiquiri
+            -
+                name: Build dq-dev containers
+                run: |
+                    export PATH=${PATH}:/home/.local/bin
+                    python3 manage.py -c test
+                    python3 manage.py -s test
+                    python3 manage.py -b

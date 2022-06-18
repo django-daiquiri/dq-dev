@@ -39,6 +39,7 @@ def init(args):
     conf['args']['remove_network'] = parse_bool(args.remove_network)
     conf['args']['remove_images'] = parse_bool(args.remove_images)
     conf['args']['render'] = parse_nargs(args.render)
+    conf['args']['build'] = parse_nargs(args.build)
     conf['args']['run'] = parse_nargs(args.run)
     conf['args']['stop'] = parse_nargs(args.stop)
     conf['args']['display_profile'] = parse_nargs(args.display_profile)
@@ -161,7 +162,10 @@ def get_group(user_id):
     if user_id in groups:
         return user_id
     else:
-        return groups[len(groups)-1]
+        try:
+            return groups[len(groups)-1]
+        except:
+            return ''
 
 
 def create_rootfs_folders(basedir):

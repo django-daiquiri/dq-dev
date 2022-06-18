@@ -17,8 +17,12 @@ parser = argparse.ArgumentParser(
     formatter_class=argparse.RawDescriptionHelpFormatter
 )
 parser.add_argument(
+    '-b', '--build', type=str, nargs='*', default=None,
+    help='build a profile\'s containers, exit when done'
+)
+parser.add_argument(
     '-r', '--run', type=str, nargs='*', default=None,
-    help='run a profile\'s containers'
+    help='run a profile\'s containers, build if necessary'
 )
 parser.add_argument(
     '-p', '--stop', type=str, nargs='*', default=None,
@@ -94,6 +98,13 @@ if __name__ == '__main__':
     if args.render is not None:
         dco.render_dc_yaml(conf['args']['render'])
         dco.render_dockerfile_templates()
+
+    if args.build is not None:
+        dco.render_dc_yaml(conf['args']['run'])
+        dco.render_dockerfile_templates()
+        run = Runner(conf)
+        run.create_network()
+        run.build()
 
     if args.run is not None:
         dco.render_dc_yaml(conf['args']['run'])

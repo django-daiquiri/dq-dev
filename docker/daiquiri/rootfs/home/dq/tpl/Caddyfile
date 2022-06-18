@@ -13,6 +13,15 @@
 		path_regexp static ^.*/static/(.*)$
 	}
 
+	@hooks {
+		path_regexp hooks ^.*/api/hooks/(.*)$
+	}
+
+	route @hooks {
+		rewrite * /hooks/{http.regexp.hooks.1}
+		reverse_proxy :9000
+	}
+
 	route @docs {
 		rewrite * {http.regexp.docs.1}
 		file_server {

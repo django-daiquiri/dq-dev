@@ -34,6 +34,7 @@ function ap() {
     fi
 }
 
+# main
 cat "${source_spv_tpl}" >"${target_spv_conf}"
 
 if [[ "$(echo ${ASYNC} | tr '[:upper:]' '[:lower:]')" == "true" ]]; then
@@ -50,5 +51,14 @@ if [[ "$(echo ${ASYNC} | tr '[:upper:]' '[:lower:]')" == "true" ]]; then
         ap "exitcodes = 255"
     done
 fi
-
 ap ""
+
+if [[ -n "${ADD_TO_SUPERVISORD_CONF}" ]]; then
+    ap "\n\n# added custom service(s) from conf.toml\n"
+
+    arr=($(echo "${ADD_TO_SUPERVISORD_CONF:1:-1}" | sed 's|, |\n|g'))
+    for el in "${arr[@]}"; do
+        ap "${el:1:-1}"
+    done
+fi
+ap "\n"

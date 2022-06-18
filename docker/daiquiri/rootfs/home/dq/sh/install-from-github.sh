@@ -2,7 +2,7 @@
 
 url="${1}"
 grep_scheme="${2}"
-target_folder="${3}"
+target="${3}"
 strip_comp="${4}"
 
 if [[ ${strip_comp} =~ ^[0-9]+ ]]; then
@@ -11,7 +11,7 @@ else
     strip_comp=""
 fi
 
-if [[ -z "${target_folder}" ]]; then
+if [[ -z "${target}" ]]; then
     echo -e "\nthree args required, provide url, grepscheme and target folder"
     echo -e "\ni.e. install_from_github.sh \\
         \"triole/lunr-indexer/releases/latest\" \\
@@ -22,7 +22,6 @@ if [[ -z "${target_folder}" ]]; then
 fi
 
 function install() {
-    mkdir -p "${target_folder}"
     url_prefix="https://github.com"
     tmpfil="/tmp/tmp_install.tar.gz"
 
@@ -30,8 +29,14 @@ function install() {
         curl -Ls "${url_prefix}/${url}" | grep -Po "${grep_scheme}"
     )"
 
-    curl -L ${bin_url} -o "${tmpfil}" &&
-        tar xvf "${tmpfil}" -C "${target_folder}" ${strip_comp}
+    curl -L ${bin_url} -o "${tmpfil}"
+    if [[ -n $(file "${tmpfil}" | grep "executable") ]]; then
+        mv "${tmpfil}" "${target}"
+        chmod +x "${target}"
+    else
+        mkdir -p "${target}"
+        tar xvf "${tmpfil}" -C "${target}" ${strip_comp}
+    fi
 }
 
 install

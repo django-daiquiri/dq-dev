@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [[ -f "${INIT_PID_FILE}" ]]; then
+if [[ ! -f "${INIT_FINISHED_FILE}" ]]; then
     exit 1
 fi
 

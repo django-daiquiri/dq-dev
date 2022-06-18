@@ -4,7 +4,7 @@ import re
 from os.path import isdir, isfile
 from os.path import join as pj
 from os.path import sep as sep
-from shutil import copyfile, rmtree
+from shutil import copy, rmtree
 from subprocess import PIPE, Popen
 from sys import exit as x
 
@@ -97,7 +97,7 @@ def copy_file(src,  trg):
         sn = shortname(src)
         trg = pj(trg, sn)
     print('Copy file ' + colmag(src) + ' to ' + colgre(trg))
-    copyfile(src, trg)
+    copy(src, trg)
 
 
 def empty_dir(dir):

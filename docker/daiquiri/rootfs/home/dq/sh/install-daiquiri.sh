@@ -2,7 +2,7 @@
 
 scriptdir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-if [[ $(pip3 freeze | grep -Poc "django-daiquiri") == "0" ]]; then
+if [[ $(pip3 freeze | grep -Poc "/django-daiquiri/daiquiri.git") == "0" ]]; then
     cd "${DQSOURCE}" || exit 1
     pip3 install -e "${DQSOURCE}"
 

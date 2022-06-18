@@ -81,8 +81,13 @@ oai_schema = "oai_schema"
 tap_upload = "tap_upload"
 async = false
 celery_broker_url = "amqp://<RABBITMQ_USER>:<RABBITMQ_PASS>@<CONTAINER_RABBITMQ>:5672/<RABBITMQ_VHOST>"
+celeryd_log_level = "INFO"
 enable_gunicorn = false
 docs_git_url = "https://gitlab.aip.de/django-daiquiri/cosmosim-content.git"
+# add_to_supervisord_conf = [
+#     "[program:lunr-indexer]",
+#     "command = lunr-indexer /home/dq/docs/docs -o /home/dq/docs/lunr-index.json -w -f"
+# ]
 
 [env]
 [env.pgapp]

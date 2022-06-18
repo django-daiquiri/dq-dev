@@ -3,7 +3,7 @@
 sleep 5
 
 while true; do
-    if [[ ! -f "${INIT_PID_FILE}" ]]; then
+    if [[ -f "${INIT_FINISHED_FILE}" ]]; then
         break
     fi
     sleep 1

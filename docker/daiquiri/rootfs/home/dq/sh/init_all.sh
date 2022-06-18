@@ -2,7 +2,9 @@
 
 source "${HOME}/.bashrc"
 
-echo $$ >"${INIT_PID_FILE}"
+if [[ -f "${INIT_FINISHED_FILE}" ]]; then
+    exit
+fi
 
 mkdir -p "${FILES_BASE_PATH}"
 
@@ -29,4 +31,4 @@ fi
 find /tmp -type f -executable -regex ".*\/custom_scripts\/up.*" |
     sort | xargs -i /bin/bash {}
 
-rm -f "${INIT_PID_FILE}"
+echo "finished at $(date)" >"${INIT_FINISHED_FILE}"

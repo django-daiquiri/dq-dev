@@ -20,11 +20,13 @@ class Runner():
                 pass
 
     def need_sudo(self):
+        r = run_cmd(['whoami'])
+        if bool(re.search('root', r)) is True:
+            return False
         g = run_cmd(['groups'])
         if bool(re.search('docker', g)) is True:
             return False
-        else:
-            return True
+        return True
 
     def file_arg_compose(self):
         return ['-f', self.conf['files']['dc_yaml']]
@@ -47,6 +49,9 @@ class Runner():
         self.run_cmd_fg(cmd_arr)
 
     # docker compose commands
+    def build(self):
+        self.run_compose(['build'])
+
     def start(self):
         self.run_compose(['up', '--build', '-d'])
         self.tail_logs()

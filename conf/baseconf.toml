@@ -1,6 +1,6 @@
 # folder of the app's source code is looked up
 # in the 'folders_on_host' entry below
-active_app = "cosmosim"
+active_app = "daiquiri"
 
 [enable_containers]
 daiquiri = true

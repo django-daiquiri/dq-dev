@@ -10,6 +10,7 @@ mkdir -p "${FILES_BASE_PATH}"
 
 ${HOME}/sh/install-caddy.sh
 ${HOME}/sh/install-daiquiri.sh
+${HOME}/sh/install-app-requirements.sh
 
 cd "${DQAPP}" || exit 1
 

@@ -1,7 +1,7 @@
 alias ..="cd .."
 alias env="env | sort"
 alias p="python"
-alias pm="python manage.py"
+alias pm="python ${DQAPP}/manage.py"
 alias psa="ps faux"
 alias spv="spv.sh"
 alias tailf="tail -F"

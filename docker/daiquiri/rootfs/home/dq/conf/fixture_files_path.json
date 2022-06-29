@@ -3,7 +3,7 @@
     "pk": 1,
     "fields": {
         "path": "cms",
-        "layout": false,
+        "layout": true,
         "access_level": "PUBLIC",
         "depth": 1,
         "groups": []

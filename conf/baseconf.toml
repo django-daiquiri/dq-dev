@@ -87,7 +87,9 @@ enable_gunicorn = false
 docs_git_url = "https://gitlab.aip.de/django-daiquiri/cosmosim-content.git"
 # add_to_supervisord_conf = [
 #     "[program:lunr-indexer]",
-#     "command = lunr-indexer /home/dq/docs/docs -o /home/dq/docs/lunr-index.json -w -f"
+#     "command = lunr-indexer /home/dq/docs/docs -o /home/dq/docs/lunr-index.json -w -f",
+#     "[program:webhook]",
+#     "command = webhook --port 9000 --verbose --hooks /home/dq/hooks.yaml"
 # ]
 
 [env]

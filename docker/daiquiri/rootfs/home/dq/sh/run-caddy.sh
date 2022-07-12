@@ -1,6 +1,6 @@
 #!/bin/bash
 
-caddyfile="${HOME}/Caddyfile"
+caddyfile="${HOME}/conf/Caddyfile"
 
 if [[ -f "${caddyfile}" ]]; then
     caddy run --config "${caddyfile}" --adapter caddyfile --watch

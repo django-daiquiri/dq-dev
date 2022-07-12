@@ -22,7 +22,7 @@ fi
 
 # render config files
 ${HOME}/sh/expand-env-vars.sh \
-    "${HOME}/tpl/Caddyfile" "${HOME}/Caddyfile"
+    "${HOME}/tpl/Caddyfile" "${HOME}/conf/Caddyfile"
 
 if [[ "${ASYNC}" == "True" ]]; then
     ${HOME}/sh/init-folders.sh

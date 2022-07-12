@@ -36,5 +36,7 @@
 		}
 	}
 
-	reverse_proxy * :8000
+	reverse_proxy * :8000 {
+		header_down Location http:// <URL_PROTOCOL>://
+	}
 }

@@ -37,6 +37,7 @@
 	}
 
 	reverse_proxy * :8000 {
+		header_up X-Forwarded-Proto <URL_PROTOCOL>
 		header_down Location http:// <URL_PROTOCOL>://
 	}
 }

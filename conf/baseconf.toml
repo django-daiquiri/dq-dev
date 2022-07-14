@@ -91,6 +91,7 @@ docs_git_url = "https://gitlab.aip.de/django-daiquiri/cosmosim-content.git"
 #     "[program:webhook]",
 #     "command = webhook --port 9000 --verbose --hooks /home/dq/hooks.yaml"
 # ]
+url_base = "<URL_PROTOCOL>://<URL_HOSTNAME>"
 
 [env]
 [env.pgapp]

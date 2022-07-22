@@ -86,7 +86,10 @@ def is_git(folder):
     if exitcode != 0:
         return (False, None)
     out = out.splitlines()[0].decode('utf-8')
-    out = re.search(r'git.*?\s', out).group(0)
+    try:
+        out = re.search(r'git.*?\s', out).group(0)
+    except (NameError, AttributeError):
+        return (False, None)
     return (True, out)
 
 

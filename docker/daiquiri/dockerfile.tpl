@@ -14,6 +14,7 @@ RUN apt update -y
 RUN apt update -y && apt install -y \
     curl \
     file \
+    gettext \
     git \
     jq \
     netcat \

@@ -1,9 +1,7 @@
 #!/bin/bash
 
-caddyfile="${HOME}/conf/Caddyfile"
-
-if [[ -f "${caddyfile}" ]]; then
-    caddy run --config "${caddyfile}" --adapter caddyfile --watch
+if [[ -f "${CADDYFILE}" ]]; then
+    caddy run --config "${CADDYFILE}" --adapter caddyfile --watch
 else
     exit 1
 fi

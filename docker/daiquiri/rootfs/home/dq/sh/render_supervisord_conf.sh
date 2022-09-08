@@ -24,6 +24,10 @@ function get_list_entry() {
     jq -r ".[${2}].${1}" "${tempfile}"
 }
 
+function random_string() {
+    tr -dc "A-Za-z0-9" </dev/urandom | head -c 16
+}
+
 function sanitize_string() {
     echo "${1}" | tr '[:upper:]' '[:lower:]' | sed "s|[^a-z0-9_-]|_|g"
 }
@@ -35,7 +39,10 @@ function ap() {
 }
 
 # main
-cat "${source_spv_tpl}" >"${target_spv_conf}"
+cat "${source_spv_tpl}" |
+    sed "s/<PASSWORD>/$(random_string)/g" |
+    sed "s/<USERNAME>/$(random_string)/g" |
+    envsubst >"${target_spv_conf}"
 
 if [[ "$(echo ${ASYNC} | tr '[:upper:]' '[:lower:]')" == "true" ]]; then
     extract_query_queues_entry

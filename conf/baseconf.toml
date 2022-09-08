@@ -91,6 +91,8 @@ docs_git_url = "https://gitlab.aip.de/django-daiquiri/cosmosim-content.git"
 #     "[program:webhook]",
 #     "command = webhook --port 9000 --verbose --hooks /home/dq/hooks.yaml"
 # ]
+caddyfile="/home/dq/conf/Caddyfile"
+crontab="/home/dq/conf/crontab"
 url_base = "<URL_PROTOCOL>://<URL_HOSTNAME>"
 
 [env]

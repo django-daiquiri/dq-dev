@@ -21,8 +21,7 @@ if [[ ! -f "${tfil}" ]]; then
 fi
 
 # render config files
-${HOME}/sh/expand-env-vars.sh \
-    "${HOME}/tpl/Caddyfile" "${HOME}/conf/Caddyfile"
+cat "${HOME}/tpl/Caddyfile" | envsubst >"${CADDYFILE}"
 
 if [[ "${ASYNC}" == "True" ]]; then
     ${HOME}/sh/init-folders.sh

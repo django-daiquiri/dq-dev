@@ -1,5 +1,7 @@
 alias ..="cd .."
+alias editbasepy="micro ${DQAPP}/config/settings/base.py"
 alias env="env | sort"
+alias mic="micro"
 alias p="python"
 alias pm="python ${DQAPP}/manage.py"
 alias psa="ps faux"

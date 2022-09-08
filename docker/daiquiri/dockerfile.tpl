@@ -25,6 +25,7 @@ RUN apt update -y && apt install -y \
     net-tools \
     procps \
     vim \
+    micro \
     libxml2-dev \
     libxslt-dev \
     zlib1g-dev \

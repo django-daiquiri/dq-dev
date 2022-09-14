@@ -41,26 +41,25 @@ RUN apt -y update && apt -y install postgresql-client
 COPY ./rootfs /
 RUN mkdir ${HOME}/log ${HOME}/run
 
-RUN ${HOME}/sh/install-from-github.sh \
-    "triole/supervisord/releases/latest" \
-    "(?<=href\=\").*_linux_x86_64.tar.gz" \
-    "${HOME}/bin"
+RUN curl --output ${HOME}/sh/install_from_github.sh https://raw.githubusercontent.com/triole/ghwfe/master/sh/install_from_github.sh
+RUN chmod +x ${HOME}/sh/install_from_github.sh
 
-RUN ${HOME}/sh/install-from-github.sh \
-    "triole/lunr-indexer/releases/latest" \
-    "(?<=href\=\").*_linux_x86_64.tar.gz" \
-    "${HOME}/bin"
+RUN ${HOME}/sh/install_from_github.sh \
+"caddyserver/caddy" "_linux_amd64.tar.gz" "${HOME}/bin"
 
-RUN ${HOME}/sh/install-from-github.sh \
-    "triole/webhook/releases/latest" \
-    "(?<=href\=\").*_linux_amd64.tar.gz" \
-    "${HOME}/bin"
+RUN ${HOME}/sh/install_from_github.sh \
+    "triole/supervisord" "_linux_x86_64.tar.gz" "${HOME}/bin"
 
-RUN ${HOME}/sh/install-from-github.sh \
-    "aptible/supercronic/releases/latest" \
-    "(?<=href\=\").*-linux-amd64" \
-    "${HOME}/bin/supercronic"
+RUN ${HOME}/sh/install_from_github.sh \
+    "triole/lunr-indexer" "_linux_x86_64.tar.gz" "${HOME}/bin"
 
+RUN ${HOME}/sh/install_from_github.sh \
+    "triole/webhook" "_linux_amd64.tar.gz" "${HOME}/bin"
+
+RUN ${HOME}/sh/install_from_github.sh \
+    "aptible/supercronic" "supercronic-linux-amd64" "${HOME}/bin"
+RUN mv ${HOME}/bin/supercronic-linux-amd64 ${HOME}/bin/supercronic
+RUN chmod +x ${HOME}/bin/supercronic
 
 RUN groupadd "${GNAME}" \
  && useradd -m -s /bin/bash -g "${GNAME}" -u "${UID}" "${USER}"

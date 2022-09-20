@@ -1,4 +1,5 @@
-alias editbasepy="micro ${DQAPP}/config/settings/base.py"
+alias editappconf="micro ${DQAPP}/config/settings/base.py"
+alias pm="python ${DQAPP}/manage.py"
 alias spv="spv.sh"
 
 # the following four functions are abstraction layers using wait_for

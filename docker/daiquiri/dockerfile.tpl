@@ -79,8 +79,6 @@ RUN ln -sf /usr/bin/python3 /usr/bin/python
 
 # RUN apt install -y <ADDITIONAL_PACKAGES>
 
-RUN ln -s /vol/tools/shed/caddy /bin/caddy
-
 RUN ${HOME}/sh/add_user.sh
 USER ${USER}
 

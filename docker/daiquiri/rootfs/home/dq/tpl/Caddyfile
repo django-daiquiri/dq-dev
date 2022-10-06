@@ -42,6 +42,7 @@
 			root * /store
 			rewrite * {rp.header.X-Accel-Redirect}
 			file_server
+			header Content-Disposition "attachment; filename="
 		}
 		header_up X-Forwarded-Proto ${URL_PROTOCOL}
 		header_down Location http:// ${URL_PROTOCOL}://

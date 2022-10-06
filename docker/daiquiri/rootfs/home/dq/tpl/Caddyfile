@@ -37,6 +37,12 @@
 	}
 
 	reverse_proxy * :8000 {
+		@accel header X-Accel-Redirect *
+		handle_response @accel {
+			root * /store
+			rewrite * {rp.header.X-Accel-Redirect}
+			file_server
+		}
 		header_up X-Forwarded-Proto ${URL_PROTOCOL}
 		header_down Location http:// ${URL_PROTOCOL}://
 	}

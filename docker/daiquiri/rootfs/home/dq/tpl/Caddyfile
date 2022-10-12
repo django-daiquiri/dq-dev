@@ -5,6 +5,10 @@
 }
 
 :${EXPOSED_PORT} {
+	@cms_static {
+		path_regexp cms_static ^.*/cms/(.*\.(css|gif|jpeg|jpg|json|js|png))$
+	}
+
 	@docs {
 		path_regexp docs ^.*/docs/(.*)$
 	}
@@ -15,6 +19,13 @@
 
 	@hooks {
 		path_regexp hooks ^.*/api/hooks/(.*)$
+	}
+
+	route @cms_static {
+		rewrite * {http.regexp.cms_static.1}
+		file_server {
+			root /store/files/cms
+		}
 	}
 
 	route @hooks {

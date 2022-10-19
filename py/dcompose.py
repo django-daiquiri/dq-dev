@@ -198,8 +198,7 @@ class DCompose():
         nn = self.prof.conf['prof']['network_name']
         self.dcyaml['networks'] = {}
         self.dcyaml['networks'][nn] = {}
-        self.dcyaml['networks'][nn]['external'] = {}
-        self.dcyaml['networks'][nn]['external']['name'] = nn
+        self.dcyaml['networks'][nn]['name'] = nn
         for service in self.dcyaml['services']:
             self.dcyaml['services'][service]['networks'] = [nn]
 

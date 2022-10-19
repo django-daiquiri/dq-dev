@@ -133,6 +133,11 @@ rabbitmq_logs = "-"
 # pgapp = "<HOME>/bash_scripts/build"
 # pgdata = "<HOME>/<ACTIVE_APP>/bash_scripts/build"
 
+[custom_scripts.init]
+# daiquiri = ""
+# pgapp = ""
+# pgdata = ""
+
 [custom_scripts.up]
 # daiquiri = ""
 # pgapp = ""

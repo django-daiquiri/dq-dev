@@ -68,6 +68,7 @@ secret_key = "verysecretkey"
 debug = true
 auto_create_admin_user = true
 auto_pip_install_app_requirements = true
+pip_force_reinstall_app_requirements = false
 account_email_verification = "optional"
 archive_base_path = "/tmp/files"
 archive_download_dir = "/tmp/download"

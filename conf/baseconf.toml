@@ -60,7 +60,6 @@ daiquiri = 9280
 # enter your hostname below and set 'url_protocol' to 'https'
 url_hostname = "localhost:9280"
 url_protocol = "http"
-container_docs = "<CONTAINER_DOCS>"
 database_app = "postgresql://<PGAPP_DB_USER>:<PGAPP_DB_PASS>@<CONTAINER_PGAPP>/daiquiri_app"
 database_data = "postgresql://<PGDATA_DB_USER>:<PGDATA_DB_PASS>@<CONTAINER_PGDATA>/daiquiri_data"
 allowed_hosts = "*"

@@ -24,7 +24,7 @@
 	route @cms_static {
 		rewrite * {http.regexp.cms_static.1}
 		file_server {
-			root /store/files/cms
+			root ${CADDY_SENDFILE_ROOT}/files/cms
 		}
 	}
 

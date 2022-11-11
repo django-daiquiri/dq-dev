@@ -79,6 +79,8 @@ RUN ln -sf /usr/bin/python3 /usr/bin/python
 
 # RUN apt install -y <ADDITIONAL_PACKAGES>
 
+RUN mkdir -p /store && chown -R ${USER}.${GNAME} /store
+
 RUN ${HOME}/sh/add_user.sh
 USER ${USER}
 

@@ -1,7 +1,14 @@
 #!/bin/bash
 
-docs_dir="${HOME}/docs"
-sl_target="${FILES_BASE_PATH}/cms"
+function make_docs_symlink() {
+    docs_dir="${HOME}/docs"
+    fol="$(echo "${1}" | grep -Po ".*(?=\/)")"
+    mkdir -p "${fol}"
+    if [[ (! -L "${1}" && -d "${docs_dir}/.git") ]]; then
+        ln -s "${docs_dir}/cms" "${1}"
+    fi
+
+}
 
 if [[ -n "${DOCS_GIT_URL}" ]]; then
     mkdir -p "${docs_dir}"
@@ -14,6 +21,5 @@ if [[ -n "${DOCS_GIT_URL}" ]]; then
     fi
 fi
 
-if [[ (! -L "${sl_target}" && -d "${docs_dir}/.git") ]]; then
-    ln -s "${docs_dir}/cms" "${sl_target}"
-fi
+make_docs_symlink "${FILES_BASE_PATH}/cms"
+make_docs_symlink "${CADDY_SENDFILE_ROOT}/files/cms"

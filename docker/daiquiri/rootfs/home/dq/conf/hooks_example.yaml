@@ -1,12 +1,12 @@
--
-    id: update-docs
-    execute-command: /home/dq/sh/update_content.sh
-    command-working-directory: "/vol/content"
-    include-command-output-in-response: true
-    trigger-rule:
-        match:
-            type: value
-            parameter:
-                source: header
-                name: X-Gitlab-Token
-            value: <VERY_SECRET_TOKEN>
+---
+- id: update-docs
+  execute-command: /home/dq/sh/update_content.sh
+  command-working-directory: "/vol/content"
+  include-command-output-in-response: true
+  trigger-rule:
+    match:
+      type: value
+      parameter:
+        source: header
+        name: X-Gitlab-Token
+      value: <VERY_SECRET_TOKEN>

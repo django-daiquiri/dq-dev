@@ -48,6 +48,9 @@ RUN chmod +x ${HOME}/sh/install_from_github.sh
 RUN ${HOME}/sh/install_from_github.sh \
     "triole/supervisord" "_linux_x86_64.tar.gz" "${HOME}/bin"
 
+RUN ${HOME}/sh/install_from_github.sh \
+    "caddyserver/caddy" "_linux_amd64.tar.gz" "${HOME}/bin"
+
 RUN chmod -R 777 /tmp
 RUN find /tmp -type f -executable -regex ".*\/custom_scripts\/build.*" \
     | sort | xargs -i /bin/bash {}
@@ -74,8 +77,6 @@ RUN git clone \
     ${WORDPRESS_PATH}/wp-content/themes/daiquiri
 
 # RUN apt install -y <ADDITIONAL_PACKAGES>
-
-RUN ln -s /vol/tools/shed/caddy /bin/caddy
 
 RUN groupadd -g "${GID}" "${GNAME}" \
  && useradd -m -s /bin/bash -g "${GNAME}" -u "${UID}" "${USER}" \

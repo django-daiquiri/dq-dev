@@ -41,10 +41,12 @@ COPY ./rootfs /
 RUN mkdir ${HOME}/log
 RUN echo "docker build" > "${INIT_PID_FILE}"
 
-RUN ${HOME}/sh/install-from-github.sh \
-    "triole/supervisord/releases/latest" \
-    "(?<=href\=\").*_linux_x86_64.tar.gz" \
-    "${HOME}/bin"
+RUN curl --output ${HOME}/sh/install_from_github.sh \
+    https://raw.githubusercontent.com/triole/ghwfe/master/sh/install_from_github.sh
+RUN chmod +x ${HOME}/sh/install_from_github.sh
+
+RUN ${HOME}/sh/install_from_github.sh \
+    "triole/supervisord" "_linux_x86_64.tar.gz" "${HOME}/bin"
 
 RUN chmod -R 777 /tmp
 RUN find /tmp -type f -executable -regex ".*\/custom_scripts\/build.*" \

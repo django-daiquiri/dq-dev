@@ -6,7 +6,7 @@
 
 :${EXPOSED_PORT} {
 	@cms_static {
-		path_regexp cms_static ^.*/cms/(.*\.(css|gif|jpeg|jpg|json|js|pdf|py|png))$
+		path_regexp cms_static ^.*/cms/(.*\.(bmp|css|gif|jpeg|jpg|js|json|mp4|pdf|png|py))$
 	}
 
 	@docs {

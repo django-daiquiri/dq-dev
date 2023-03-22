@@ -1,41 +1,41 @@
+---
 version: '3'
 
 vars:
-    PYTEST_FILES:
-        sh: >
-            find test -mindepth 1 -maxdepth 1 -type f -regex '.*_test.py$'
-            | sort
+  PYTEST_FILES:
+    sh: >
+      find test -mindepth 1 -maxdepth 1 -type f -regex '.*_test.py$'
 
 tasks:
-    default:
-        desc: "run default tests: command line, unit tests"
-        cmds:
-            - task: test
+  default:
+    desc: "run default tests: command line, unit tests"
+    cmds:
+      - task: test
 
-    test:
-        desc: run unit and command line tests
-        sources:
-            - py/*.py
-            - test/*
-        method: timestamp
-        cmds:
-            - cmd: pytest {{.PYTEST_FILES}}
-            - cmd: test/cmdline.sh
+  test:
+    desc: run unit and command line tests
+    sources:
+      - py/*.py
+      - test/*
+    method: timestamp
+    cmds:
+      - cmd: pytest {{.PYTEST_FILES}}
+      - cmd: test/cmdline.sh
 
-    test_req:
-        desc: run request tests, requires spinned up dq dev containers
-        sources:
-            - py/*.py
-            - test/*
-        method: timestamp
-        cmds:
-            - cmd: python test/fire_requests.py -c req_test
+  test_req:
+    desc: run request tests, requires spinned up dq dev containers
+    sources:
+      - py/*.py
+      - test/*
+    method: timestamp
+    cmds:
+      - cmd: python test/fire_requests.py -c req_test
 
-    test_req_rp:
-        desc: run request tests, requires spinned up dq dev containers
-        sources:
-            - py/*.py
-            - test/*
-        method: timestamp
-        cmds:
-            - cmd: python test/fire_requests.py -c req_rp
+  test_req_rp:
+    desc: run request tests, requires spinned up dq dev containers
+    sources:
+      - py/*.py
+      - test/*
+    method: timestamp
+    cmds:
+      - cmd: python test/fire_requests.py -c req_rp

@@ -10,6 +10,8 @@ ENV INIT_FINISHED_FILE=${HOME}/run/init.finished
 
 ENV PATH=${PATH}:/home/dq/sh:/home/dq/.local/bin:${HOME}/bin:${HOME}/sh:/vol/tools/shed
 
+ENV PIP_BREAK_SYSTEM_PACKAGES 1
+
 RUN apt update -y
 RUN apt update -y && apt install -y \
     curl \

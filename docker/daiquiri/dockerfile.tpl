@@ -17,7 +17,7 @@ RUN apt update -y && apt install -y \
     gettext \
     git \
     jq \
-    netcat \
+    netcat-traditional \
     python3 \
     python3-dev \
     python3-pip \

@@ -150,7 +150,7 @@ if __name__ == "__main__":
         dco.render_dc_yaml(conf["args"]["run"])
         dco.render_dockerfile_templates()
         run = Runner(conf)
-        run.create_network()
+        # run.create_network()
         run.start()
 
     if args.stop is not None:

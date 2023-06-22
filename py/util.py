@@ -24,7 +24,7 @@ def colmag(s):
 
 def find(root, filter=".*", filter_type="f"):
     detected = []
-    for (path, dirs, files) in os.walk(root):
+    for path, dirs, files in os.walk(root):
         if files and filter_type == "f":
             for filename in files:
                 rfn = pj(path, filename)
@@ -143,7 +143,7 @@ def write_toml(data, filename):
 
 def write_yaml(data, filename):
     with open(filename, "w") as outfile:
-        yaml.dump(data, outfile, default_flow_style=False, indent=4)
+        yaml.dump(data, outfile, default_flow_style=False, indent=2)
 
 
 def write_array_to_file(data, filename, mode="w"):

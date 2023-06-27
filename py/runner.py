@@ -71,8 +71,5 @@ class Runner:
     def remove_images(self):
         self.run_compose(["down", "--volumes"])
 
-    # def create_network(self):
-    # self.run_docker(["network", "create", self.conf["prof"]["network_name"]])
-
     def remove_network(self):
         self.run_docker(["network", "remove", self.conf["prof"]["network_name"]])

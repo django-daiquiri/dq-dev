@@ -209,3 +209,8 @@ def pprint(obj):
 
 def ptable(head, tab):
     print(tabulate(tab, headers=head))
+
+
+def get_lastmod(filename):
+    stat = os.stat(filename)
+    return os.path.getmtime(filename)

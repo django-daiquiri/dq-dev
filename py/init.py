@@ -56,6 +56,8 @@ def init(args):
     conf["args"]["tail_logs"] = parse_nargs(args.tail_logs)
     conf["args"]["set"] = args.set_profile
     conf["args"]["create"] = args.create_profile
+    conf["args"]["save_snapshot"] = args.save_snapshot
+    conf["args"]["restore_snapshot"] = args.restore_snapshot
 
     apc = read_toml(conf["files"]["active_conf"])
     conf["prof"]["name"] = ""
@@ -91,7 +93,7 @@ def init(args):
     conf["files"]["prof_conf"] = pj(conf["prof"]["folder"], "conf.toml")
     conf["files"]["prof_secrets"] = pj(conf["prof"]["folder"], "secrets.toml")
 
-    if conf["args"]["set"] is None:
+    if conf["args"]["set"] is None and args.save_snapshot and args.restore_snapshot:
         print("\nUse profile         " + col.gre(conf["prof"]["name"]))
     if isfile(conf["files"]["prof_conf"]) is True:
         if conf["args"]["set"] is None:
@@ -100,7 +102,12 @@ def init(args):
         # merge the two
         conf["conf"] = merge_dictionaries(conf["conf"], prof_conf)
     else:
-        if args.set_profile is None and args.create_profile is None:
+        if (
+            args.set_profile is None
+            and args.create_profile is None
+            and args.save_snapshot is None
+            and args.restore_snapshot is None
+        ):
             print(
                 col.red("\nWarning")
                 + "\n    Profile config does not exist: "

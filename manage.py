@@ -8,6 +8,7 @@ from py.dcompose import DCompose
 from py.init import init
 from py.profile import Profile
 from py.runner import Runner
+from py.snapshots import restore_snapshot, save_snapshot
 from py.util import pprint
 
 parser = argparse.ArgumentParser(
@@ -102,6 +103,20 @@ parser.add_argument(
     help="display currently active profile",
 )
 parser.add_argument(
+    "--save_snapshot",
+    type=str,
+    nargs="?",
+    default=None,
+    help="save current db and config to snapshot",
+)
+parser.add_argument(
+    "--restore_snapshot",
+    type=str,
+    nargs="*",
+    default=None,
+    help="restoare saved snapshot",
+)
+parser.add_argument(
     "-n",
     "--dry_run",
     action="store_true",
@@ -171,3 +186,9 @@ if __name__ == "__main__":
     if args.remove_network is True:
         run = Runner(conf)
         run.remove_network()
+
+    if conf["args"]["save_snapshot"] is not None:
+        save_snapshot(conf["args"]["save_snapshot"])
+
+    if conf["args"]["restore_snapshot"] is not None:
+        restore_snapshot(conf["args"]["restore_snapshot"])

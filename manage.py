@@ -161,7 +161,6 @@ if __name__ == "__main__":
         run.down()
 
     if conf["args"]["tail_logs"] is True:
-        print("hello")
         run = Runner(conf)
         run.tail_logs()
 

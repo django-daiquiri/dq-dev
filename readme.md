@@ -1,14 +1,16 @@
 # Dq Dev [![build](https://github.com/django-daiquiri/dq-dev/actions/workflows/build.yaml/badge.svg)](https://github.com/django-daiquiri/dq-dev/actions/workflows/build.yaml)
 
-<!--- mdtoc: toc begin -->
+<!-- toc -->
 
-1. [Synopsis](#synopsis)
-2. [How to use](#how-to-use)
-3. [From scratch](#from-scratch)
-4. [Tech background](#tech-background)
-   1. [Dependencies](#dependencies)
-   2. [Tests](#tests)
-   3. [CLI Args](#cli-args)<!--- mdtoc: toc end -->
+- [Synopsis](#synopsis)
+- [How to use](#how-to-use)
+- [From scratch](#from-scratch)
+- [Tech background](#tech-background)
+  - [Dependencies](#dependencies)
+  - [Tests](#tests)
+  - [CLI Args](#cli-args)
+
+<!-- /toc -->
 
 ## Synopsis
 

@@ -8,7 +8,7 @@ ENV HOME=/home/dq
 
 ENV INIT_FINISHED_FILE=${HOME}/run/init.finished
 
-ENV PATH=${PATH}:/home/dq/sh:/home/dq/.local/bin:${HOME}/bin:${HOME}/sh:/vol/tools/shed
+ENV PATH=${PATH}:/home/dq/sh:/home/dq/.local/bin:${HOME}/bin:${HOME}/py:${HOME}/sh:/vol/tools/shed
 
 ENV PIP_BREAK_SYSTEM_PACKAGES 1
 
@@ -76,7 +76,8 @@ RUN chown -R ${USER}:${USER} /tmp
 RUN find /tmp -type f -executable -regex ".*\/custom_scripts\/build.*" \
     | sort | xargs -i /bin/bash {}
 
-RUN pip3 install --upgrade pip && pip3 install gunicorn
+RUN pip3 install --upgrade pip
+RUN pip3 install python-dotenv django gunicorn
 RUN ln -sf /usr/bin/python3 /usr/bin/python
 
 # RUN apt install -y <ADDITIONAL_PACKAGES>

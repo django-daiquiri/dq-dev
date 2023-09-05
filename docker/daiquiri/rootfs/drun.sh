@@ -1,4 +1,4 @@
 #!/bin/bash
 
-${HOME}/sh/render_supervisord_conf.sh
+${HOME}/py/render_supervisord_conf.py
 ${HOME}/bin/supervisord -c "${HOME}/conf/supervisord.conf"

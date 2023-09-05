@@ -1,6 +1,7 @@
 #!/usr/bin/python3
-
 import os
+import secrets
+import string
 import sys
 from os.path import join as pj
 
@@ -8,17 +9,6 @@ sys.path.append(pj(os.environ["HOME"], "app"))
 
 from django.conf import settings
 from dotenv import load_dotenv
-
-
-def make_spv_entry(queue):
-    qu = "query_" + queue["key"]
-    prio = str(queue["priority"])
-    return [
-        "",
-        "[program:" + qu + "]",
-        "run-rmq-worker.sh " + qu + " " + prio,
-        "exitcodes = 255",
-    ]
 
 
 class SupervisordConfRenderer:
@@ -38,8 +28,27 @@ class SupervisordConfRenderer:
             return True
         return False
 
+    def random_string(self, len):
+        charset = string.ascii_letters + string.digits
+        pwd = ""
+        for i in range(len):
+            pwd += "".join(secrets.choice(charset))
+        return pwd
+
+    def make_spv_entry(self, queue):
+        qu = "query_" + queue["key"]
+        prio = str(queue["priority"])
+        return [
+            "",
+            "[program:" + qu + "]",
+            "run-rmq-worker.sh " + qu + " " + prio,
+            "exitcodes = 255",
+        ]
+
     def read_template(self):
         data = []
+        os.environ["SPV_USERNAME"] = self.random_string(32)
+        os.environ["SPV_PASSWORD"] = self.random_string(32)
         with open(self.spv_tpl_path, "r") as file:
             temp = file.read().splitlines()
         for line in temp:
@@ -54,8 +63,9 @@ class SupervisordConfRenderer:
 
 if __name__ == "__main__":
     scr = SupervisordConfRenderer()
+
     if scr.is_async:
         for queue in scr.django_settings.QUERY_QUEUES:
-            en = make_spv_entry(queue)
+            en = self.make_spv_entry(queue)
             scr.spv_conf.extend(en)
     scr.save_config()

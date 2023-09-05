@@ -37,11 +37,11 @@ dq_app = "/home/dq/app"
 
 [docker_container_labels]
 daiquiri = [
-    # "traefik.enable=true",
-    # "traefik.http.routers.dqdev.entrypoints=websecure",
-    # "traefik.http.routers.dqdev.rule=\"Host(`dqdev.localhost`) || Host(`dqdev.aip.de`)\"",
-    # "traefik.http.routers.dqdev.service=\"dqdev\"",
-    # "traefik.http.services.dqdev.loadbalancer.server.port=8080"
+  # "traefik.enable=true",
+  # "traefik.http.routers.dqdev.entrypoints=websecure",
+  # "traefik.http.routers.dqdev.rule=\"Host(`dqdev.localhost`) || Host(`dqdev.aip.de`)\"",
+  # "traefik.http.routers.dqdev.service=\"dqdev\"",
+  # "traefik.http.services.dqdev.loadbalancer.server.port=8080"
 ]
 pgapp = []
 pgdata = []
@@ -95,8 +95,8 @@ docs_git_url = "https://gitlab.aip.de/django-daiquiri/cosmosim-content.git"
 #     "[program:webhook]",
 #     "command = webhook --port 9000 --verbose --hooks /home/dq/hooks.yaml"
 # ]
-caddyfile="/home/dq/conf/Caddyfile"
-crontab="/home/dq/conf/crontab"
+caddyfile = "/home/dq/conf/Caddyfile"
+crontab = "/home/dq/conf/crontab"
 url_base = "<URL_PROTOCOL>://<URL_HOSTNAME>"
 
 [env]

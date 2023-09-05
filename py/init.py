@@ -43,6 +43,8 @@ def init(args):
     conf["files"]["active_conf"] = pj(conf["prof"]["basedir"], "active.toml")
     conf["files"]["base_conf"] = pj(basedir, "conf", "baseconf.toml")
     conf["files"]["base_secrets"] = pj(basedir, "conf", "secrets.toml")
+    conf["snapshots_dir"] = pj(conf["basedir"], "usr", "snapshots")
+    mkdir(conf["snapshots_dir"])
 
     conf["args"]["list"] = True
     conf["args"]["down"] = parse_nargs(args.down)
@@ -56,8 +58,9 @@ def init(args):
     conf["args"]["tail_logs"] = parse_nargs(args.tail_logs)
     conf["args"]["set"] = args.set_profile
     conf["args"]["create"] = args.create_profile
-    conf["args"]["save_snapshot"] = args.save_snapshot
-    conf["args"]["restore_snapshot"] = args.restore_snapshot
+    conf["args"]["list_snapshots"] = args.list_snapshots
+    conf["args"]["save_snapshot"] = parse_nargs(args.save_snapshot)
+    conf["args"]["restore_snapshot"] = parse_nargs(args.restore_snapshot)
 
     apc = read_toml(conf["files"]["active_conf"])
     conf["prof"]["name"] = ""
@@ -110,9 +113,9 @@ def init(args):
         ):
             print(
                 col.red("\nWarning")
-                + "\n    Profile config does not exist: "
+                + "\n  Profile config does not exist: "
                 + col.yel(conf["files"]["prof_conf"])
-                + "\n    All base settings are going to be applied. "
+                + "\n  All base settings are going to be applied. "
                 + "It is highly likely your setup "
                 + "will turn out to be unusable.\n"
             )

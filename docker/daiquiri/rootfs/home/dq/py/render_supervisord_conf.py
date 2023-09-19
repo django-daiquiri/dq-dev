@@ -35,15 +35,21 @@ class SupervisordConfRenderer:
             pwd += "".join(secrets.choice(charset))
         return pwd
 
-    def make_spv_entry(self, queue):
-        qu = "query_" + queue["key"]
-        prio = str(queue["priority"])
+    def make_spv_entry(self, queue, idx):
+        qu = "query_" + self.getval(queue, "key", idx)
+        prio = self.getval(queue, "priority", 1)
         return [
             "",
             "[program:" + qu + "]",
             "run-rmq-worker.sh " + qu + " " + prio,
             "exitcodes = 255",
         ]
+
+    def getval(self, dic, val, default=""):
+        try:
+            return str(dic[val])
+        except KeyError:
+            return str(default)
 
     def read_template(self):
         data = []
@@ -65,7 +71,9 @@ if __name__ == "__main__":
     scr = SupervisordConfRenderer()
 
     if scr.is_async:
-        for queue in scr.django_settings.QUERY_QUEUES:
-            en = self.make_spv_entry(queue)
+        print("render supervisord.conf")
+        for idx, queue in enumerate(scr.django_settings.QUERY_QUEUES):
+            en = scr.make_spv_entry(queue, idx)
+            print("add queue to spv conf: %s" % en[1:])
             scr.spv_conf.extend(en)
     scr.save_config()

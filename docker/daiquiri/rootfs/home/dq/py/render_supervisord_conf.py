@@ -69,11 +69,15 @@ class SupervisordConfRenderer:
 
 if __name__ == "__main__":
     scr = SupervisordConfRenderer()
-
     if scr.is_async:
-        print("render supervisord.conf")
-        for idx, queue in enumerate(scr.django_settings.QUERY_QUEUES):
-            en = scr.make_spv_entry(queue, idx)
-            print("add queue to spv conf: %s" % en[1:])
-            scr.spv_conf.extend(en)
+        try:
+            scr.django_settings.QUERY_QUEUES
+        except ModuleNotFoundError:
+            pass
+        else:
+            print("render supervisord.conf")
+            for idx, queue in enumerate(scr.django_settings.QUERY_QUEUES):
+                en = scr.make_spv_entry(queue, idx)
+                print("add queue to spv conf: %s" % en[1:])
+                scr.spv_conf.extend(en)
     scr.save_config()

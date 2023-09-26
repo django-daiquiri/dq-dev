@@ -3,7 +3,7 @@ FROM postgres:13
 ENV PATH="${PATH}:/opt:/vol/tools/shed"
 
 RUN apt update -y && apt install -y \
-    postgresql-client
+  postgresql-client
 
 COPY ./rootfs /
 RUN chmod -R 777 /tmp

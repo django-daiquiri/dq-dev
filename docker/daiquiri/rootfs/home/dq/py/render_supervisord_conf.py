@@ -89,8 +89,10 @@ if __name__ == "__main__":
     if scr.is_async:
         try:
             scr.django_settings.QUERY_QUEUES
-        except ModuleNotFoundError, KeyError:
-            print("can not open django_settings.QUERY_QUEUES, skip query queue renderer")
+        except (ModuleNotFoundError, KeyError):
+            print(
+                "can not open django_settings.QUERY_QUEUES, skip query queue renderer"
+            )
         else:
             print("render supervisord.conf")
             for idx, queue in enumerate(scr.django_settings.QUERY_QUEUES):

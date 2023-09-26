@@ -23,7 +23,6 @@ class SupervisordConfRenderer:
             print("async is true, load django settings")
             load_dotenv()
             os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings")
-            print(os.environ["DJANGO_SETTINGS_MODULE"])
             self.django_settings = settings
 
     def to_bool(self, s: str):
@@ -87,13 +86,11 @@ class SupervisordConfRenderer:
 
 if __name__ == "__main__":
     scr = SupervisordConfRenderer()
-    print(settings)
-    # print(scr.django_settings.QUERY_QUEUES)
     if scr.is_async:
         try:
             scr.django_settings.QUERY_QUEUES
-        except ModuleNotFoundError:
-            print("hahaha")
+        except ModuleNotFoundError, KeyError:
+            print("can not open django_settings.QUERY_QUEUES, skip query queue renderer")
         else:
             print("render supervisord.conf")
             for idx, queue in enumerate(scr.django_settings.QUERY_QUEUES):

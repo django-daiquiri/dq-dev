@@ -43,7 +43,7 @@ class SupervisordConfRenderer:
         return [
             "",
             "[program:" + qu + "]",
-            "run-rmq-worker.sh " + qu + " " + prio,
+            "command = run-rmq-worker.sh " + qu + " " + prio,
             "exitcodes = 255",
         ]
 

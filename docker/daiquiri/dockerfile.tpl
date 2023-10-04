@@ -77,7 +77,7 @@ RUN find /tmp -type f -executable -regex ".*\/custom_scripts\/build.*" \
   | sort | xargs -i /bin/bash {}
 
 RUN python3 -m pip install --upgrade pip
-RUN python3 -m pip install python-dotenv django gunicorn
+RUN python3 -m pip install python-dotenv django gunicorn gevent
 RUN ln -sf /usr/bin/python3 /usr/bin/python
 
 # RUN apt install -y <ADDITIONAL_PACKAGES>

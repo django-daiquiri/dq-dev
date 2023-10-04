@@ -10,6 +10,7 @@ if [[ -z "$(ps aux | grep "[g]unicorn")" ]]; then
         gunicorn --bind 0.0.0.0:8000 \
             --log-file=/dev/stdout \
             --access-logfile=/dev/stdout \
+            --worker-class gevent \
             --workers 2 \
             config.wsgi:application
     else

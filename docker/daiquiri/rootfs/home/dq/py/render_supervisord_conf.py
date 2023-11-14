@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 import os
+import re
 import secrets
 import string
 import sys
@@ -83,6 +84,40 @@ class SupervisordConfRenderer:
                 for el in self.spv_conf:
                     fil.write("%s\n" % el)
 
+    def add_to_supervisord_conf_from_env_var(self):
+        entries = os.getenv("ADD_TO_SUPERVISORD_CONF")
+        if entries is not None:
+            self.spv_conf.append("")
+            self.spv_conf.append(
+                "# from add_to_supervisord_conf env var set in conf.toml"
+            )
+            arr = entries.split(",")
+            for el in arr:
+                substr = self.rxfind("(?<=').*(?=')", el)
+                if substr is not None:
+                    print("add to spv conf from env: %s" % substr)
+                    if substr[0] == "[":
+                        self.spv_conf.append("")
+                    self.spv_conf.append(substr)
+            self.spv_conf.append("")
+
+    def rxfind(self, rx, string, group=0, ignoreCase=False):
+        r = None
+        if ignoreCase is True:
+            m = re.search(rx, string, flags=re.IGNORECASE)
+        else:
+            try:
+                m = re.search(rx, string)
+            except TypeError:
+                pass
+            else:
+                if bool(m) is True:
+                    if group is None:
+                        r = m
+                    else:
+                        r = m.group(group)
+        return r
+
 
 if __name__ == "__main__":
     scr = SupervisordConfRenderer()
@@ -99,4 +134,5 @@ if __name__ == "__main__":
                 en = scr.make_spv_entry(queue, idx)
                 print("add queue to spv conf: %s" % en[1:])
                 scr.spv_conf.extend(en)
+    scr.add_to_supervisord_conf_from_env_var()
     scr.save_config()

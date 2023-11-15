@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# always execute custom init scripts before daiquiri is installed
+find /tmp -type f -executable -regex ".*\/custom_scripts\/init.*" |
+  sort | xargs -i /bin/bash {}
+
 scriptdir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 if [[ $(pip3 freeze | grep -Poc "/django-daiquiri/daiquiri.git") == "0" ]]; then

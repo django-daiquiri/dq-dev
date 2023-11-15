@@ -8,10 +8,6 @@ fi
 
 mkdir -p "${FILES_BASE_PATH}"
 
-# execute custom scripts (init)
-find /tmp -type f -executable -regex ".*\/custom_scripts\/init.*" |
-  sort | xargs -i /bin/bash {}
-
 # ${HOME}/sh/install-daiquiri.sh
 # ${HOME}/sh/install-app-requirements.sh
 

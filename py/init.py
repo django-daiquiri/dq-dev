@@ -224,11 +224,10 @@ def parse_ports(conf):
                 r = {}
                 r["exposed"] = str(exp)
                 r["envstr"] = r["exposed"] + ":"
-            # try:
             inp = lookup_env_value(
                 conf["conf"]["env"][service_name], service_name + "_port$"
             )
-            if inp is None or is_port_no(inp) is False:
+            if inp is None or is_port_no(inp) is False or service_name == "daiquiri":
                 r["internal"] = r["exposed"]
             else:
                 r["internal"] = str(inp)

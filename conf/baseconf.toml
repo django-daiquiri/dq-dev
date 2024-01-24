@@ -98,10 +98,6 @@ docs_git_url = "https://gitlab.aip.de/django-daiquiri/cosmosim-content.git"
 caddyfile = "/home/dq/conf/Caddyfile"
 crontab = "/home/dq/conf/crontab"
 url_base = "<URL_PROTOCOL>://<URL_HOSTNAME>"
-# the following setting can be used to change the port on which
-# the daiquriri web server runs inside the container, if not set it defaults
-# the the same number as the port set in the exposed ports setting
-# daiquiri_port = 9280
 
 [env]
 [env.pgapp]

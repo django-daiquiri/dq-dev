@@ -227,6 +227,10 @@ def parse_ports(conf):
             inp = lookup_env_value(
                 conf["conf"]["env"][service_name], service_name + "_port$"
             )
+            if inp is None:
+                inp = lookup_env_value(
+                    conf["conf"]["env"][service_name], "postgres_port$"
+                )
             if inp is None or is_port_no(inp) is False or service_name == "daiquiri":
                 r["internal"] = r["exposed"]
             else:

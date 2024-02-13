@@ -10,8 +10,9 @@ if [[ -z "$(ps aux | grep "[g]unicorn")" ]]; then
         gunicorn --bind 0.0.0.0:8000 \
             --log-file=/dev/stdout \
             --access-logfile=/dev/stdout \
-            --worker-class gevent \
+            --worker-class gthread \
             --workers 2 \
+            --threads 2 \
             config.wsgi:application
     else
         # django dev server for development, has auto reload, does not cache

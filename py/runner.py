@@ -52,6 +52,9 @@ class Runner:
     def build(self):
         self.run_compose(["build"])
 
+    def build_no_cache(self):
+        self.run_compose(["build", "--no-cache"])
+
     def start(self):
         self.run_compose(["up", "--build", "-d"])
         self.tail_logs()

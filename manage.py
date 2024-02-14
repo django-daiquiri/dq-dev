@@ -27,6 +27,14 @@ parser.add_argument(
     help="build a profile's containers, exit when done",
 )
 parser.add_argument(
+    "-bnc",
+    "--build_no_cache",
+    type=str,
+    nargs="*",
+    default=None,
+    help="build a profile's containers without using cache, exit when done",
+)
+parser.add_argument(
     "-r",
     "--run",
     type=str,
@@ -165,8 +173,13 @@ if __name__ == "__main__":
         dco.render_dc_yaml(conf["args"]["run"])
         dco.render_dockerfile_templates()
         run = Runner(conf)
-        run.create_network()
         run.build()
+
+    if args.build_no_cache is not None:
+        dco.render_dc_yaml(conf["args"]["run"])
+        dco.render_dockerfile_templates()
+        run = Runner(conf)
+        run.build_no_cache()
 
     if args.run is not None:
         dco.render_dc_yaml(conf["args"]["run"])

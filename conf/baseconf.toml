@@ -102,17 +102,14 @@ url_base = "<URL_PROTOCOL>://<URL_HOSTNAME>"
 [env]
 [env.pgapp]
 postgres_host = "pgapp"
-postgres_port = 5432
 postgres_db = "daiquiri_app"
 
 [env.pgdata]
 postgres_host = "pgdata"
-postgres_port = 5432
 postgres_db = "daiquiri_data"
 
 [env.rabbitmq]
 rabbitmq_vhost = "daiquiri"
-rabbitmq_node_port = 5672
 rabbitmq_logs = "-"
 
 # define additional packages that are installed during the docker container

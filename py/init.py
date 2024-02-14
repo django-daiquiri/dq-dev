@@ -231,7 +231,7 @@ def parse_ports(conf):
                 inp = str(5432)
             if service_name == "rabbitmq":
                 inp = str(5672)
-            if inp != "0":
+            if inp == "0":
                 print(
                     "\n[error] can not construct port map, "
                     + "unable to determine internally used port for service '"

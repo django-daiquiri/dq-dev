@@ -85,7 +85,7 @@ async = false
 celery_broker_url = "amqp://<RABBITMQ_USER>:<RABBITMQ_PASS>@<CONTAINER_RABBITMQ>:5672/<RABBITMQ_VHOST>"
 celeryd_log_level = "INFO"
 enable_gunicorn = false
-# docs_git_url = "https://gitlab.aip.de/django-daiquiri/cosmosim-content.git"
+docs_git_url = "placeholder.git"
 # add_to_supervisord_conf = [
 #     "[program:rmq_worker_new_worker]",
 #     "command = run-rmq-worker.sh new_worker 1",

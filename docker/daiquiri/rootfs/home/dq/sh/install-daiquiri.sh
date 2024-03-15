@@ -6,8 +6,15 @@ find /tmp -type f -executable -regex ".*\/custom_scripts\/init.*" |
 
 scriptdir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
+source "${HOME}/.bashrc"
+
 if [[ $(pip3 freeze | grep -Poc "/django-daiquiri/daiquiri.git") == "0" ]]; then
     cd "${DQSOURCE}" || exit 1
+
+    nvm install
+    npm ci
+    npm run build
+
     pip3 install -e "${DQSOURCE}"
 
     cd "${DQAPP}"
@@ -19,6 +26,10 @@ if [[ $(pip3 freeze | grep -Poc "/django-daiquiri/daiquiri.git") == "0" ]]; then
         # necessary to create the daiquiri admin user
         python3 manage.py create_admin_user >/dev/null 2>&1
     fi
+
+    nvm use
+    npm link ${DQSOURCE}
+    npm run build
 
     mkdir -p "${DQAPP}/vendor"
     python3 manage.py download_vendor_files

@@ -43,7 +43,7 @@ class Runner:
         cmd_arr = []
         if self.need_sudo is True:
             cmd_arr.append("sudo")
-        cmd_arr.append("docker-compose")
+        cmd_arr.extend(["docker", "compose"])
         cmd_arr.extend(self.file_arg_compose())
         cmd_arr.extend(args)
         self.run_cmd_fg(cmd_arr)
@@ -51,6 +51,9 @@ class Runner:
     # docker compose commands
     def build(self):
         self.run_compose(["build"])
+
+    def build_no_cache(self):
+        self.run_compose(["build", "--no-cache"])
 
     def start(self):
         self.run_compose(["up", "--build", "-d"])

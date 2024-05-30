@@ -36,13 +36,7 @@ dq_app = "/home/dq/app"
 # testdata = "/vol/testdata"
 
 [docker_container_labels]
-daiquiri = [
-  # "traefik.enable=true",
-  # "traefik.http.routers.dqdev.entrypoints=websecure",
-  # "traefik.http.routers.dqdev.rule=\"Host(`dqdev.localhost`) || Host(`dqdev.aip.de`)\"",
-  # "traefik.http.routers.dqdev.service=\"dqdev\"",
-  # "traefik.http.services.dqdev.loadbalancer.server.port=8080"
-]
+daiquiri = []
 pgapp = []
 pgdata = []
 rabbitmq = []
@@ -60,11 +54,14 @@ daiquiri = 9280
 # enter your hostname below and set 'url_protocol' to 'https'
 url_hostname = "localhost:9280"
 url_protocol = "http"
+url_base = "<URL_PROTOCOL>://<URL_HOSTNAME>"
+site_url = "<URL_PROTOCOL>://<URL_HOSTNAME>"
 database_app = "postgresql://<PGAPP_DB_USER>:<PGAPP_DB_PASS>@<CONTAINER_PGAPP>/daiquiri_app"
 database_data = "postgresql://<PGDATA_DB_USER>:<PGDATA_DB_PASS>@<CONTAINER_PGDATA>/daiquiri_data"
 allowed_hosts = "*"
 secret_key = "verysecretkey"
 debug = true
+proxy = true
 auto_create_admin_user = true
 auto_pip_install_app_requirements = true
 pip_force_reinstall_app_requirements = false
@@ -88,37 +85,33 @@ async = false
 celery_broker_url = "amqp://<RABBITMQ_USER>:<RABBITMQ_PASS>@<CONTAINER_RABBITMQ>:5672/<RABBITMQ_VHOST>"
 celeryd_log_level = "INFO"
 enable_gunicorn = false
-docs_git_url = "https://gitlab.aip.de/django-daiquiri/cosmosim-content.git"
+docs_git_url = "placeholder.git"
 # add_to_supervisord_conf = [
-#     "[program:lunr-indexer]",
-#     "command = lunr-indexer /home/dq/docs/docs -o /home/dq/docs/lunr-index.json -w -f",
+#     "[program:rmq_worker_new_worker]",
+#     "command = run-rmq-worker.sh new_worker 1",
 #     "[program:webhook]",
 #     "command = webhook --port 9000 --verbose --hooks /home/dq/hooks.yaml"
 # ]
 caddyfile = "/home/dq/conf/Caddyfile"
 crontab = "/home/dq/conf/crontab"
-url_base = "<URL_PROTOCOL>://<URL_HOSTNAME>"
 
 [env]
 [env.pgapp]
 postgres_host = "pgapp"
-postgres_port = 5432
 postgres_db = "daiquiri_app"
 
 [env.pgdata]
 postgres_host = "pgdata"
-postgres_port = 5432
 postgres_db = "daiquiri_data"
 
 [env.rabbitmq]
 rabbitmq_vhost = "daiquiri"
-rabbitmq_node_port = 5672
 rabbitmq_logs = "-"
 
 # define additional packages that are installed during the docker container
 # build process from the base image's repositories, uncomment below
 [additional_packages]
-# daiquiri = [ "wget", "procps" ]
+# daiquiri = [ "libpq-dev", "python3-venv", "zip", "wget", "procps" ]
 # pgapp = [ "procps" ]
 # pgdata = [ "procps" ]
 
@@ -134,11 +127,11 @@ rabbitmq_logs = "-"
 # pgdata = "<HOME>/<ACTIVE_APP>/bash_scripts/build"
 
 [custom_scripts.init]
-# daiquiri = ""
+# daiquiri = "<HOME>/bash_scripts/init"
 # pgapp = ""
 # pgdata = ""
 
 [custom_scripts.up]
-# daiquiri = ""
+# daiquiri = "<HOME>/bash_scripts/up"
 # pgapp = ""
 # pgdata = ""

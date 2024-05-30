@@ -1,4 +1,5 @@
 import os
+import sys
 from os.path import isdir, isfile
 from os.path import join as pj
 
@@ -9,7 +10,6 @@ from py.util import (
     is_port_no,
     listdirs_only,
     listfiles_only,
-    lookup_env_value,
     mkdir,
     read_toml,
     remove_dir,
@@ -224,17 +224,22 @@ def parse_ports(conf):
                 r = {}
                 r["exposed"] = str(exp)
                 r["envstr"] = r["exposed"] + ":"
-            inp = lookup_env_value(
-                conf["conf"]["env"][service_name], service_name + "_port$"
-            )
-            if inp is None:
-                inp = lookup_env_value(
-                    conf["conf"]["env"][service_name], "postgres_port$"
+            inp = "0"
+            if service_name == "daiquiri":
+                inp = r["exposed"]
+            if service_name == "pgapp" or service_name == "pgdata":
+                inp = str(5432)
+            if service_name == "rabbitmq":
+                inp = str(5672)
+            if inp == "0":
+                print(
+                    "\n[error] can not construct port map, "
+                    + "unable to determine internally used port for service '"
+                    + service_name
+                    + "'\n"
                 )
-            if inp is None or is_port_no(inp) is False or service_name == "daiquiri":
-                r["internal"] = r["exposed"]
-            else:
-                r["internal"] = str(inp)
+                sys.exit(1)
+            r["internal"] = str(inp)
             r["envstr"] += r["internal"]
         if r is not None:
             portmap[service_name] = r

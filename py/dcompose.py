@@ -156,6 +156,12 @@ class DCompose:
                     "../../../docker/" + service
                 )
                 self.dcyaml["services"][c]["container_name"] = self.nam_con(service)
+                self.dcyaml["services"][c]["ulimits"] = {
+                    "nofile": {
+                        "soft": 65536,
+                        "hard": 65536
+                        }
+                }
                 self.dcyaml["services"][c]["restart"] = "always"
 
     # depends on

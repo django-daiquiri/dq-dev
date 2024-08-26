@@ -30,7 +30,7 @@ pidfile="${rundir}/$(sanitize_string ${queue}).pid"
 
 cd "${DQAPP}"
 echo "[$(date +%Y%m%d_%H%M%S)] Start rmq queue: ${queue}, concurrency ${concurrency}"
-celery multi start ${DAIQUIRI_APP}_${queue} \
+celery multi start daiquiri_${queue} \
     -A config \
     -Q "${queue}" \
     -c ${concurrency} \

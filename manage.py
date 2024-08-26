@@ -1,11 +1,11 @@
 #!/usr/bin/python3
 import argparse
 import os
+import sys
 from sys import exit as x
 
 from py.colours import Colours
 from py.dcompose import DCompose
-from py.init import init
 from py.profile import Profile
 from py.runner import Runner
 from py.snapshots import Snapshots
@@ -92,7 +92,11 @@ parser.add_argument(
     help="create a new profile with the default settings",
 )
 parser.add_argument(
-    "-s", "--set_profile", type=str, default=None, help="set profile to active"
+    "-s",
+    "--set_profile",
+    type=str,
+    default=None,
+    help="set profile to active"
 )
 parser.add_argument(
     "-e",
@@ -128,7 +132,7 @@ parser.add_argument(
     type=str,
     nargs="*",
     default=None,
-    help="restoare saved snapshot",
+    help="restore saved snapshot",
 )
 parser.add_argument(
     "-n",
@@ -145,20 +149,32 @@ args = parser.parse_args()
 
 if __name__ == "__main__":
     col = Colours()
-    conf = init(args)
-    prof = Profile(conf)
+    prof = Profile(args)
+    conf = prof.conf
     dco = DCompose(conf, prof)
     snap = Snapshots(conf)
 
-    if conf["args"]["list"] is True:
-        prof.list()
-        x()
-
     if args.create_profile is not None:
         prof.create(args.create_profile)
+        x()
 
     if args.set_profile is not None:
         prof.set(args.set_profile)
+        x()
+
+    if not prof.exists:
+        print(
+            col.red("There is no active profile!\n\n") +
+            col.gre("Please activate a profile with \n") +
+            col.gre("    python manage.py -s <profile_name>\n") +
+            col.gre("or, first, create a new profile with\n") +
+            col.gre("    python manage.py -c <profile_name>\n") +
+            col.gre("and then activate it.")
+        )
+
+    if len(sys.argv) <=1 or not prof.is_active():
+        prof.list()
+        x()
 
     if args.display_profile is not None:
         c = prof.read_profile_config(conf["args"]["display_profile"])

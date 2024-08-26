@@ -7,7 +7,7 @@ if [[ -f "${reqfile}" ]]; then
     # if the path to the local daiquiri repo exists then don't install it from the req
     if [[ -d "${DQSOURCE}" ]]; then
         echo "Install app requirements excluding daiquiri"
-        pip install $(grep -ivE "django-daiquiri" $reqfile)
+        pip install $(grep -v "^\s*#" ${reqfile} | grep -ivE "django-daiquiri")
     else
         echo "Install app requirements"
         pip install -r ${reqfile}

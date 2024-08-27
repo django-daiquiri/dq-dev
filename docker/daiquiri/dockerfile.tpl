@@ -30,9 +30,13 @@ RUN apt install -y \
   libxml2-dev \
   libxslt-dev \
   zlib1g-dev \
+  build-essential \
   libssl-dev
 
 RUN apt -y install gnupg2 wget vim
+
+RUN wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+
 RUN echo "deb http://apt.postgresql.org/pub/repos/apt \
   $(cat /etc/os-release | grep -Po "(?<=VERSION_CODENAME=).*")-pgdg main" \
   > /etc/apt/sources.list.d/pgdg.list

@@ -77,4 +77,8 @@ function wait_for_caddy(){
 # wait_for_file /tmp/file 120 "ls -la /tmp/file"
 # wait_for_folder /tmp/folder 120 "ls -la /tmp/folder"
 
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
 cd "${HOME}"

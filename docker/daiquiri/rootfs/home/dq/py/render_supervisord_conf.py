@@ -34,7 +34,7 @@ class SupervisordConfRenderer:
     def random_string(self, len):
         charset = string.ascii_letters + string.digits
         pwd = ""
-        for i in range(len):
+        for _ in range(len):
             pwd += "".join(secrets.choice(charset))
         return pwd
 
@@ -83,6 +83,7 @@ class SupervisordConfRenderer:
                 print("save rendered conf %s" % self.spv_conf_path)
                 for el in self.spv_conf:
                     fil.write("%s\n" % el)
+
 
     def add_to_supervisord_conf_from_env_var(self):
         entries = os.getenv("ADD_TO_SUPERVISORD_CONF")

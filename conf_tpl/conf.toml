@@ -1,0 +1,122 @@
+active_app = "dq_app"
+
+[enable_containers]
+daiquiri = true
+pgapp = true
+pgdata = true
+rabbitmq = false
+
+[enable_volumes]
+pgapp = false
+pgdata = false
+docs = false # if true, set the volume 'docs' in 'folders_on_host'
+
+[folders_on_host]
+# dq_source = "<HOME>/srv/daiquiri"
+dq_app = "<HOME>/code/gaia/gaia-app"
+# docs = "<HOME>/code/gaia/gaia-content"
+# data = "/data/gaia"
+# store = "/store/gaia"
+
+[docker_volume_mountpoints]
+# dq_source = "/home/dq/source"
+dq_app = "/home/dq/app"
+# data = "/data"
+# store = "/store"
+
+# please make sure the daiquiri port matches the one in the base_url below
+# db ports do not have to be exposed, but it's nice for test and development
+[exposed_ports]
+daiquiri = 9280
+# pgapp = 9281
+# pgdata = 9282
+# rabbitmq = 9284
+
+[env.daiquiri]
+url_hostname = "localhost:9280"
+url_protocol = "http"
+allowed_hosts = "*"
+debug = true
+proxy = true
+async = false
+enable_gunicorn = false
+auto_create_admin_user = true
+account_email_verification = "optional"
+crontab = "/home/dq/conf/crontab"
+
+secret_key = "verysecretkey"
+docs_git_url = "https://<DOCS_GIT_USER>:<DOCS_GIT_PASS>@gitlab.aip.de/gaia/gaia-content.git"
+database_app = "postgresql://<PGAPP_DB_USER>:<PGAPP_DB_PASS>@<CONTAINER_PGAPP>/daiquiri_app"
+database_data = "postgresql://<PGDATA_DB_USER>:<PGDATA_DB_PASS>@<CONTAINER_PGDATA>/daiquiri_data"
+celery_broker_url = "amqp://<RABBITMQ_USER>:<RABBITMQ_PASS>@<CONTAINER_RABBITMQ>:5672/<RABBITMQ_VHOST>"
+celeryd_log_level = "INFO"
+
+log_dir = "/home/dq/log"
+log_level = "INFO"
+
+files_base_path = "/tmp/files"
+files_base_url = "<URL_BASE>/files"
+archive_base_path = "/tmp/files"
+archive_download_dir = "/tmp/download"
+query_download_dir = "/tmp/download"
+query_upload_dir = "/tmp/upload"
+sendfile_root = "<FILES_BASE_PATH>"
+sendfile_url = "/download"
+sendfile_backend = "django_sendfile.backends.nginx"
+
+tap_schema = "tap_schema"
+oai_schema = "oai_schema"
+tap_upload = "tap_upload"
+url_base = "<URL_PROTOCOL>://<URL_HOSTNAME>"
+site_url = "<URL_PROTOCOL>://<URL_HOSTNAME>"
+caddyfile = "/home/dq/conf/Caddyfile"
+caddy_sendfile_root = "/store"
+
+# add_to_supervisord_conf = [
+#     "[program:rmq_worker_new_worker]",
+#     "command = run-rmq-worker.sh new_worker 1",
+#     "[program:webhook]",
+#     "command = webhook --port 9000 --verbose --hooks /home/dq/hooks.yaml"
+# ]
+
+
+[env]
+[env.pgapp]
+postgres_host = "pgapp"
+postgres_db = "daiquiri_app"
+
+[env.pgdata]
+postgres_host = "pgdata"
+postgres_db = "daiquiri_data"
+
+[env.rabbitmq]
+rabbitmq_vhost = "daiquiri"
+rabbitmq_logs = "-"
+
+# additional packages ('apt install <>') are installed during the build process
+[additional_packages]
+# daiquiri = [ "libpq-dev", "python3-venv", "zip", "wget", "procps" ]
+# pgapp = [ "procps" ]
+# pgdata = [ "procps" ]
+
+# The following entries define absolute paths on the host that contain custom
+# scripts executed during different build processes ('build', 'init' and 'up').
+# The scripts are executed in the alphabetical order. Subfolders are ignored.
+# BUILD: executed during the build process of the image
+[custom_scripts]
+[custom_scripts.build]
+# daiquiri = "/tmp/bash_scripts/build"
+# pgapp = "<HOME>/bash_scripts/build"
+# pgdata = "<HOME>/<ACTIVE_APP>/bash_scripts/build"
+
+# INIT: executed right after the build process, before anything else is installed
+[custom_scripts.init]
+# daiquiri = "<HOME>/bash_scripts/init"
+# pgapp = ""
+# pgdata = ""
+
+# UP: executed in the end, after the containers are up and running
+[custom_scripts.up]
+# daiquiri = "<HOME>/bash_scripts/up"
+# pgapp = ""
+# pgdata = ""

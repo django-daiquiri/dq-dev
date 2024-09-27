@@ -360,14 +360,6 @@ class DCompose:
             for line in filecontent.read().splitlines():
                 arr.append(self.expand_vars(line, container_name))
 
-        if len(self.conf["conf"]["docker_container_labels"][container_name]) > 0:
-            new_arr = [arr[0], ""]
-            for line in self.conf["conf"]["docker_container_labels"][container_name]:
-                new_arr.append("LABEL " + line)
-            for line in arr[1:]:
-                new_arr.append(line)
-            arr = new_arr
-
         write_array_to_file(arr, new_filename)
 
     # main

@@ -91,11 +91,11 @@ In the mainfolder is a python script `request_test.py` that fires some simple re
 ### CLI Args
 
 ```go mdox-exec="python manage.py -h"
-usage: manage.py [-h] [-b [BUILD ...]] [-r [RUN ...]] [-p [STOP ...]]
-                 [-d [DOWN ...]] [-rmi] [-rmn] [-g [TAIL_LOGS ...]]
-                 [-c CREATE_PROFILE] [-s SET_PROFILE] [-e [RENDER ...]]
-                 [-a [DISPLAY_PROFILE ...]] [--list_snapshots]
-                 [--save_snapshot [SAVE_SNAPSHOT ...]]
+usage: manage.py [-h] [-b [BUILD ...]] [-bnc [BUILD_NO_CACHE ...]]
+                 [-r [RUN ...]] [-p [STOP ...]] [-d [DOWN ...]] [-rmi] [-rmn]
+                 [-g [TAIL_LOGS ...]] [-c CREATE_PROFILE] [-s SET_PROFILE]
+                 [-e [RENDER ...]] [-a [DISPLAY_PROFILE ...]]
+                 [--list_snapshots] [--save_snapshot [SAVE_SNAPSHOT ...]]
                  [--restore_snapshot [RESTORE_SNAPSHOT ...]] [-n]
 
 Manage.Py: dq-dev, daiquiri docker compose dev setup
@@ -104,6 +104,8 @@ options:
   -h, --help            show this help message and exit
   -b [BUILD ...], --build [BUILD ...]
                         build a profile's containers, exit when done
+  -bnc [BUILD_NO_CACHE ...], --build_no_cache [BUILD_NO_CACHE ...]
+                        build a profile's containers without using cache, exit when done
   -r [RUN ...], --run [RUN ...]
                         run a profile's containers, build if necessary
   -p [STOP ...], --stop [STOP ...]
@@ -131,7 +133,7 @@ options:
   --save_snapshot [SAVE_SNAPSHOT ...]
                         save current db and config to snapshot
   --restore_snapshot [RESTORE_SNAPSHOT ...]
-                        restoare saved snapshot
+                        restore saved snapshot
   -n, --dry_run         do not run any docker-compose commands nor save
                         rendered docker-compose.yaml, just print them
 

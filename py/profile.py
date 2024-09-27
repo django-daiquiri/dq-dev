@@ -4,6 +4,7 @@ from shutil import copyfile
 from sys import exit as x
 
 from py.colours import Colours
+from py.init import init
 from py.util import (
     find,
     listdirs_only,
@@ -17,8 +18,12 @@ from py.util import (
 
 
 class Profile:
-    def __init__(self, conf):
-        self.conf = conf
+    def __init__(self, args):
+        self.exists = False
+        self.conf = init(args)
+        if self.profile_exists(self.conf["prof"]["name"]) and \
+                self.conf["prof"]["name"] != "":
+            self.exists = True
         self.c = Colours()
 
     def create(self, profname):
@@ -43,8 +48,8 @@ class Profile:
                 + self.c.yel(conf_yaml)
                 + "\nAnd don't forget your secrets."
             )
-            copyfile(self.conf["files"]["base_conf"], conf_yaml)
-            copyfile(self.conf["files"]["base_secrets"], secrets_yaml)
+            copyfile(self.conf["files"]["conf_tpl"], conf_yaml)
+            copyfile(self.conf["files"]["secrets_tpl"], secrets_yaml)
 
     def set(self, profname):
         if self.profile_exists(profname) is False:
@@ -126,3 +131,9 @@ class Profile:
 
     def profile_exists(self, profname):
         return isdir(self.get_profile_folder_by_name(profname))
+
+    def is_active(self):
+        if self.conf["prof"]["name"] == "":
+            return False
+        else:
+            return True

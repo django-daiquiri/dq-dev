@@ -1,8 +1,11 @@
 #!/bin/bash
 
+source "${HOME}/.bashrc"
+
 if [[ -d "$DQSOURCE" ]]; then
     cd "${DQSOURCE}"
-    pip3 install -e "${DQSOURCE}"
+    pip3 install .[postgres]
+#    pip3 install -e "${DQSOURCE}"
 
     nvm install
     npm ci

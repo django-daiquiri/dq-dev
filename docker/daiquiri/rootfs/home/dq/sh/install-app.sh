@@ -1,6 +1,8 @@
 #!/bin/bash
 
 
+source "${HOME}/.bashrc"
+
 reqfile="${DQAPP}/requirements.txt"
 
 if [[ -f "${reqfile}" ]]; then
@@ -30,6 +32,7 @@ nvm use
 npm link ${DQSOURCE}
 npm run build
 
-mkdir -p "${DQAPP}/vendor"
-python3 manage.py download_vendor_files
+# mkdir -p "${DQAPP}/vendor"
+# python3 manage.py download_vendor_files
+#
 python3 manage.py collectstatic --no-input

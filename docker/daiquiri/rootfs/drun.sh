@@ -1,7 +1,9 @@
 #!/bin/bash
 
+source ${HOME}/.bashrc
+
 if [[ -d $DQSOURCE ]]; then
-    ${HOME}/sh/install-local-daiquiri.sh
+    bash ${HOME}/sh/install-local-daiquiri.sh
 fi
 
 ${HOME}/sh/install-app.sh

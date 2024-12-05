@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [[ -d $DQSOURCE ]]; then
+if [[ -d "${DQSOURCE}" ]]; then
     ${HOME}/sh/install-local-daiquiri.sh
 fi
 

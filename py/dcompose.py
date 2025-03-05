@@ -143,7 +143,6 @@ class DCompose:
 
     # template
     def make_template(self):
-        self.dcyaml["version"] = "3.9"
         self.dcyaml["services"] = {}
         self.dcyaml["volumes"] = {}
 
@@ -151,16 +150,14 @@ class DCompose:
             if self.container_enabled(service) is True:
                 c = self.nam_img(service)
                 self.dcyaml["services"][c] = {}
+                self.dcyaml["services"][c]["platform"] = "linux/amd64"
                 self.dcyaml["services"][c]["build"] = {}
                 self.dcyaml["services"][c]["build"]["context"] = (
                     "../../../docker/" + service
                 )
                 self.dcyaml["services"][c]["container_name"] = self.nam_con(service)
                 self.dcyaml["services"][c]["ulimits"] = {
-                    "nofile": {
-                        "soft": 65536,
-                        "hard": 65536
-                        }
+                    "nofile": {"soft": 65536, "hard": 65536}
                 }
                 self.dcyaml["services"][c]["restart"] = "always"
 

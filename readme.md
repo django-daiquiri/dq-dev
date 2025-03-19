@@ -91,7 +91,7 @@ In the mainfolder is a python script `request_test.py` that fires some simple re
 ### CLI Args
 
 ```go mdox-exec="pm -h"
-usage: manage.py [-h] [-b [BUILD ...]] [-bnc [BUILD_NO_CACHE ...]]
+usage: pm [-h] [-b [BUILD ...]] [-bnc [BUILD_NO_CACHE ...]]
                  [-r [RUN ...]] [-p [STOP ...]] [-d [DOWN ...]] [-rmi] [-rmn]
                  [-g [TAIL_LOGS ...]] [-c CREATE_PROFILE] [-s SET_PROFILE]
                  [-e [RENDER ...]] [-a [DISPLAY_PROFILE ...]]

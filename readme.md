@@ -14,7 +14,7 @@
 
 ## Overview
 
-A toolset for daiquiri docker containerization. It brings quite a few configuration options that can be found looking into the toml files in the `conf` folder. An abstraction layer that is written in python aims to provide an easier access to all the different functions supporting multiple profiles and other things.
+A toolset for [daiquiri](https://github.com/django-daiquiri/daiquiri) docker containerization. It brings quite a few configuration options that can be found looking into the toml files in the `conf` folder. An abstraction layer that is written in python aims to provide an easier access to all the different functions supporting multiple profiles and other things.
 
 ## Setup
 

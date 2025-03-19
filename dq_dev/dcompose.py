@@ -2,13 +2,13 @@ import os
 import re
 import sys
 from os.path import join as pj
+from pathlib import Path
 from sys import exit as x
 
 from dq_dev.colours import Colours
 from dq_dev.util import (
     find,
     is_git,
-    mkdir,
     pprint,
     rxbool,
     rxsearch,
@@ -230,6 +230,7 @@ class DCompose:
 
     def make_volumes(self):
         vols = []
+
         for volname in self.conf["conf"]["docker_volume_mountpoints"]:
             try:
                 fol = self.conf["conf"]["folders_on_host"][volname]
@@ -292,11 +293,10 @@ class DCompose:
         return vol
 
     def valid_volume(self, vol):
-        r = False
-        dev = vol["driver_opts"]["device"]
-        is_dir = os.path.isdir(dev)
+        valid = False
+        dev = Path(vol["driver_opts"]["device"])
 
-        if is_dir is False and vol["required_git"] is False:
+        if not dev.is_dir() and not vol["required_git"]:
             print(
                 "Run without volume "
                 + self.col.yel(vol["name"])
@@ -304,12 +304,12 @@ class DCompose:
                 + self.col.yel(dev)
             )
 
-        if is_dir is True:
-            r = True
+        if dev.is_dir():
+            valid = True
 
         if vol["required_git"] is True:
-            ig = is_git(dev)
-            if ig[0] is False:
+            ig, _ = is_git(dev)
+            if not ig:
                 print(
                     "\n"
                     + self.col.err()
@@ -322,8 +322,9 @@ class DCompose:
                 )
                 x(1)
             else:
-                r = True
-        return r
+                valid = True
+
+        return valid
 
     def write_yaml(self):
         if self.conf["dry_run"] is True:
@@ -343,9 +344,9 @@ class DCompose:
             print("Render dockerfile template " + self.col.yel(fn))
             self.render_template_file(fn)
 
-    def render_template_file(self, filename):
-        container_name = rxsearch(r"[a-z0-9A-Z-]+(?=/dockerfile.tpl$)", filename)
-        new_filename = rxsearch(r".*(?=\.)", filename)
+    def render_template_file(self, filename: Path):
+        container_name = rxsearch(r"[a-z0-9A-Z-]+(?=/dockerfile.tpl$)", str(filename))
+        new_filename = rxsearch(r".*(?=\.)", str(filename))
         new_filename = new_filename.replace("/dockerfile", "/Dockerfile")
 
         arr = []

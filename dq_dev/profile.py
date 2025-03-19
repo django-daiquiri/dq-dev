@@ -7,7 +7,6 @@ from dq_dev.init import init
 from dq_dev.util import (
     find,
     listdirs_only,
-    mkdir,
     ptable,
     read_toml,
     rxsearch,

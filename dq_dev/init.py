@@ -2,22 +2,21 @@ import os
 import sys
 from os.path import isdir, isfile
 from os.path import join as pj
+from pathlib import Path
 
 from dq_dev.colours import Colours
 from dq_dev.util import (
     copy_file,
-    exists,
     is_port_no,
     listdirs_only,
     listfiles_only,
-    mkdir,
     read_toml,
     remove_dir,
     shortname,
 )
 
 
-def merge_dictionaries(dict1, dict2):
+def merge_dictionaries(dict1: dict, dict2: dict) -> dict:
     for key, val in dict1.items():
         if isinstance(val, dict):
             dict2_node = dict2.setdefault(key, {})
@@ -31,17 +30,17 @@ def merge_dictionaries(dict1, dict2):
 def init(args):
     col = Colours()
     conf = {}
-    n = os.path.realpath(__file__)
-    basedir = "/".join(n.split("/")[:-2])
+    n = Path(__file__)
+    basedir = n.parents[1]
     conf["basedir"] = basedir
     conf["args"] = get_parsed_args(args)
     conf["prof"] = {}
-    conf["prof"]["basedir"] = pj(conf["basedir"], "usr", "profiles")
+    conf["prof"]["basedir"] = conf["basedir"] / "usr" / "profiles"
     conf["files"] = {}
-    conf["files"]["active_conf"] = pj(conf["prof"]["basedir"], "active.toml")
-    conf["files"]["conf_tpl"] = pj(conf["basedir"], "conf_tpl", "conf.toml")
-    conf["files"]["secrets_tpl"] = pj(conf["basedir"], "conf_tpl", "secrets.toml")
-    conf["snapshots_dir"] = pj(conf["basedir"], "usr", "snapshots")
+    conf["files"]["active_conf"] = conf["prof"]["basedir"] / "active.toml"
+    conf["files"]["conf_tpl"] = conf["basedir"] / "conf_tpl" / "conf.toml"
+    conf["files"]["secrets_tpl"] = conf["basedir"] / "conf_tpl" / "secrets.toml"
+    conf["snapshots_dir"] = conf["basedir"] / "usr" / "snapshots"
 
     apc = read_toml(conf["files"]["active_conf"]) or {}
     conf["prof"]["name"] = apc.get("active_profile_name", "")
@@ -50,13 +49,12 @@ def init(args):
         return conf
 
     # read profile configurations
-    conf["prof"]["folder"] = pj(conf["prof"]["basedir"], conf["prof"]["name"])
+    conf["prof"]["folder"] = conf["prof"]["basedir"] / conf["prof"]["name"]
     conf["prof"]["network_name"] = "dqdevnet_" + conf["prof"]["name"]
-    conf["files"]["dc_yaml"] = pj(conf["prof"]["folder"], "docker-compose.yaml")
-    conf["files"]["prof_conf"] = pj(conf["prof"]["folder"], "conf.toml")
-    conf["files"]["prof_secrets"] = pj(conf["prof"]["folder"], "secrets.toml")
-
-    mkdir(conf["snapshots_dir"])
+    conf["files"]["dc_yaml"] = conf["prof"]["folder"] / "docker-compose.yaml"
+    conf["files"]["prof_conf"] = conf["prof"]["folder"] / "conf.toml"
+    conf["files"]["prof_secrets"] = conf["prof"]["folder"] / "secrets.toml"
+    conf["snapshots_dir"].mkdir(parents=True, exist_ok=True)
     if conf["args"]["set"] is None and args.save_snapshot and args.restore_snapshot:
         print("\nUse profile         " + col.gre(conf["prof"]["name"]))
 
@@ -80,7 +78,7 @@ def init(args):
     conf["user"]["group"] = get_group(conf["user"]["id"])
     conf["user"]["groupstr"] = str(conf["user"]["group"])
     conf["dry_run"] = args.dry_run
-    mkdir(conf["prof"]["basedir"])
+    conf["prof"]["basedir"].mkdir(parents=True, exist_ok=True)
 
     clean_temp_files(conf["basedir"], conf["conf"]["enable_containers"])
 
@@ -122,55 +120,55 @@ def parse_bool(boolval):
         return None
 
 
-def parse_nargs(nargs):
+def parse_nargs(nargs: list | None) -> bool | str | None:
     if isinstance(nargs, list):
-        if len(nargs) < 1:
+        if len(nargs) == 0:
             return True
         else:
             return nargs[0]
     return None
 
 
-def get_group(user_id):
+def get_group(user_id: int) -> int | str:
     groups = sorted(os.getgroups())
     if user_id in groups:
         return user_id
     else:
-        try:
-            return groups[len(groups) - 1]
-        except:
+        if len(groups) > 0:
+            return groups[-1]
+        else:
             return ""
 
 
 def create_rootfs_folders(basedir):
-    dockerdir = pj(basedir, "docker")
+    dockerdir = basedir / "docker"
     for dir in listdirs_only(dockerdir):
-        mkdir(pj(dir, "rootfs"))
+        (dir / "rootfs").mkdir(parents=True, exist_ok=True)
 
 
-def clean_temp_files(basedir, container_names):
+def clean_temp_files(basedir: Path, container_names: list[str]):
     for con in container_names:
-        fol = pj(basedir, "docker", con, "rootfs", "tmp")
+        fol = basedir / "docker" / con / "rootfs" / "tmp"
         remove_dir(fol)
 
 
-def copy_custom_scripts(cs_conf, basedir, active_app):
+def copy_custom_scripts(cs_conf: dict, basedir: Path, active_app: str):
     col = Colours()
     for typ in cs_conf:
         for con in cs_conf[typ]:
-            dockdir = pj(basedir, "docker", con)
-            if exists(dockdir) is True:
-                target_folder = pj(dockdir, "rootfs", "tmp", "custom_scripts", typ)
-                source_folder = expand(cs_conf[typ][con], active_app)
-                if isdir(source_folder) is True:
+            dockdir = basedir / "docker" / con
+            if dockdir.is_dir():
+                target_folder = dockdir / "rootfs" / "tmp" / "custom_scripts" / typ
+                source_folder = Path(expand(cs_conf[typ][con], active_app))
+                if source_folder.is_dir():
                     files = listfiles_only(source_folder)
                     if len(files) > 0:
                         print(
                             "\nAdd custom scripts to container "
                             + col.gre(shortname(dockdir))
                         )
-                    for fil in files:
-                        copy_file(fil, target_folder)
+                    for file in files:
+                        copy_file(file, target_folder)
     print("")
 
 
@@ -200,10 +198,7 @@ def parse_ports(conf):
                 inp = str(5672)
             if inp == "0":
                 print(
-                    "\n[error] can not construct port map, "
-                    + "unable to determine internally used port for service '"
-                    + service_name
-                    + "'\n"
+                    f"\n[error] can not construct port map, unable to determine internally used port for service '{service_name}'\n"
                 )
                 sys.exit(1)
             r["internal"] = str(inp)

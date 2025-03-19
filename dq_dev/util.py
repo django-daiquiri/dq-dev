@@ -29,7 +29,7 @@ def find(root, filter=".*", filter_type="f"):
         if files and filter_type == "f":
             for filename in files:
                 rfn = Path(path) / filename
-                if bool(re.search(filter, rfn)) is True:
+                if bool(re.search(filter, str(rfn))) is True:
                     detected.append(rfn)
         elif dirs and filter_type == "d":
             for dirname in dirs:
@@ -39,22 +39,22 @@ def find(root, filter=".*", filter_type="f"):
     return sorted(detected)
 
 
-def listdirs_only(root):
+def listdirs_only(root: Path) -> list[Path]:
     p = os.listdir(root)
     r = []
     for i in p:
-        fil = pj(root, i)
-        if isdir(fil):
+        fil = root / i
+        if fil.is_dir():
             r.append(fil)
     return sorted(r)
 
 
-def listfiles_only(root):
+def listfiles_only(root: Path) -> list[Path]:
     p = os.listdir(root)
     r = []
     for i in p:
-        fil = pj(root, i)
-        if isfile(fil):
+        fil = root / i
+        if fil.is_file():
             r.append(fil)
     return sorted(r)
 
@@ -77,7 +77,7 @@ def run_cmd(cmd, silent=True, debug=False):
     return o
 
 
-def is_git(folder):
+def is_git(folder: Path | str) -> tuple[bool, str | None]:
     proc = Popen(
         ["git", "-C", folder, "remote", "-v"], stdout=PIPE, stderr=PIPE, close_fds=True
     )
@@ -90,16 +90,15 @@ def is_git(folder):
         out = re.search(r"git.*?\s", out).group(0)
     except (NameError, AttributeError):
         return (False, None)
+
     return (True, out)
 
 
-def copy_file(src, trg):
-    if exists(trg) is False:
-        mkdir(trg)
-    if isdir(trg) is True:
-        sn = shortname(src)
-        trg = pj(trg, sn)
-    print("Copy file " + colmag(src) + " to " + colgre(trg))
+def copy_file(src: Path, trg: Path):
+    trg.mkdir(exist_ok=True, parents=True)
+    sn = shortname(src)
+    trg = trg / sn
+    print(f"Copy file {colmag(src)} to {colgre(trg)}")
     copy(src, trg)
 
 
@@ -112,13 +111,8 @@ def exists(dir):
     return os.path.exists(dir)
 
 
-def mkdir(dir):
-    if exists(dir) is False:
-        os.makedirs(dir)
-
-
-def remove_dir(dir):
-    if exists(dir) is True:
+def remove_dir(dir: Path):
+    if dir.is_dir():
         rmtree(dir)
 
 
@@ -160,8 +154,9 @@ def is_port_no(s: int) -> bool:
     except (TypeError, ValueError):
         return False
     else:
-        if i <= 65535:
+        if 0 < i <= 65535:
             return True
+
     return False
 
 

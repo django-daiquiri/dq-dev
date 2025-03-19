@@ -6,7 +6,7 @@ from dq_dev.util import run_cmd
 
 
 class Runner:
-    def __init__(self, conf):
+    def __init__(self, conf: dict):
         self.c = Colours()
         self.conf = conf
         self.need_sudo = self.need_sudo()
@@ -29,7 +29,7 @@ class Runner:
         return True
 
     def file_arg_compose(self):
-        return ["-f", self.conf["files"]["dc_yaml"]]
+        return ["-f", str(self.conf["files"]["dc_yaml"])]
 
     def run_docker(self, args):
         cmd_arr = []
@@ -46,6 +46,7 @@ class Runner:
         cmd_arr.extend(["docker", "compose"])
         cmd_arr.extend(self.file_arg_compose())
         cmd_arr.extend(args)
+
         self.run_cmd_fg(cmd_arr)
 
     # docker compose commands

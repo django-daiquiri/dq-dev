@@ -3,18 +3,18 @@ import sys
 import time
 import zipfile
 from os.path import isfile
-from os.path import join as pj
+from pathlib import Path
 
 from dq_dev.colours import Colours
 from dq_dev.util import exists, get_lastmod, listfiles_only, ptable, rxbool
 
 
 class Snapshots:
-    def __init__(self, conf):
+    def __init__(self, conf: dict):
         self.conf = conf
         self.col = Colours()
 
-    def check_name(self, name):
+    def check_name(self, name: str | None):
         if name is None or name is True:
             print(
                 self.col.red("Error\n")
@@ -24,12 +24,12 @@ class Snapshots:
             sys.exit(1)
 
     def list_snapshots(self):
-        fol = self.conf["snapshots_dir"]
+        snapshots_dir = self.conf["snapshots_dir"]
         head = ["snapshot creation date", "snapshot file", "saved profile"]
         snapshotslist = []
-        for fil in listfiles_only(fol):
-            saved_profile = self.zipGetSavedProfile(fil)
-            row = [get_lastmod(fil), fil, saved_profile]
+        for filename in listfiles_only(snapshots_dir):
+            saved_profile = self.zipGetSavedProfile(filename)
+            row = [get_lastmod(filename), filename, saved_profile]
             snapshotslist.append(row)
         snapshotslist.sort(key=lambda row: (row[0], row[1], row[2]), reverse=True)
         tabledata = []
@@ -38,9 +38,9 @@ class Snapshots:
         ptable(head, tabledata)
         print("")
 
-    def zipGetSavedProfile(self, filename):
+    def zipGetSavedProfile(self, filename: Path):
         s = ""
-        if zipfile.is_zipfile(filename) is True:
+        if zipfile.is_zipfile(filename):
             zip = zipfile.ZipFile(filename)
             for fil in zip.namelist():
                 if rxbool("conf\.toml$", fil) is True:
@@ -51,10 +51,11 @@ class Snapshots:
     def save_snapshot(self):
         name = self.conf["args"]["save_snapshot"]
         self.check_name(name)
-        current_snapshot = pj(self.conf["snapshots_dir"], name) + ".zip"
-        if exists(current_snapshot) is True:
-            print('snapshot already exists "{}"'.format(current_snapshot))
-            print("please choose a different name\n")
+        current_snapshot = (self.conf["snapshots_dir"] / name).with_suffix(".zip")
+        if current_snapshot.is_file():
+            print(
+                f'snapshot already exists ("{current_snapshot}"), please choose a different name'
+            )
             sys.exit(0)
         ("save snapshot " + name)
         sources = [self.conf["prof"]["folder"]]

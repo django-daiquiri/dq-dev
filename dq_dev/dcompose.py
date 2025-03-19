@@ -251,14 +251,15 @@ class DCompose:
         for volname in self.conf["conf"]["enable_volumes"]:
             # TODO: do not hard code folders, improve structure
             if self.conf["conf"]["enable_volumes"][volname] is True:
-                volfolder = pj(
-                    self.prof.get_profile_folder_by_name(self.profconf["name"]), volname
+                volfolder = (
+                    self.prof.get_profile_folder_by_name(self.profconf["name"])
+                    / volname
                 )
                 if volname == "docs":
                     volfolder = self.expand_vars(
                         self.profconf["conf"]["folders_on_host"]["docs"]
                     )
-                mkdir(volfolder)
+                Path(volfolder).mkdir(parents=True, exist_ok=True)
                 mp = "/var/lib/mysql"
                 if volname.startswith("pg"):
                     mp = "/var/lib/postgresql/data"

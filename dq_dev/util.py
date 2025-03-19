@@ -1,29 +1,27 @@
 import os
 import pprint as ppr
 import re
-from os.path import isdir, isfile
-from os.path import join as pj
 from os.path import sep as sep
 from pathlib import Path
 from shutil import copy, rmtree
 from subprocess import PIPE, Popen
 from sys import exit as x
+from typing import Any
 
-# import toml
 import pytomlpp as toml
 import yaml
 from tabulate import tabulate
 
 
-def colgre(s):
+def colgre(s: str) -> str:
     return "\033[92m" + str(s) + "\033[0m"
 
 
-def colmag(s):
+def colmag(s: str) -> str:
     return "\033[95m" + str(s) + "\033[0m"
 
 
-def find(root, filter=".*", filter_type="f"):
+def find(root, filter: str = ".*", filter_type: str = "f") -> list[Path]:
     detected = []
     for path, dirs, files in os.walk(root):
         if files and filter_type == "f":
@@ -36,6 +34,7 @@ def find(root, filter=".*", filter_type="f"):
                 rdir = Path(path) / dirname
                 if bool(re.search(filter, str(rdir))) is True:
                     detected.append(rdir)
+
     return sorted(detected)
 
 
@@ -46,6 +45,7 @@ def listdirs_only(root: Path) -> list[Path]:
         fil = root / i
         if fil.is_dir():
             r.append(fil)
+
     return sorted(r)
 
 
@@ -56,10 +56,11 @@ def listfiles_only(root: Path) -> list[Path]:
         fil = root / i
         if fil.is_file():
             r.append(fil)
+
     return sorted(r)
 
 
-def run_cmd(cmd, silent=True, debug=False):
+def run_cmd(cmd: list[str], silent: bool = True, debug: bool = False) -> str:
     o = ""
     if debug is False:
         proc = Popen(cmd, stdout=PIPE, stderr=PIPE, close_fds=True)
@@ -74,6 +75,7 @@ def run_cmd(cmd, silent=True, debug=False):
             print(o)
     else:
         print(" ".join(cmd))
+
     return o
 
 
@@ -102,12 +104,12 @@ def copy_file(src: Path, trg: Path):
     copy(src, trg)
 
 
-def empty_dir(dir):
+def empty_dir(dir: Path | str):
     for f in os.listdir(dir):
-        os.remove(os.path.join(dir, f))
+        os.remove(Path(dir) / f)
 
 
-def exists(dir):
+def exists(dir: Path | str) -> bool:
     return os.path.exists(dir)
 
 
@@ -168,34 +170,31 @@ def lookup_env_value(env, rx):
     return r
 
 
-def shortname(p):
+def shortname(p: str) -> str:
     return re.search(r"[^/]+$", p).group(0)
 
 
-def rxsearch(rx, s, gr=0):
+def rxsearch(rx: str, s: str, gr: int = 0) -> str | None:
     r = None
     m = re.search(rx, s, flags=re.IGNORECASE)
     if bool(m) is True:
         r = m.group(gr)
+
     return r
 
 
-def rxbool(rx, s):
+def rxbool(rx: str, s: str) -> bool:
     return bool(re.search(rx, s))
 
 
-def uncomment_line(line):
+def uncomment_line(line: str) -> str:
     rx = r"(#\s*)(.*)"
     if rxbool(rx, line) is True:
         line = rxsearch(rx, line, 2)
     return line
 
 
-def path_after_last_slash(s):
-    return rxsearch("[^" + sep + "]+$", s)
-
-
-def pprint(obj):
+def pprint(obj: Any):
     pp = ppr.PrettyPrinter(indent=4)
     pp.pprint(obj)
 

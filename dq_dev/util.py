@@ -14,22 +14,22 @@ from tabulate import tabulate
 
 
 def colgre(s: str) -> str:
-    return "\033[92m" + str(s) + "\033[0m"
+    return '\033[92m' + str(s) + '\033[0m'
 
 
 def colmag(s: str) -> str:
-    return "\033[95m" + str(s) + "\033[0m"
+    return '\033[95m' + str(s) + '\033[0m'
 
 
-def find(root, filter: str = ".*", filter_type: str = "f") -> list[Path]:
+def find(root, filter: str = '.*', filter_type: str = 'f') -> list[Path]:
     detected = []
     for path, dirs, files in os.walk(root):
-        if files and filter_type == "f":
+        if files and filter_type == 'f':
             for filename in files:
                 rfn = Path(path) / filename
                 if bool(re.search(filter, str(rfn))) is True:
                     detected.append(rfn)
-        elif dirs and filter_type == "d":
+        elif dirs and filter_type == 'd':
             for dirname in dirs:
                 rdir = Path(path) / dirname
                 if bool(re.search(filter, str(rdir))) is True:
@@ -61,35 +61,35 @@ def listfiles_only(root: Path) -> list[Path]:
 
 
 def run_cmd(cmd: list[str], silent: bool = True, debug: bool = False) -> str:
-    o = ""
+    o = ''
     if debug is False:
         proc = Popen(cmd, stdout=PIPE, stderr=PIPE, close_fds=True)
         (out, err) = proc.communicate()
         exitcode = proc.wait()
         if exitcode != 0:
-            print(err.decode("utf-8"))
+            print(err.decode('utf-8'))
             return (False, None)
             x()
-        o = out.decode("utf-8")
+        o = out.decode('utf-8')
         if silent is False:
             print(o)
     else:
-        print(" ".join(cmd))
+        print(' '.join(cmd))
 
     return o
 
 
 def is_git(folder: Path | str) -> tuple[bool, str | None]:
     proc = Popen(
-        ["git", "-C", folder, "remote", "-v"], stdout=PIPE, stderr=PIPE, close_fds=True
+        ['git', '-C', folder, 'remote', '-v'], stdout=PIPE, stderr=PIPE, close_fds=True
     )
     (out, err) = proc.communicate()
     exitcode = proc.wait()
     if exitcode != 0:
         return (False, None)
-    out = out.splitlines()[0].decode("utf-8")
+    out = out.splitlines()[0].decode('utf-8')
     try:
-        out = re.search(r"git.*?\s", out).group(0)
+        out = re.search(r'git.*?\s', out).group(0)
     except (NameError, AttributeError):
         return (False, None)
 
@@ -100,7 +100,7 @@ def copy_file(src: Path, trg: Path):
     trg.mkdir(exist_ok=True, parents=True)
     sn = shortname(src)
     trg = trg / sn
-    print(f"Copy file {colmag(src)} to {colgre(trg)}")
+    print(f'Copy file {colmag(src)} to {colgre(trg)}')
     copy(src, trg)
 
 
@@ -121,7 +121,7 @@ def remove_dir(dir: Path):
 def read_toml(filename: Path | str) -> dict | None:
     filename = Path(filename)
     if not filename.is_file():
-        print(f"yaml file does not exist: {filename}")
+        print(f'yaml file does not exist: {filename}')
     else:
         with open(filename) as filedata:
             try:
@@ -129,25 +129,25 @@ def read_toml(filename: Path | str) -> dict | None:
                 d = toml.loads(data)
                 return d
             except Exception as e:
-                print(f"toml decode error: {filename}")
+                print(f'toml decode error: {filename}')
                 raise (e)
     return None
 
 
 def write_toml(data, filename: Path | str):
-    with open(filename, "w") as toml_file:
+    with open(filename, 'w') as toml_file:
         toml.dump(data, toml_file)
 
 
 def write_yaml(data, filename: Path | str):
-    with open(filename, "w") as outfile:
+    with open(filename, 'w') as outfile:
         yaml.dump(data, outfile, default_flow_style=False, indent=2)
 
 
-def write_array_to_file(data: list[str], filename: Path | str, mode: str = "w"):
+def write_array_to_file(data: list[str], filename: Path | str, mode: str = 'w'):
     with open(filename, mode) as fp:
         for line in data:
-            fp.write(line + "\n")
+            fp.write(line + '\n')
 
 
 def is_port_no(s: int) -> bool:
@@ -171,7 +171,7 @@ def lookup_env_value(env, rx):
 
 
 def shortname(p: str) -> str:
-    return re.search(r"[^/]+$", p).group(0)
+    return re.search(r'[^/]+$', p).group(0)
 
 
 def rxsearch(rx: str, s: str, gr: int = 0) -> str | None:
@@ -188,7 +188,7 @@ def rxbool(rx: str, s: str) -> bool:
 
 
 def uncomment_line(line: str) -> str:
-    rx = r"(#\s*)(.*)"
+    rx = r'(#\s*)(.*)'
     if rxbool(rx, line) is True:
         line = rxsearch(rx, line, 2)
     return line

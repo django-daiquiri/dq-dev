@@ -19,8 +19,8 @@ class Profile:
         self.exists = False
         self.conf = init(args)
         if (
-            self.profile_exists(self.conf["prof"]["name"])
-            and self.conf["prof"]["name"] != ""
+            self.profile_exists(self.conf['prof']['name'])
+            and self.conf['prof']['name'] != ''
         ):
             self.exists = True
         self.c = Colours()
@@ -28,110 +28,110 @@ class Profile:
     def create(self, profname: str):
         if self.profile_exists(profname):
             print(
-                "Please check "
-                + self.c.yel(self.conf["prof"]["basedir"])
-                + "\nDid nothing. Profile "
+                'Please check '
+                + self.c.yel(self.conf['prof']['basedir'])
+                + '\nDid nothing. Profile '
                 + self.c.yel(profname)
-                + " seems to exist"
+                + ' seems to exist'
             )
         else:
             profile_folder = self.get_profile_folder_by_name(profname)
             profile_folder.mkdir(parents=True, exist_ok=True)
-            conf_yaml = profile_folder / "conf.toml"
-            secrets_yaml = profile_folder / "secrets.toml"
+            conf_yaml = profile_folder / 'conf.toml'
+            secrets_yaml = profile_folder / 'secrets.toml'
             print(
-                "Fresh profile "
+                'Fresh profile '
                 + self.c.yel(profname)
-                + " created inside folder "
+                + ' created inside folder '
                 + self.c.yel(profile_folder)
-                + "\nPlease add your local settings to "
+                + '\nPlease add your local settings to '
                 + self.c.yel(conf_yaml)
                 + "\nAnd don't forget your secrets."
             )
-            copyfile(self.conf["files"]["conf_tpl"], conf_yaml)
-            copyfile(self.conf["files"]["secrets_tpl"], secrets_yaml)
+            copyfile(self.conf['files']['conf_tpl'], conf_yaml)
+            copyfile(self.conf['files']['secrets_tpl'], secrets_yaml)
 
     def set(self, profname):
         if self.profile_exists(profname) is False:
             print(
-                "Unable to set. Profile "
+                'Unable to set. Profile '
                 + self.c.yel(profname)
-                + " does not seem to exist"
+                + ' does not seem to exist'
             )
         else:
-            print("Set active profile " + self.c.yel(profname))
+            print('Set active profile ' + self.c.yel(profname))
             p = {}
-            p["active_profile_name"] = profname
-            write_toml(p, self.conf["files"]["active_conf"])
+            p['active_profile_name'] = profname
+            write_toml(p, self.conf['files']['active_conf'])
 
     def read_profile_config(self, profname: str | None = None) -> dict:
         if profname is None or profname is True:
-            profname = self.conf["prof"]["name"]
+            profname = self.conf['prof']['name']
         if profname is None:
             print(
-                "Unable to detect active profile. Either set one or use the command line arg."
+                'Unable to detect active profile. Either set one or use the command line arg.'
             )
             x(1)
         r = {}
-        profile_list = find(self.conf["prof"]["basedir"], profname + r"$", "d")
+        profile_list = find(self.conf['prof']['basedir'], profname + r'$', 'd')
 
         if len(profile_list) < 1:
             print(
-                "Please check "
-                + self.c.yel(self.conf["prof"]["basedir"])
-                + "\nProfile "
+                'Please check '
+                + self.c.yel(self.conf['prof']['basedir'])
+                + '\nProfile '
                 + self.c.yel(profname)
-                + " does not seem to exist. "
+                + ' does not seem to exist. '
             )
             x(1)
         if len(profile_list) > 1:
             print(
-                "Please check "
-                + self.c.yel(self.conf["prof"]["basedir"])
-                + "\nMultiple profiles matched: "
+                'Please check '
+                + self.c.yel(self.conf['prof']['basedir'])
+                + '\nMultiple profiles matched: '
             )
             for profile in profile_list:
-                print("\t" + profile)
+                print('\t' + profile)
             x(1)
 
-        r["name"] = profname
-        r["yaml"] = profile_list[0] / "conf.toml"
-        r["folder"] = profile_list[0].parent
-        r["dc_yaml"] = r["folder"] / "docker-compose.yaml"
-        if r["yaml"].is_file():
-            r["conf"] = read_toml(r["yaml"])
+        r['name'] = profname
+        r['yaml'] = profile_list[0] / 'conf.toml'
+        r['folder'] = profile_list[0].parent
+        r['dc_yaml'] = r['folder'] / 'docker-compose.yaml'
+        if r['yaml'].is_file():
+            r['conf'] = read_toml(r['yaml'])
         return r
 
     def boolstr(self, bool: bool) -> str:
-        return "*" if bool else ""
+        return '*' if bool else ''
 
     def list(self):
-        print(self.c.yel("\nThe following profiles are available\n"))
-        arr = find(self.conf["prof"]["basedir"], r".*/profiles/[a-zA-Z0-9-_]+$", "d")
-        head = ["profile", "has conf", "active", "volumes"]
+        print(self.c.yel('\nThe following profiles are available\n'))
+        arr = find(self.conf['prof']['basedir'], r'.*/profiles/[a-zA-Z0-9-_]+$', 'd')
+        head = ['profile', 'has conf', 'active', 'volumes']
         tabledata = []
         for path in arr:
-            shortname = rxsearch(r"[^/]+/[^/]+$", str(path))
-            profname = rxsearch(r"[^/]+$", shortname)
-            ap = self.conf["prof"]["name"]
-            has_conf = self.boolstr((path / "conf.toml").is_file())
+            shortname = rxsearch(r'[^/]+/[^/]+$', str(path))
+            profname = rxsearch(r'[^/]+$', shortname)
+            ap = self.conf['prof']['name']
+            has_conf = self.boolstr((path / 'conf.toml').is_file())
             active = self.boolstr(profname == ap)
             listdirs_only(self.get_profile_folder_by_name(path))
-            volumes = " ".join(listdirs_only(self.get_profile_folder_by_name(path)))
+            volumes = ' '.join(listdirs_only(self.get_profile_folder_by_name(path)))
             tabledata.append([profname, has_conf, active, volumes])
         ptable(head, tabledata)
         print()
 
     def get_profile_folder_by_name(self, profname: str | Path | None = None) -> Path:
         if profname is None:
-            profname = self.conf["prof"]["name"]
+            profname = self.conf['prof']['name']
 
-        return Path(self.conf["prof"]["basedir"]) / profname
+        return Path(self.conf['prof']['basedir']) / profname
 
     def profile_exists(self, profname: str) -> bool:
         return self.get_profile_folder_by_name(profname).is_dir()
 
     def is_active(self):
-        if self.conf["prof"]["name"] == "":
+        if self.conf['prof']['name'] == '':
             return False
         return True

@@ -4,6 +4,7 @@ import re
 from os.path import isdir, isfile
 from os.path import join as pj
 from os.path import sep as sep
+from pathlib import Path
 from shutil import copy, rmtree
 from subprocess import PIPE, Popen
 from sys import exit as x
@@ -27,13 +28,13 @@ def find(root, filter=".*", filter_type="f"):
     for path, dirs, files in os.walk(root):
         if files and filter_type == "f":
             for filename in files:
-                rfn = pj(path, filename)
+                rfn = Path(path) / filename
                 if bool(re.search(filter, rfn)) is True:
                     detected.append(rfn)
         elif dirs and filter_type == "d":
             for dirname in dirs:
-                rdir = pj(path, dirname)
-                if bool(re.search(filter, rdir)) is True:
+                rdir = Path(path) / dirname
+                if bool(re.search(filter, str(rdir))) is True:
                     detected.append(rdir)
     return sorted(detected)
 
@@ -121,9 +122,10 @@ def remove_dir(dir):
         rmtree(dir)
 
 
-def read_toml(filename):
-    if os.path.isfile(filename) is False:
-        print("yaml file does not exist: " + filename)
+def read_toml(filename: Path | str) -> dict | None:
+    filename = Path(filename)
+    if not filename.is_file():
+        print(f"yaml file does not exist: {filename}")
     else:
         with open(filename) as filedata:
             try:
@@ -131,28 +133,28 @@ def read_toml(filename):
                 d = toml.loads(data)
                 return d
             except Exception as e:
-                print("toml decode error: " + str(filename))
+                print(f"toml decode error: {filename}")
                 raise (e)
     return None
 
 
-def write_toml(data, filename):
+def write_toml(data, filename: Path | str):
     with open(filename, "w") as toml_file:
         toml.dump(data, toml_file)
 
 
-def write_yaml(data, filename):
+def write_yaml(data, filename: Path | str):
     with open(filename, "w") as outfile:
         yaml.dump(data, outfile, default_flow_style=False, indent=2)
 
 
-def write_array_to_file(data, filename, mode="w"):
+def write_array_to_file(data: list[str], filename: Path | str, mode: str = "w"):
     with open(filename, mode) as fp:
         for line in data:
             fp.write(line + "\n")
 
 
-def is_port_no(s):
+def is_port_no(s: int) -> bool:
     try:
         i = int(s)
     except (TypeError, ValueError):
@@ -196,10 +198,6 @@ def uncomment_line(line):
 
 def path_after_last_slash(s):
     return rxsearch("[^" + sep + "]+$", s)
-
-
-def path_up_to_last_slash(s):
-    return rxsearch(".*(?=\\" + sep + ")", s)
 
 
 def pprint(obj):

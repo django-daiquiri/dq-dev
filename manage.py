@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 import argparse
-import os
 import sys
+from pathlib import Path
 from sys import exit as x
 
 from dq_dev.colours import Colours
@@ -12,9 +12,7 @@ from dq_dev.snapshots import Snapshots
 from dq_dev.util import pprint
 
 parser = argparse.ArgumentParser(
-    description=os.path.basename(__file__).title()
-    + ": "
-    + "dq-dev, daiquiri docker compose dev setup",
+    description=f"{Path(__file__).name}: daiquiri docker compose dev setup",
     epilog="If used without arg, profile list is displayed\n",
     formatter_class=argparse.RawDescriptionHelpFormatter,
 )
@@ -57,9 +55,7 @@ parser.add_argument(
     nargs="*",
     default=None,
     help=(
-        "stop and remove profile's running containers, "
-        + "remove docker's volumes, keep folders containing the "
-        + "volume data, they can be reused on next run"
+        "stop and remove profile's running containers, remove docker's volumes, keep folders containing the volume data, they can be reused on next run"
     ),
 )
 parser.add_argument(
@@ -136,14 +132,13 @@ parser.add_argument(
     action="store_true",
     default=False,
     help=(
-        "do not run any docker-compose commands nor "
-        + "save rendered docker-compose.yaml, just print them"
+        "do not run any docker-compose commands nor save rendered docker-compose.yaml, just print them"
     ),
 )
 args = parser.parse_args()
 
 
-if __name__ == "__main__":
+def main():
     col = Colours()
     prof = Profile(args)
     conf = prof.conf
@@ -227,3 +222,7 @@ if __name__ == "__main__":
 
     if conf["args"]["restore_snapshot"] is not None:
         snap.restore_snapshot()
+
+
+if __name__ == "__main__":
+    main()

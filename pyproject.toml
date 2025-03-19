@@ -1,0 +1,25 @@
+[project]
+name = "dq-dev"
+version = "0.4.0"
+description = "Container management for daiquiri"
+authors = [
+    {name = "EScience Team at AIP",email = "escience@aip.de"}
+]
+license = {text = "BSD-3-Clause"}
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "pyyaml (>=6.0.2,<7.0.0)",
+    "tabulate (>=0.9.0,<0.10.0)",
+    "pytomlpp (>=1.0.13,<2.0.0)"
+]
+
+[tool.poetry]
+
+[tool.poetry.group.dev.dependencies]
+mypy = "^1.15.0"
+pytest = "^8.3.5"
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"

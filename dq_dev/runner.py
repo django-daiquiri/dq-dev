@@ -1,8 +1,8 @@
 import re
 import subprocess
 
-from py.colours import Colours
-from py.util import run_cmd
+from dq_dev.colours import Colours
+from dq_dev.util import run_cmd
 
 
 class Runner:

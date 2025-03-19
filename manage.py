@@ -4,12 +4,12 @@ import os
 import sys
 from sys import exit as x
 
-from py.colours import Colours
-from py.dcompose import DCompose
-from py.profile import Profile
-from py.runner import Runner
-from py.snapshots import Snapshots
-from py.util import pprint
+from dq_dev.colours import Colours
+from dq_dev.dcompose import DCompose
+from dq_dev.profile import Profile
+from dq_dev.runner import Runner
+from dq_dev.snapshots import Snapshots
+from dq_dev.util import pprint
 
 parser = argparse.ArgumentParser(
     description=os.path.basename(__file__).title()
@@ -92,11 +92,7 @@ parser.add_argument(
     help="create a new profile with the default settings",
 )
 parser.add_argument(
-    "-s",
-    "--set_profile",
-    type=str,
-    default=None,
-    help="set profile to active"
+    "-s", "--set_profile", type=str, default=None, help="set profile to active"
 )
 parser.add_argument(
     "-e",
@@ -164,15 +160,15 @@ if __name__ == "__main__":
 
     if not prof.exists:
         print(
-            col.red("There is no active profile!\n\n") +
-            col.gre("Please activate a profile with \n") +
-            col.gre("    python manage.py -s <profile_name>\n") +
-            col.gre("or, first, create a new profile with\n") +
-            col.gre("    python manage.py -c <profile_name>\n") +
-            col.gre("and then activate it.")
+            col.red("There is no active profile!\n\n")
+            + col.gre("Please activate a profile with \n")
+            + col.gre("    python manage.py -s <profile_name>\n")
+            + col.gre("or, first, create a new profile with\n")
+            + col.gre("    python manage.py -c <profile_name>\n")
+            + col.gre("and then activate it.")
         )
 
-    if len(sys.argv) <=1 or not prof.is_active():
+    if len(sys.argv) <= 1 or not prof.is_active():
         prof.list()
         x()
 

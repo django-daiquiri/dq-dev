@@ -5,8 +5,8 @@ import zipfile
 from os.path import isfile
 from os.path import join as pj
 
-from py.colours import Colours
-from py.util import exists, get_lastmod, listfiles_only, ptable, rxbool
+from dq_dev.colours import Colours
+from dq_dev.util import exists, get_lastmod, listfiles_only, ptable, rxbool
 
 
 class Snapshots:

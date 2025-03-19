@@ -1,10 +1,10 @@
 import os
+import sys
 from os.path import isdir, isfile
 from os.path import join as pj
-import sys
 
-from py.colours import Colours
-from py.util import (
+from dq_dev.colours import Colours
+from dq_dev.util import (
     copy_file,
     exists,
     is_port_no,
@@ -66,8 +66,7 @@ def init(args):
             print("Read prof config    " + col.yel(conf["files"]["prof_conf"]))
         conf["conf"] = read_toml(conf["files"]["prof_conf"])
     else:
-        print(
-            col.red("\nWarning") + "\n  Profile config does not exist!")
+        print(col.red("\nWarning") + "\n  Profile config does not exist!")
 
     if isfile(conf["files"]["prof_secrets"]) is True:
         print("Read prof secrets   " + col.yel(conf["files"]["prof_secrets"]))
@@ -114,7 +113,6 @@ def get_parsed_args(args):
     parsed_args["save_snapshot"] = parse_nargs(args.save_snapshot)
     parsed_args["restore_snapshot"] = parse_nargs(args.restore_snapshot)
     return parsed_args
-
 
 
 def parse_bool(boolval):

@@ -3,9 +3,9 @@ from os.path import join as pj
 from shutil import copyfile
 from sys import exit as x
 
-from py.colours import Colours
-from py.init import init
-from py.util import (
+from dq_dev.colours import Colours
+from dq_dev.init import init
+from dq_dev.util import (
     find,
     listdirs_only,
     mkdir,
@@ -21,8 +21,10 @@ class Profile:
     def __init__(self, args):
         self.exists = False
         self.conf = init(args)
-        if self.profile_exists(self.conf["prof"]["name"]) and \
-                self.conf["prof"]["name"] != "":
+        if (
+            self.profile_exists(self.conf["prof"]["name"])
+            and self.conf["prof"]["name"] != ""
+        ):
             self.exists = True
         self.c = Colours()
 

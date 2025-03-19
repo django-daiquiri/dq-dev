@@ -4,8 +4,8 @@ import sys
 from os.path import join as pj
 from sys import exit as x
 
-from py.colours import Colours
-from py.util import (
+from dq_dev.colours import Colours
+from dq_dev.util import (
     find,
     is_git,
     mkdir,

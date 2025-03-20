@@ -11,7 +11,7 @@ class Runner:
         self.conf = conf
         self.need_sudo = self.need_sudo()
 
-    def run_cmd_fg(self, cmd):
+    def run_cmd_fg(self, cmd: list[str]):
         print(self.c.mag(' '.join(cmd)))
         if self.conf['dry_run'] is False:
             try:
@@ -31,7 +31,7 @@ class Runner:
     def file_arg_compose(self):
         return ['-f', str(self.conf['files']['dc_yaml'])]
 
-    def run_docker(self, args):
+    def run_docker(self, args: list[str]):
         cmd_arr = []
         if self.need_sudo is True:
             cmd_arr.append('sudo')
@@ -39,7 +39,7 @@ class Runner:
         cmd_arr.extend(args)
         self.run_cmd_fg(cmd_arr)
 
-    def run_compose(self, args):
+    def run_compose(self, args: list[str]):
         cmd_arr = []
         if self.need_sudo is True:
             cmd_arr.append('sudo')

@@ -1,7 +1,6 @@
+import argparse
 import os
 import sys
-from os.path import isdir, isfile
-from os.path import join as pj
 from pathlib import Path
 
 from dq_dev.colours import Colours
@@ -27,7 +26,7 @@ def merge_dictionaries(dict1: dict, dict2: dict) -> dict:
     return dict2
 
 
-def init(args):
+def init(args: argparse.Namespace):
     col = Colours()
     conf = {}
     n = Path(__file__)
@@ -59,14 +58,15 @@ def init(args):
         print('\nUse profile         ' + col.gre(conf['prof']['name']))
 
     conf['conf'] = {}
-    if isfile(conf['files']['prof_conf']) is True:
+
+    if conf['files']['prof_conf'].is_file():
         if conf['args']['set'] is None:
             print('Read prof config    ' + col.yel(conf['files']['prof_conf']))
         conf['conf'] = read_toml(conf['files']['prof_conf'])
     else:
         print(col.red('\nWarning') + '\n  Profile config does not exist!')
 
-    if isfile(conf['files']['prof_secrets']) is True:
+    if conf['files']['prof_secrets'].is_file():
         print('Read prof secrets   ' + col.yel(conf['files']['prof_secrets']))
         prof_secrets = read_toml(conf['files']['prof_secrets'])
         conf['conf']['env'] = merge_dictionaries(conf['conf']['env'], prof_secrets)
@@ -94,11 +94,11 @@ def init(args):
     return conf
 
 
-def get_parsed_args(args):
+def get_parsed_args(args: argparse.Namespace):
     parsed_args = {}
     parsed_args['down'] = parse_nargs(args.down)
-    parsed_args['remove_network'] = parse_bool(args.remove_network)
-    parsed_args['remove_images'] = parse_bool(args.remove_images)
+    parsed_args['remove_network'] = false_to_none(args.remove_network)
+    parsed_args['remove_images'] = false_to_none(args.remove_images)
     parsed_args['render'] = parse_nargs(args.render)
     parsed_args['build'] = parse_nargs(args.build)
     parsed_args['run'] = parse_nargs(args.run)
@@ -113,7 +113,7 @@ def get_parsed_args(args):
     return parsed_args
 
 
-def parse_bool(boolval):
+def false_to_none(boolval: bool) -> bool | None:
     if boolval is True:
         return boolval
     else:
@@ -140,7 +140,7 @@ def get_group(user_id: int) -> int | str:
             return ''
 
 
-def create_rootfs_folders(basedir):
+def create_rootfs_folders(basedir: Path):
     dockerdir = basedir / 'docker'
     for dir in listdirs_only(dockerdir):
         (dir / 'rootfs').mkdir(parents=True, exist_ok=True)
@@ -172,11 +172,11 @@ def copy_custom_scripts(cs_conf: dict, basedir: Path, active_app: str):
     print('')
 
 
-def expand(s, active_app):
+def expand(s: str, active_app: str) -> str:
     return s.replace('<HOME>', os.environ['HOME']).replace('<ACTIVE_APP>', active_app)
 
 
-def parse_ports(conf):
+def parse_ports(conf: dict) -> dict:
     portmap = {}
     for service_name in conf['conf']['enable_containers']:
         r = None
@@ -205,4 +205,5 @@ def parse_ports(conf):
             r['envstr'] += r['internal']
         if r is not None:
             portmap[service_name] = r
+
     return portmap

@@ -1,3 +1,4 @@
+import argparse
 from pathlib import Path
 from shutil import copyfile
 from sys import exit as x
@@ -15,7 +16,7 @@ from dq_dev.util import (
 
 
 class Profile:
-    def __init__(self, args):
+    def __init__(self, args: argparse.Namespace):
         self.exists = False
         self.conf = init(args)
         if (
@@ -51,8 +52,8 @@ class Profile:
             copyfile(self.conf['files']['conf_tpl'], conf_yaml)
             copyfile(self.conf['files']['secrets_tpl'], secrets_yaml)
 
-    def set(self, profname):
-        if self.profile_exists(profname) is False:
+    def set(self, profname: str):
+        if not self.profile_exists(profname):
             print(
                 'Unable to set. Profile '
                 + self.c.yel(profname)
@@ -102,7 +103,7 @@ class Profile:
             r['conf'] = read_toml(r['yaml'])
         return r
 
-    def boolstr(self, bool: bool) -> str:
+    def bool_to_str(self, bool: bool) -> str:
         return '*' if bool else ''
 
     def list(self):
@@ -114,8 +115,8 @@ class Profile:
             shortname = rxsearch(r'[^/]+/[^/]+$', str(path))
             profname = rxsearch(r'[^/]+$', shortname)
             ap = self.conf['prof']['name']
-            has_conf = self.boolstr((path / 'conf.toml').is_file())
-            active = self.boolstr(profname == ap)
+            has_conf = self.bool_to_str((path / 'conf.toml').is_file())
+            active = self.bool_to_str(profname == ap)
             listdirs_only(self.get_profile_folder_by_name(path))
             volumes = ' '.join(listdirs_only(self.get_profile_folder_by_name(path)))
             tabledata.append([profname, has_conf, active, volumes])

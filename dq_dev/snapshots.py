@@ -1,12 +1,10 @@
-import os
 import sys
 import time
 import zipfile
-from os.path import isfile
 from pathlib import Path
 
 from dq_dev.colours import Colours
-from dq_dev.util import exists, get_lastmod, listfiles_only, ptable, rxbool
+from dq_dev.util import get_lastmod, listfiles_only, ptable, rxbool
 
 
 class Snapshots:
@@ -74,21 +72,21 @@ class Snapshots:
         print(f'Restore snapshot {name}')
         with zipfile.ZipFile(current_snapshot, 'r') as zip_ref:
             zip_ref.extractall(self.conf['basedir'])
-        print('Done, file {} restored '.format(current_snapshot))
+        print(f'Done, file {current_snapshot} restored')
 
-    def toZip(self, file, filename):
+    def toZip(self, file: Path, filename: Path):
         zip_file = zipfile.ZipFile(filename, 'w')
-        if isfile(file):
+        if file.is_file():
             zip_file.write(file)
         else:
             self.addFolderToZip(zip_file, file)
         zip_file.close()
 
-    def addFolderToZip(self, zip_file, folder):
-        for file in os.listdir(folder):
-            full_path = os.path.join(folder, file)
-            if isfile(full_path):
-                print('Add file ' + str(full_path))
+    def addFolderToZip(self, zip_file: zipfile.ZipFile, folder: Path):
+        for file in folder.iterdir():
+            full_path = folder / file
+            if full_path.is_file():
+                print(f'Add file {str(full_path)}')
                 zip_file.write(full_path)
-            elif os.path.isdir(full_path):
+            elif full_path.is_dir():
                 self.addFolderToZip(zip_file, full_path)

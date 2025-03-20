@@ -1,7 +1,6 @@
 import os
 import pprint as ppr
 import re
-from os.path import sep as sep
 from pathlib import Path
 from shutil import copy, rmtree
 from subprocess import PIPE, Popen
@@ -199,10 +198,9 @@ def pprint(obj: Any):
     pp.pprint(obj)
 
 
-def ptable(head, tab):
+def ptable(head: list[str], tab: list[list[str]]):
     print(tabulate(tab, headers=head))
 
 
-def get_lastmod(filename):
-    stat = os.stat(filename)
-    return os.path.getmtime(filename)
+def get_lastmod(filename: Path) -> float:
+    return filename.stat().st_mtime

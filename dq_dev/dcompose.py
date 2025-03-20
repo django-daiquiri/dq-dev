@@ -1,7 +1,6 @@
 import os
 import re
 import sys
-from os.path import join as pj
 from pathlib import Path
 from sys import exit as x
 

@@ -4,7 +4,7 @@ source "${HOME}/.bashrc"
 
 if [[ -d "$DQSOURCE" ]]; then
     cd "${DQSOURCE}"
-    pip3 install -e .[postgres]
+    pip3 install -e .[postgres,dev]
 
     nvm install
     npm ci

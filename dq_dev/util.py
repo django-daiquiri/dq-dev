@@ -169,7 +169,9 @@ def lookup_env_value(env, rx):
     return r
 
 
-def shortname(p: str) -> str:
+def shortname(p: str | Path) -> str:
+    if isinstance(p, Path):
+        p = str(p)
     return re.search(r'[^/]+$', p).group(0)
 
 

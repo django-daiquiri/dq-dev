@@ -83,7 +83,9 @@ def init(args: argparse.Namespace):
     clean_temp_files(conf['basedir'], conf['conf']['enable_containers'])
 
     copy_custom_scripts(
-        conf['conf']['custom_scripts'], conf['basedir'], conf['conf']['active_app']
+        cs_conf=conf['conf']['custom_scripts'],
+        basedir=conf['basedir'],
+        active_app=conf['conf']['active_app'],
     )
 
     create_rootfs_folders(conf['basedir'])

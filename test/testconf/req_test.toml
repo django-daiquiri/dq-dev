@@ -1,39 +1,42 @@
-request_check = [
-{
-    exp_in = "A framework for the publication of scientific databases",
-    exp_out = "A framework for the publication of scientific databases",
-    url = "/"
-}, {
-    exp_in = "Welcome to WordPress. This is your first post.",
-    exp_out = "Welcome to WordPress. This is your first post.",
-    url = "/cms/"
-}, {
-    exp_in = "Dashboard",
-    exp_out = "If you have not created an account yet",
-    url = "/cms/admin/"
-}, {
-    exp_in = "Dashboard",
-    exp_out = "If you have not created an account yet",
-    url = "/cms/wp-admin/"
-}, {
-    exp_in = "ng-app=\"archive\"",
-    exp_out = "If you have not created an account yet",
-    url = "/archive/"
-}, {
-    exp_in = "Please enter your contact details and your message",
-    exp_out = "Please log in to be able to fill the contact form",
-    url = "/contact/"
-}, {
-    exp_in = "Place your SQL statement directly in the text area below",
-    exp_out = "If you have not created an account yet",
-    url = "/query/"
-}, {
-    exp_in = "jQuery v3.2.1",
-    exp_out = "jQuery v3.2.1",
-    url = "/static/jquery/jquery-3.2.1.min.js"
-}]
+[[request_check]]
+exp_in = "A framework for the publication of scientific databases"
+exp_out = "A framework for the publication of scientific databases"
+url = "/"
 
-ua = "User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:80.0) Gecko/20100101 Firefox/80.0"
+[[request_check]]
+exp_in = "Welcome to WordPress. This is your first post."
+exp_out = "Welcome to WordPress. This is your first post."
+url = "/cms/"
+
+[[request_check]]
+exp_in = "Dashboard"
+exp_out = "If you have not created an account yet"
+url = "/cms/admin/"
+
+[[request_check]]
+exp_in = "Dashboard"
+exp_out = "If you have not created an account yet"
+url = "/cms/wp-admin/"
+
+[[request_check]]
+exp_in = "ng-app=\"archive\""
+exp_out = "If you have not created an account yet"
+url = "/archive/"
+
+[[request_check]]
+exp_in = "Please enter your contact details and your message"
+exp_out = "Please log in to be able to fill the contact form"
+url = "/contact/"
+
+[[request_check]]
+exp_in = "Place your SQL statement directly in the text area below"
+exp_out = "If you have not created an account yet"
+url = "/query/"
+
+[[request_check]]
+exp_in = "jQuery v3.2.1"
+exp_out = "jQuery v3.2.1"
+url = "/static/jquery/jquery-3.2.1.min.js"
 
 [cred]
   pass = "admin"
@@ -43,3 +46,6 @@ ua = "User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:80.0) Gecko/20100101 Firefo
   base = "http://localhost:9280"
   login = "/accounts/login/"
   logout = "/accounts/logout/"
+
+[user_agent]
+  ua = "User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:80.0) Gecko/20100101 Firefox/80.0"

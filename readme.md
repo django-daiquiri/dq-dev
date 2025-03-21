@@ -20,7 +20,7 @@ A toolset for [daiquiri](https://github.com/django-daiquiri/daiquiri) docker con
 
 You need [docker](https://www.docker.com/) and [docker compose](https://github.com/docker/compose/releases).
 
-dq-dev and its dependencies can be install via poetry:
+dq-dev and its dependencies can be install via poetry (to get poetry, issue `pip install poetry`):
 
 ```bash
 cd dq-dev

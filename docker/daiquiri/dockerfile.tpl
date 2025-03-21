@@ -10,7 +10,7 @@ ENV INIT_FINISHED_FILE=${HOME}/run/init.finished
 
 ENV PATH=${PATH}:/home/dq/sh:/home/dq/.local/bin:${HOME}/bin:${HOME}/py:${HOME}/sh:/vol/tools/shed
 
-ENV PIP_BREAK_SYSTEM_PACKAGES 1
+ENV PIP_BREAK_SYSTEM_PACKAGES=1
 
 RUN apt update -y
 RUN apt install -y \
@@ -30,9 +30,15 @@ RUN apt install -y \
   libxml2-dev \
   libxslt-dev \
   zlib1g-dev \
+  build-essential \
   libssl-dev
 
 RUN apt -y install gnupg2 wget vim
+
+
+ENV NVM_DIR="$HOME/.nvm"
+RUN wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+
 RUN echo "deb http://apt.postgresql.org/pub/repos/apt \
   $(cat /etc/os-release | grep -Po "(?<=VERSION_CODENAME=).*")-pgdg main" \
   > /etc/apt/sources.list.d/pgdg.list
@@ -76,7 +82,7 @@ RUN find /tmp -type f -executable -regex ".*\/custom_scripts\/build.*" \
   | sort | xargs -i /bin/bash {}
 
 RUN python3 -m pip install --upgrade pip
-RUN python3 -m pip install python-dotenv django gunicorn gevent psycopg[binary]
+RUN python3 -m pip install python-dotenv django gunicorn gevent
 RUN ln -sf /usr/bin/python3 /usr/bin/python
 
 # RUN apt install -y <ADDITIONAL_PACKAGES>

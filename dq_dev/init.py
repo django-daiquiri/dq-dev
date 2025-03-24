@@ -165,9 +165,6 @@ def copy_custom_scripts(cs_conf: dict, basedir: Path, active_app: str):
                 if source_folder.is_dir():
                     files = listfiles_only(source_folder)
                     if len(files) > 0:
-                        print(dockdir)
-                        print(dockdir.name)
-                        quit()
                         print(
                             '\nAdd custom scripts to container ' + col.gre(dockdir.name)
                         )

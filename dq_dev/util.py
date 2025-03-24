@@ -38,23 +38,23 @@ def find(root, filter: str = '.*', filter_type: str = 'f') -> list[Path]:
 
 
 def listdirs_only(root: Path) -> list[Path]:
-    p = os.listdir(root)
+    paths = os.listdir(root)
     r = []
-    for i in p:
-        fil = root / i
-        if fil.is_dir():
-            r.append(fil)
+    for p in paths:
+        path = root / p
+        if path.is_dir():
+            r.append(path)
 
     return sorted(r)
 
 
 def listfiles_only(root: Path) -> list[Path]:
-    p = os.listdir(root)
+    paths = os.listdir(root)
     r = []
-    for i in p:
-        fil = root / i
-        if fil.is_file():
-            r.append(fil)
+    for p in paths:
+        path = root / p
+        if path.is_file():
+            r.append(path)
 
     return sorted(r)
 
@@ -95,21 +95,16 @@ def is_git(folder: Path | str) -> tuple[bool, str | None]:
     return (True, out)
 
 
-def copy_file(src: Path, trg: Path):
-    trg.mkdir(exist_ok=True, parents=True)
-    sn = shortname(src)
-    trg = trg / sn
-    print(f'Copy file {colmag(src)} to {colgre(trg)}')
-    copy(src, trg)
+def copy_file(src: Path, target_dir: Path):
+    target_dir.mkdir(exist_ok=True, parents=True)
+    target_file = target_dir / src.name
+    print(f'Copy file {colmag(src)} to {colgre(target_file)}')
+    copy(src, target_file)
 
 
 def empty_dir(dir: Path | str):
     for f in os.listdir(dir):
         os.remove(Path(dir) / f)
-
-
-def exists(dir: Path | str) -> bool:
-    return os.path.exists(dir)
 
 
 def remove_dir(dir: Path):
@@ -133,30 +128,28 @@ def read_toml(filename: Path | str) -> dict | None:
     return None
 
 
-def write_toml(data, filename: Path | str):
+def write_toml(data, filename: Path):
     with open(filename, 'w') as toml_file:
         toml.dump(data, toml_file)
 
 
-def write_yaml(data, filename: Path | str):
+def write_yaml(data, filename: Path):
     with open(filename, 'w') as outfile:
         yaml.dump(data, outfile, default_flow_style=False, indent=2)
 
 
-def write_array_to_file(data: list[str], filename: Path | str, mode: str = 'w'):
+def write_array_to_file(data: list[str], filename: Path, mode: str = 'w'):
     with open(filename, mode) as fp:
         for line in data:
             fp.write(line + '\n')
 
 
 def is_port_no(s: int) -> bool:
-    try:
-        i = int(s)
-    except (TypeError, ValueError):
+    if not isinstance(s, int):
         return False
-    else:
-        if 0 < i <= 65535:
-            return True
+
+    if 0 < s <= 65535:
+        return True
 
     return False
 
@@ -167,12 +160,6 @@ def lookup_env_value(env, rx):
         if rxbool(rx, el):
             r = env[el]
     return r
-
-
-def shortname(p: str | Path) -> str:
-    if isinstance(p, Path):
-        p = str(p)
-    return re.search(r'[^/]+$', p).group(0)
 
 
 def rxsearch(rx: str, s: str, gr: int = 0) -> str | None:

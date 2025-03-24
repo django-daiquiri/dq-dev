@@ -11,7 +11,6 @@ from dq_dev.util import (
     listfiles_only,
     read_toml,
     remove_dir,
-    shortname,
 )
 
 
@@ -156,6 +155,7 @@ def clean_temp_files(basedir: Path, container_names: list[str]):
 
 def copy_custom_scripts(cs_conf: dict, basedir: Path, active_app: str):
     col = Colours()
+
     for typ in cs_conf:
         for con in cs_conf[typ]:
             dockdir = basedir / 'docker' / con
@@ -165,9 +165,11 @@ def copy_custom_scripts(cs_conf: dict, basedir: Path, active_app: str):
                 if source_folder.is_dir():
                     files = listfiles_only(source_folder)
                     if len(files) > 0:
+                        print(dockdir)
+                        print(dockdir.name)
+                        quit()
                         print(
-                            '\nAdd custom scripts to container '
-                            + col.gre(shortname(dockdir))
+                            '\nAdd custom scripts to container ' + col.gre(dockdir.name)
                         )
                     for file in files:
                         copy_file(file, target_folder)

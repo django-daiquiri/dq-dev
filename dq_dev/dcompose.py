@@ -27,12 +27,14 @@ class DCompose:
         self.names = {}
         self.volumes = []
 
-    def expand_vars_arr(self, arr, container_name=None):
+    def expand_vars_arr(self, arr: list[str], container_name: str | None = None):
         for i, el in enumerate(arr):
             arr[i] = self.expand_vars(arr[i], container_name)
         return arr
 
-    def expand_vars(self, string, container_name=None):
+    def expand_vars(self, string: Path | str, container_name: str | None = None):
+        string = str(string)
+
         if '<' not in string and '>' not in string:
             return string
         # expand variables set in config

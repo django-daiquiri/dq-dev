@@ -117,8 +117,10 @@ class Profile:
             ap = self.conf['prof']['name']
             has_conf = self.bool_to_str((path / 'conf.toml').is_file())
             active = self.bool_to_str(profname == ap)
-            listdirs_only(self.get_profile_folder_by_name(path))
-            volumes = ' '.join(listdirs_only(self.get_profile_folder_by_name(path)))
+            volumes_list = [
+                str(i) for i in listdirs_only(self.get_profile_folder_by_name(path))
+            ]
+            volumes = ' '.join(volumes_list)
             tabledata.append([profname, has_conf, active, volumes])
         ptable(head, tabledata)
         print()

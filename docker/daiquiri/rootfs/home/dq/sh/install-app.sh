@@ -28,13 +28,10 @@ if [[ "$(echo ${AUTO_CREATE_ADMIN_USER} | tr '[:upper:]' '[:lower:]')" == "true"
     python3 manage.py create_admin_user >/dev/null 2>&1
 fi
 
-if [[ -d "$DQSOURCE" ]]; then
+if [[ -d "$DQSOURCE" ]] && [[ -f "${DQAPP}/package.json" ]]; then
     nvm use
     npm link ${DQSOURCE}
     npm run build
 fi
 
-# mkdir -p "${DQAPP}/vendor"
-# python3 manage.py download_vendor_files
-#
 python3 manage.py collectstatic --no-input

@@ -11,3 +11,6 @@ vol/
 
 docker/*/dockerfile
 docker/*/Dockerfile
+
+.DS_Store
+poetry.lock

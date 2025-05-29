@@ -41,13 +41,13 @@ A workflow could be
 
 ```bash
 # create a new profile
-pm [python manage.py] -c newprof
+python manage.py [pm] -c newprof
 
 # set it to active
-pm [python manage.py] -s newprof
+python manage.py [pm] -s newprof
 
 # and run it
-pm [python manage.py] -r
+python manage.py [pm] -r
 ```
 
 Note that `-r` can also take a profile name as argument. But if none given the active profile will be used for the action. Same for other commands. The idea behind the `active profile` is that one does not have to pass the profile name as argument to the command one wants to run.

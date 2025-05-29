@@ -20,8 +20,14 @@ A toolset for [daiquiri](https://github.com/django-daiquiri/daiquiri) docker con
 
 You need [docker](https://www.docker.com/) and [docker compose](https://github.com/docker/compose/releases).
 
-dq-dev and its dependencies can be install via poetry (to get poetry, issue `pip install poetry`):
+dq-dev can be installed by simply cloning the repo and issuing:
 
+```bash
+cd dq-dev
+pip install .
+```
+
+If you want to use `poetry`, do
 ```bash
 cd dq-dev
 poetry install
@@ -29,19 +35,19 @@ poetry install
 
 ## How to use
 
-Interaction is done via the `manage.py` script, which is also accessible with the `pm` command. You can call `-h` for help.
+Interaction is done via the `manage.py` script. When using poetry, this is also accessible with the `pm` command. You can call `-h` for help.
 
 A workflow could be
 
 ```bash
 # create a new profile
-pm -c newprof
+pm [python manage.py] -c newprof
 
 # set it to active
-pm -s newprof
+pm [python manage.py] -s newprof
 
 # and run it
-pm -r
+pm [python manage.py] -r
 ```
 
 Note that `-r` can also take a profile name as argument. But if none given the active profile will be used for the action. Same for other commands. The idea behind the `active profile` is that one does not have to pass the profile name as argument to the command one wants to run.
@@ -70,7 +76,7 @@ Edit the configuration for the dq-dev setup:
 
 ```bash
 cd dq-dev
-nano tpl/conf.yaml
+your-favorite-editor tpl/conf.yaml
 ```
 
 You can have multiple apps on the system. Active app is set via `active_app` entry, `daiquiri` is the default app. Make sure, to check the paths n `folders_on_host` section pointing them to your directories. In case it is needed, make the DB persistent in the `enable_volumes` section.

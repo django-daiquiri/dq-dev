@@ -2,30 +2,36 @@
 
 
 source "${HOME}/.bashrc"
+source "${HOME}/.venv/bin/activate"
 
-reqfile="${DQAPP}/requirements.txt"
+reqfile="${DQAPP}/pyproject.toml"
+echo "current directory: $(pwd)"
+
 
 if [[ -f "${reqfile}" ]]; then
+    cd "${DQAPP}"
+
     # if the path to the local daiquiri repo exists then don't install it from the req
     if [[ -d "${DQSOURCE}" ]]; then
         echo "Install app requirements excluding daiquiri"
-        pip install $(grep -v "^\s*#" ${reqfile} | grep -ivE "django-daiquiri")
+        uv pip install -e .
+        uv pip list
     else
         echo "Install app requirements"
-        pip install -r ${reqfile}
+        # uv pip install -r ${reqfile}
+        uv pip install -e .
     fi
 else
     echo "cannot pip install, file does not exist: ${reqfile}"
 fi
 
-cd "${DQAPP}"
-python3 manage.py makemigrations
-python3 manage.py migrate
+uv run manage.py makemigrations
+uv run manage.py migrate
 
 if [[ "$(echo ${AUTO_CREATE_ADMIN_USER} | tr '[:upper:]' '[:lower:]')" == "true" ]]; then
     # silent because of the error message, that wp admin user already exists
     # necessary to create the daiquiri admin user
-    python3 manage.py create_admin_user >/dev/null 2>&1
+    uv run manage.py create_admin_user >/dev/null 2>&1
 fi
 
 nvm use
@@ -35,4 +41,4 @@ npm run build
 # mkdir -p "${DQAPP}/vendor"
 # python3 manage.py download_vendor_files
 #
-python3 manage.py collectstatic --no-input
+uv run manage.py collectstatic --no-input

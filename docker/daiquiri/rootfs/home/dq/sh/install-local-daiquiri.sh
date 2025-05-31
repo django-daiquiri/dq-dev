@@ -1,14 +1,18 @@
 #!/bin/bash
 
 source "${HOME}/.bashrc"
+cd "${HOME}"
 
 if [[ -d "$DQSOURCE" ]]; then
+    echo "Installing local daiquiri"
     cd "${DQSOURCE}"
-    pip3 install -e .[postgres]
+    # source "${HOME}/.venv/bin/activate"
+    uv pip install -e .[postgres]
+    uv pip list
 
-    nvm install
-    npm ci
-    npm run build
+    # nvm install
+    # npm ci
+    # npm run build
 else
     echo "DQSOURCE is not defined"
 fi

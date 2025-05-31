@@ -1,14 +1,14 @@
 #!/bin/bash
 set -e
-
 cd "${DQAPP}"
+source "${HOME}/.venv/bin/activate"
 
-python3 ./manage.py sqlcreate
-python3 ./manage.py sqlcreate --test
-python3 ./manage.py sqlcreate --schema=daiquiri_data_obs
+uv run ./manage.py sqlcreate
+uv run ./manage.py sqlcreate --test
+uv run ./manage.py sqlcreate --schema=daiquiri_data_obs
 
-python3 ./manage.py download_vendor_files
-python3 ./manage.py test daiquiri --keepdb
-python3 ./manage.py migrate
-python3 ./manage.py migrate --database=data
-python3 ./manage.py loaddata ../source/testing/fixtures/*
+uv run ./manage.py download_vendor_files
+uv run ./manage.py test daiquiri --keepdb
+uv run ./manage.py migrate
+uv run ./manage.py migrate --database=data
+uv run ./manage.py loaddata ../source/testing/fixtures/*

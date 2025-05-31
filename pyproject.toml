@@ -3,9 +3,9 @@ name = "dq-dev"
 version = "0.4.0"
 description = "Container management for daiquiri"
 authors = [
-    {name = "EScience Team at AIP",email = "escience@aip.de"}
+    {name = "EScience Team at AIP", email = "escience@aip.de"}
 ]
-license = {text = "BSD-3-Clause"}
+license = "BSD-3-Clause"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
@@ -15,15 +15,16 @@ dependencies = [
 ]
 
 [project.scripts]
-pm = "manage:main"
+dqpm = "manage:main"
 
-[tool.poetry]
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["dq_dev"]
+exclude = []
 
-[tool.poetry.group.dev.dependencies]
-mypy = "^1.15.0"
-pytest = "^8.3.5"
-requests = "^2.32.3"
-
-[build-system]
-requires = ["poetry-core>=2.0.0,<3.0.0"]
-build-backend = "poetry.core.masonry.api"
+[dependency-groups]
+dev = [
+    "mypy (>=1.15.0,<2.0.0)",
+    "pytest (>=8.3.5,<9.0.0)",
+    "requests (>=2.32.3,<3.0.0)"
+]

@@ -1,7 +1,6 @@
 #!/bin/bash
 set -e
 cd "${DQAPP}"
-source "${HOME}/.venv/bin/activate"
 
 uv run ./manage.py sqlcreate
 uv run ./manage.py sqlcreate --test

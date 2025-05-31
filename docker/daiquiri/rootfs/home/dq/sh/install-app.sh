@@ -2,23 +2,22 @@
 
 
 source "${HOME}/.bashrc"
-source "${HOME}/.venv/bin/activate"
 
 reqfile="${DQAPP}/pyproject.toml"
 echo "current directory: $(pwd)"
 
+cd "${DQAPP}"
 
 if [[ -f "${reqfile}" ]]; then
-    cd "${DQAPP}"
-
+    
     # if the path to the local daiquiri repo exists then don't install it from the req
     if [[ -d "${DQSOURCE}" ]]; then
         echo "Install app requirements excluding daiquiri"
+        # FIXME: Add daiquiri to requirements and exclude it from the install
         uv pip install -e .
         uv pip list
     else
         echo "Install app requirements"
-        # uv pip install -r ${reqfile}
         uv pip install -e .
     fi
 else

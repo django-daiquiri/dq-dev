@@ -8,11 +8,11 @@ if [[ -d "$DQSOURCE" ]]; then
     cd "${DQSOURCE}"
     # source "${HOME}/.venv/bin/activate"
     uv pip install -e .[postgres]
-    uv pip list
+    # uv pip list
 
-    # nvm install
-    # npm ci
-    # npm run build
+    nvm install
+    npm ci
+    npm run build
 else
     echo "DQSOURCE is not defined"
 fi

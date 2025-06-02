@@ -17,6 +17,12 @@ dependencies = [
 [project.scripts]
 dqpm = "manage:main"
 
+[tool.ruff]
+line-length = 120
+
+[tool.ruff.format]
+quote-style = "single"
+
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["dq_dev"]

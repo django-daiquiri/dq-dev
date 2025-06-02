@@ -10,8 +10,6 @@ ENV INIT_FINISHED_FILE=${HOME}/run/init.finished
 
 ENV PATH=${PATH}:/home/dq/sh:/home/dq/.local/bin:${HOME}/bin:${HOME}/py:${HOME}/sh:/vol/tools/shed
 
-ENV UV_PROJECT_ENVIRONMENT="${HOME}/.venv"
-
 RUN apt update -y
 RUN apt install -y \
   curl \
@@ -81,6 +79,7 @@ RUN find /tmp -type f -executable -regex ".*\/custom_scripts\/build.*" \
 
 RUN apt install -y python3 curl
 
+ENV UV_PROJECT_ENVIRONMENT="${HOME}/.venv"
 RUN curl -LsSf https://astral.sh/uv/install.sh | env UV_INSTALL_DIR="/home/dq/.local/bin" sh 
 RUN uv venv "${HOME}/.venv"
 RUN . "${HOME}/.venv/bin/activate" && uv pip install django gunicorn gevent

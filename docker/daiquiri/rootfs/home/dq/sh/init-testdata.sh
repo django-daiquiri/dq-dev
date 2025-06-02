@@ -1,6 +1,7 @@
 #!/bin/bash
 set -e
 cd "${DQAPP}"
+source "${HOME}/.venv/bin/activate"
 
 python manage.py sqlcreate
 python manage.py sqlcreate --test

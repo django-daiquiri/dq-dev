@@ -1,14 +1,12 @@
 #!/bin/bash
 
 source "${HOME}/.bashrc"
-cd "${HOME}"
+source "${HOME}/.venv/bin/activate"
 
 if [[ -d "$DQSOURCE" ]]; then
     echo "Installing local daiquiri"
     cd "${DQSOURCE}"
-    # source "${HOME}/.venv/bin/activate"
     uv pip install -e .[postgres]
-    # uv pip list
 
     nvm install
     npm ci

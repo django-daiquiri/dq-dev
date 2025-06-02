@@ -7,6 +7,16 @@
 - [How to use](#how-to-use)
 - [From scratch](#from-scratch)
 - [Tech background](#tech-background)
+  * [Tests](#tests)
+  * [CLI Args](#cli-args)
+
+<!-- tocstop -->
+
+- [Overview](#overview)
+- [Setup](#setup)
+- [How to use](#how-to-use)
+- [From scratch](#from-scratch)
+- [Tech background](#tech-background)
   - [Tests](#tests)
   - [CLI Args](#cli-args)
 
@@ -27,27 +37,21 @@ cd dq-dev
 pip install .
 ```
 
-If you want to use `poetry`, do
-```bash
-cd dq-dev
-poetry install
-```
-
 ## How to use
 
-Interaction is done via the `manage.py` script. When using poetry, this is also accessible with the `pm` command. You can call `-h` for help.
+Interaction is done via the `manage.py` script. When using poetry, this is also accessible with the `dqpm` command. You can call `-h` for help.
 
 A workflow could be
 
 ```bash
 # create a new profile
-python manage.py [pm] -c newprof
+python manage.py [dqpm] -c newprof
 
 # set it to active
-python manage.py [pm] -s newprof
+python manage.py [dqpm] -s newprof
 
 # and run it
-python manage.py [pm] -r
+python manage.py [dqpm] -r
 ```
 
 Note that `-r` can also take a profile name as argument. But if none given the active profile will be used for the action. Same for other commands. The idea behind the `active profile` is that one does not have to pass the profile name as argument to the command one wants to run.
@@ -89,15 +93,14 @@ The instance will be available on `localhost:9280` for the default settings.
 
 We use [caddy](https://github.com/caddyserver/caddy) as http server and reverse proxy. Usually caddy is mounted into the daiquiri docker via the `shed` volume. If caddy does exist there, it will be used. If not the latest caddy will be pulled from github automatically.
 
-
 ### Tests
 
 In the mainfolder is a python script `request_test.py` that fires some simple requests at Daiquiri. It helps to check proxy configurations. Try `python request_test.py -h` to find out what it can do.
 
 ### CLI Args
 
-```go mdox-exec="pm -h"
-usage: pm [-h] [-b [BUILD ...]] [-bnc [BUILD_NO_CACHE ...]]
+```go mdox-exec="dqpm -h"
+usage: dqpm [-h] [-b [BUILD ...]] [-bnc [BUILD_NO_CACHE ...]]
                  [-r [RUN ...]] [-p [STOP ...]] [-d [DOWN ...]] [-rmi] [-rmn]
                  [-g [TAIL_LOGS ...]] [-c CREATE_PROFILE] [-s SET_PROFILE]
                  [-e [RENDER ...]] [-a [DISPLAY_PROFILE ...]]

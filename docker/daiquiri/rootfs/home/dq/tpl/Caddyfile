@@ -1,7 +1,11 @@
 {
-	# debug
 	http_port ${EXPOSED_PORT}
 	auto_https disable_redirects
+	log {
+		output stdout
+		format console
+		level info
+	}
 }
 
 :${EXPOSED_PORT} {

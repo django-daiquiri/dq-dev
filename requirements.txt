@@ -1,3 +1,0 @@
-PyYAML>=5.3.1
-tabulate>=0.8.9
-pytomlpp>=1.0.10

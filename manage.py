@@ -1,20 +1,18 @@
 #!/usr/bin/python3
 import argparse
-import os
 import sys
+from pathlib import Path
 from sys import exit as x
 
-from py.colours import Colours
-from py.dcompose import DCompose
-from py.profile import Profile
-from py.runner import Runner
-from py.snapshots import Snapshots
-from py.util import pprint
+from dq_dev.colours import Colours
+from dq_dev.dcompose import DCompose
+from dq_dev.profile import Profile
+from dq_dev.runner import Runner
+from dq_dev.snapshots import Snapshots
+from dq_dev.util import pprint
 
 parser = argparse.ArgumentParser(
-    description=os.path.basename(__file__).title()
-    + ": "
-    + "dq-dev, daiquiri docker compose dev setup",
+    description=f"{Path(__file__).name}: daiquiri docker compose dev setup",
     epilog="If used without arg, profile list is displayed\n",
     formatter_class=argparse.RawDescriptionHelpFormatter,
 )
@@ -57,9 +55,7 @@ parser.add_argument(
     nargs="*",
     default=None,
     help=(
-        "stop and remove profile's running containers, "
-        + "remove docker's volumes, keep folders containing the "
-        + "volume data, they can be reused on next run"
+        "stop and remove profile's running containers, remove docker's volumes, keep folders containing the volume data, they can be reused on next run"
     ),
 )
 parser.add_argument(
@@ -92,11 +88,7 @@ parser.add_argument(
     help="create a new profile with the default settings",
 )
 parser.add_argument(
-    "-s",
-    "--set_profile",
-    type=str,
-    default=None,
-    help="set profile to active"
+    "-s", "--set_profile", type=str, default=None, help="set profile to active"
 )
 parser.add_argument(
     "-e",
@@ -140,14 +132,13 @@ parser.add_argument(
     action="store_true",
     default=False,
     help=(
-        "do not run any docker-compose commands nor "
-        + "save rendered docker-compose.yaml, just print them"
+        "do not run any docker-compose commands nor save rendered docker-compose.yaml, just print them"
     ),
 )
 args = parser.parse_args()
 
 
-if __name__ == "__main__":
+def main():
     col = Colours()
     prof = Profile(args)
     conf = prof.conf
@@ -164,15 +155,15 @@ if __name__ == "__main__":
 
     if not prof.exists:
         print(
-            col.red("There is no active profile!\n\n") +
-            col.gre("Please activate a profile with \n") +
-            col.gre("    python manage.py -s <profile_name>\n") +
-            col.gre("or, first, create a new profile with\n") +
-            col.gre("    python manage.py -c <profile_name>\n") +
-            col.gre("and then activate it.")
+            col.red("There is no active profile!\n\n")
+            + col.gre("Please activate a profile with \n")
+            + col.gre("    python manage.py -s <profile_name>\n")
+            + col.gre("or, first, create a new profile with\n")
+            + col.gre("    python manage.py -c <profile_name>\n")
+            + col.gre("and then activate it.")
         )
 
-    if len(sys.argv) <=1 or not prof.is_active():
+    if len(sys.argv) <= 1 or not prof.is_active():
         prof.list()
         x()
 
@@ -231,3 +222,7 @@ if __name__ == "__main__":
 
     if conf["args"]["restore_snapshot"] is not None:
         snap.restore_snapshot()
+
+
+if __name__ == "__main__":
+    main()

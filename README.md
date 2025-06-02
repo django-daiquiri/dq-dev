@@ -1,40 +1,53 @@
-# Dq Dev [![build](https://github.com/django-daiquiri/dq-dev/actions/workflows/build.yaml/badge.svg)](https://github.com/django-daiquiri/dq-dev/actions/workflows/build.yaml)
+# dq-dev [![build](https://github.com/django-daiquiri/dq-dev/actions/workflows/build.yaml/badge.svg)](https://github.com/django-daiquiri/dq-dev/actions/workflows/build.yaml)
 
 <!-- toc -->
 
-- [Synopsis](#synopsis)
+- [Overview](#overview)
+- [Setup](#setup)
 - [How to use](#how-to-use)
 - [From scratch](#from-scratch)
 - [Tech background](#tech-background)
-  - [Dependencies](#dependencies)
   - [Tests](#tests)
   - [CLI Args](#cli-args)
 
 <!-- /toc -->
 
-## Synopsis
+## Overview
 
-A daiquiri docker containerisation that started as development setup. It brings quite a few configuration options that can be found looking into the toml files in the `conf` folder. An abstraction layer that is written in python aims to provide an easier access to all the different functions supporting multiple profiles and other things.
+A toolset for [daiquiri](https://github.com/django-daiquiri/daiquiri) docker containerization. It brings quite a few configuration options that can be found looking into the toml files in the `conf` folder. An abstraction layer that is written in python aims to provide an easier access to all the different functions supporting multiple profiles and other things.
 
-Please make sure that you have [docker](https://www.docker.com/) and [docker compose](https://github.com/docker/compose/releases) to make use of dq dev.
+## Setup
 
-The required python libraries can be installed as usual `pip install -r requirements.txt`.
+You need [docker](https://www.docker.com/) and [docker compose](https://github.com/docker/compose/releases).
+
+dq-dev can be installed by simply cloning the repo and issuing:
+
+```bash
+cd dq-dev
+pip install .
+```
+
+If you want to use `poetry`, do
+```bash
+cd dq-dev
+poetry install
+```
 
 ## How to use
 
-Interaction is done via the `manage.py` script. You can call `-h` for help.
+Interaction is done via the `manage.py` script. When using poetry, this is also accessible with the `pm` command. You can call `-h` for help.
 
 A workflow could be
 
-```python
+```bash
 # create a new profile
-python manage.py -c newprof
+python manage.py [pm] -c newprof
 
 # set it to active
-python manage.py -s newprof
+python manage.py [pm] -s newprof
 
 # and run it
-python manage.py -r
+python manage.py [pm] -r
 ```
 
 Note that `-r` can also take a profile name as argument. But if none given the active profile will be used for the action. Same for other commands. The idea behind the `active profile` is that one does not have to pass the profile name as argument to the command one wants to run.
@@ -63,7 +76,7 @@ Edit the configuration for the dq-dev setup:
 
 ```bash
 cd dq-dev
-nano tpl/conf.yaml
+your-favorite-editor tpl/conf.yaml
 ```
 
 You can have multiple apps on the system. Active app is set via `active_app` entry, `daiquiri` is the default app. Make sure, to check the paths n `folders_on_host` section pointing them to your directories. In case it is needed, make the DB persistent in the `enable_volumes` section.
@@ -74,15 +87,8 @@ The instance will be available on `localhost:9280` for the default settings.
 
 ## Tech background
 
-I use [caddy](https://github.com/caddyserver/caddy) as http server and reverse proxy. Usually caddy is mounted into the daiquiri docker via the `shed` volume. If caddy does exist there, it will be used. If not the latest caddy will be pulled from github automatically.
+We use [caddy](https://github.com/caddyserver/caddy) as http server and reverse proxy. Usually caddy is mounted into the daiquiri docker via the `shed` volume. If caddy does exist there, it will be used. If not the latest caddy will be pulled from github automatically.
 
-### Dependencies
-
-A python script is used to render the `docker-compose.yaml`. The script is called by the makefile and requires `pyYAML`. Make sure it is installed. You can use the requirements file for that.
-
-```
-pip install -r requirements.txt
-```
 
 ### Tests
 
@@ -90,15 +96,15 @@ In the mainfolder is a python script `request_test.py` that fires some simple re
 
 ### CLI Args
 
-```go mdox-exec="python manage.py -h"
-usage: manage.py [-h] [-b [BUILD ...]] [-bnc [BUILD_NO_CACHE ...]]
+```go mdox-exec="pm -h"
+usage: pm [-h] [-b [BUILD ...]] [-bnc [BUILD_NO_CACHE ...]]
                  [-r [RUN ...]] [-p [STOP ...]] [-d [DOWN ...]] [-rmi] [-rmn]
                  [-g [TAIL_LOGS ...]] [-c CREATE_PROFILE] [-s SET_PROFILE]
                  [-e [RENDER ...]] [-a [DISPLAY_PROFILE ...]]
                  [--list_snapshots] [--save_snapshot [SAVE_SNAPSHOT ...]]
                  [--restore_snapshot [RESTORE_SNAPSHOT ...]] [-n]
 
-Manage.Py: dq-dev, daiquiri docker compose dev setup
+manage.py: dq-dev, daiquiri docker compose dev setup
 
 options:
   -h, --help            show this help message and exit
@@ -137,5 +143,5 @@ options:
   -n, --dry_run         do not run any docker-compose commands nor save
                         rendered docker-compose.yaml, just print them
 
-If used without arg, profile list is displayed
+If used without any arguments, the profile list is displayed
 ```

@@ -57,7 +57,7 @@
 			root * ${CADDY_SENDFILE_ROOT}
 			rewrite * {rp.header.X-Accel-Redirect}
 			file_server
-			header Content-Disposition "attachment; filename="
+			header Content-Disposition {rp.header.Content-Disposition}
 		}
 		header_up X-Forwarded-Proto ${URL_PROTOCOL}
 		header_down Location http:// ${URL_PROTOCOL}://

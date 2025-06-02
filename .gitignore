@@ -14,3 +14,6 @@ docker/*/Dockerfile
 
 .DS_Store
 poetry.lock
+
+dq_dev.egg-info/
+uv.lock

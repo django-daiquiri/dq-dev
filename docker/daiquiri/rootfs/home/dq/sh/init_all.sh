@@ -22,6 +22,8 @@ fi
 # render config files
 cat "${HOME}/tpl/Caddyfile" | envsubst >"${CADDYFILE}"
 
+envsubst '${SENDFILE_URL} ${FILES_BASE_PATH}' <"${HOME}/tpl/nginx.conf" >"${HOME}/conf/nginx.conf"
+
 if [[ "${ASYNC}" == "True" ]]; then
   ${HOME}/sh/init-folders.sh
 fi

@@ -20,6 +20,7 @@ RUN apt install -y \
   git \
   jq \
   netcat-traditional \
+  nginx \
   python3 \
   python3-dev \
   python3-pip \

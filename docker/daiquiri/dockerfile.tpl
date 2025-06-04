@@ -58,9 +58,6 @@ RUN curl --output ${HOME}/sh/install_from_github.sh \
 RUN chmod +x ${HOME}/sh/install_from_github.sh
 
 RUN ${HOME}/sh/install_from_github.sh \
-  "caddyserver/caddy" "_linux_amd64.tar.gz" "${HOME}/bin"
-
-RUN ${HOME}/sh/install_from_github.sh \
   "triole/supervisord" "_linux_x86_64.tar.gz" "${HOME}/bin"
 
 RUN ${HOME}/sh/install_from_github.sh \

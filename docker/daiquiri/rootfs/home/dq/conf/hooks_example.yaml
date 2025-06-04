@@ -1,5 +1,5 @@
 ---
-- id: update-docs
+- id: update-content
   execute-command: /home/dq/sh/update_content.sh
   command-working-directory: "/vol/content"
   include-command-output-in-response: true

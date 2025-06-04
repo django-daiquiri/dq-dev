@@ -4,11 +4,6 @@ if [[ ! -f "${INIT_FINISHED_FILE}" ]]; then
     exit 1
 fi
 
-mkdir -p /tmp/nginx/client_body /tmp/nginx/proxy /tmp/nginx/fastcgi \
-         /tmp/nginx/uwsgi /tmp/nginx/scgi
-
-nginx -c ${HOME}/conf/nginx.conf
-
 cd "${DQAPP}"
 if [[ -z "$(ps aux | grep "[g]unicorn")" ]]; then
     if [[ "$(echo "${ENABLE_GUNICORN}" | tr '[:upper:]' '[:lower:]')" == "true" ]]; then

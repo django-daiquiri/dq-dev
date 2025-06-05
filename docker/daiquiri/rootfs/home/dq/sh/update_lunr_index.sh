@@ -8,7 +8,7 @@ if [[ "${1}" == "-w" ]]; then
 fi
 
 lunr-indexer \
-    "${HOME}/docs" \
-    -o "${HOME}/docs/lunr-index.json" \
+    "${HOME}/content" \
+    -o "${HOME}/content/lunr-index.json" \
     -l "${HOME}/log/lunr-indexer.log" \
     -f ${watch}

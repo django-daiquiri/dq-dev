@@ -1,27 +1,26 @@
 #!/bin/bash
 
 export GIT_TERMINAL_PROMPT=0
-docs_dir="${HOME}/docs"
+content_dir="${HOME}/docs"
 
-function make_docs_symlink() {
+function make_content_symlink() {
   fol="$(echo "${1}" | grep -Po ".*(?=\/)")"
   mkdir -p "${fol}"
-  if [[ (! -L "${1}" && -d "${docs_dir}/.git") ]]; then
-    ln -s "${docs_dir}/cms" "${1}"
+  if [[ (! -L "${1}" && -d "${content_dir}/.git") ]]; then
+    ln -s "${content_dir}/cms" "${1}"
   fi
 
 }
 
 if [[ -n "${DOCS_GIT_URL}" ]]; then
-  mkdir -p "${docs_dir}"
-  if [[ ! -d "${docs_dir}/.git" ]]; then
-    cd "${docs_dir}"
+  mkdir -p "${content_dir}"
+  if [[ ! -d "${content_dir}/.git" ]]; then
+    cd "${content_dir}"
     git clone ${DOCS_GIT_URL} .
   else
-    cd "${docs_dir}"
+    cd "${content_dir}"
     git pull
   fi
 fi
 
-make_docs_symlink "${FILES_BASE_PATH}/cms"
-make_docs_symlink "${CADDY_SENDFILE_ROOT}/files/cms"
+make_content_symlink "${FILES_BASE_PATH}/cms"

@@ -9,19 +9,18 @@ rabbitmq = false
 [enable_volumes]
 pgapp = false
 pgdata = false
-docs = false # if true, set the volume 'docs' in 'folders_on_host'
+docs = true # if true, set the volume 'docs' in 'folders_on_host'
 
 [folders_on_host]
-# dq_source = "<HOME>/srv/daiquiri"
+dq_source = "<HOME>/srv/daiquiri" # comment out to use daiquiri from pypi (app req.)
 dq_app = "<HOME>/code/project/app"
-# content = "<HOME>/code/project/app-content"
+docs = "<HOME>/code/project/app-content"
 # data = "/data/project"
 # store = "/store/project"
 
 [docker_volume_mountpoints]
-# dq_source = "/home/dq/source"
+dq_source = "/home/dq/source" # comment out to use daiquiri from pypi (app req.)
 dq_app = "/home/dq/app"
-content = "/home/dq/content"
 # data = "/data"
 # store = "/store"
 

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 export GIT_TERMINAL_PROMPT=0
-content_dir="${HOME}/content"
+content_dir="${HOME}/docs"
 
 function make_content_symlink() {
   fol="$(echo "${1}" | grep -Po ".*(?=\/)")"
@@ -12,11 +12,11 @@ function make_content_symlink() {
 
 }
 
-if [[ -n "${CONTENT_GIT_URL}" ]]; then
+if [[ -n "${DOCS_GIT_URL}" ]]; then
   mkdir -p "${content_dir}"
   if [[ ! -d "${content_dir}/.git" ]]; then
     cd "${content_dir}"
-    git clone ${CONTENT_GIT_URL} .
+    git clone ${DOCS_GIT_URL} .
   else
     cd "${content_dir}"
     git pull

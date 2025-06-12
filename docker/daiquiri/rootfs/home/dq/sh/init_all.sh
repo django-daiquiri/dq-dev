@@ -23,9 +23,7 @@ mkdir -p /tmp/nginx/client_body \
          /tmp/nginx/scgi
 envsubst '${SENDFILE_URL} ${FILES_BASE_PATH} ${EXPOSED_PORT} ${DQAPP}' <"${HOME}/tpl/nginx.conf" >"${HOME}/conf/nginx.conf"
 
-if [[ "${ASYNC}" == "True" ]]; then
-  ${HOME}/sh/init-folders.sh
-fi
+${HOME}/sh/init-folders.sh
 
 # execute custom scripts (up)
 find /tmp -type f -executable -regex ".*\/custom_scripts\/up.*" |

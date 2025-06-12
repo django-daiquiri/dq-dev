@@ -9,17 +9,17 @@ rabbitmq = false
 [enable_volumes]
 pgapp = false
 pgdata = false
-docs = false # if true, set the volume 'docs' in 'folders_on_host'
+docs = true # if true, set the volume 'docs' in 'folders_on_host'
 
 [folders_on_host]
-# dq_source = "<HOME>/srv/daiquiri"
-dq_app = "<HOME>/code/gaia/gaia-app"
-# docs = "<HOME>/code/gaia/gaia-content"
-# data = "/data/gaia"
-# store = "/store/gaia"
+dq_source = "<HOME>/srv/daiquiri" # comment out to use daiquiri from pypi (app req.)
+dq_app = "<HOME>/code/project/app"
+docs = "<HOME>/code/project/app-content"
+# data = "/data/project"
+# store = "/store/project"
 
 [docker_volume_mountpoints]
-# dq_source = "/home/dq/source"
+dq_source = "/home/dq/source" # comment out to use daiquiri from pypi (app req.)
 dq_app = "/home/dq/app"
 # data = "/data"
 # store = "/store"
@@ -54,11 +54,11 @@ celeryd_log_level = "INFO"
 log_dir = "/home/dq/log"
 log_level = "INFO"
 
-files_base_path = "/tmp/files"
+files_base_path = "/tmp/download"
 files_base_url = "<URL_BASE>/files"
 archive_base_path = "/tmp/files"
 archive_download_dir = "/tmp/download"
-query_download_dir = "/tmp/download"
+query_download_dir = "<FILES_BASE_PATH>/user_tables"
 query_upload_dir = "/tmp/upload"
 sendfile_root = "<FILES_BASE_PATH>"
 sendfile_url = "/download"
@@ -69,8 +69,6 @@ oai_schema = "oai_schema"
 tap_upload = "tap_upload"
 url_base = "<URL_PROTOCOL>://<URL_HOSTNAME>"
 site_url = "<URL_PROTOCOL>://<URL_HOSTNAME>"
-caddyfile = "/home/dq/conf/Caddyfile"
-caddy_sendfile_root = "/store"
 
 # add_to_supervisord_conf = [
 #     "[program:rmq_worker_new_worker]",

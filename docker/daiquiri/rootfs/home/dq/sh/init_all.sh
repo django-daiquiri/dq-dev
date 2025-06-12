@@ -8,9 +8,6 @@ fi
 
 mkdir -p "${FILES_BASE_PATH}"
 
-# ${HOME}/sh/install-daiquiri.sh
-# ${HOME}/sh/install-app-requirements.sh
-
 cd "${DQAPP}" || exit 1
 
 sfil="${HOME}/tpl/wsgi.py"
@@ -19,8 +16,12 @@ if [[ ! -f "${tfil}" ]]; then
   copy -f "${sfil}" "${tfil}"
 fi
 
-# render config files
-cat "${HOME}/tpl/Caddyfile" | envsubst >"${CADDYFILE}"
+mkdir -p /tmp/nginx/client_body \
+         /tmp/nginx/proxy \
+         /tmp/nginx/fastcgi \
+         /tmp/nginx/uwsgi \
+         /tmp/nginx/scgi
+envsubst '${SENDFILE_URL} ${FILES_BASE_PATH} ${EXPOSED_PORT} ${DQAPP}' <"${HOME}/tpl/nginx.conf" >"${HOME}/conf/nginx.conf"
 
 if [[ "${ASYNC}" == "True" ]]; then
   ${HOME}/sh/init-folders.sh

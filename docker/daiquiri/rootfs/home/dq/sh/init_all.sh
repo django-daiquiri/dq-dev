@@ -19,8 +19,8 @@ if [[ ! -f "${tfil}" ]]; then
   copy -f "${sfil}" "${tfil}"
 fi
 
-# render config files
-cat "${HOME}/tpl/Caddyfile" | envsubst >"${CADDYFILE}"
+# # render config files
+# cat "${HOME}/tpl/Caddyfile" | envsubst >"${CADDYFILE}"
 
 if [[ "${ASYNC}" == "True" ]]; then
   ${HOME}/sh/init-folders.sh

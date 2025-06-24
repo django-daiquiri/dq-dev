@@ -37,7 +37,4 @@ if [[ -d "$DQSOURCE" ]] && [[ -f "${DQAPP}/package.json" ]]; then
     npm run build
 fi
 
-# mkdir -p "${DQAPP}/vendor"
-# python manage.py download_vendor_files
-#
 python manage.py collectstatic --no-input

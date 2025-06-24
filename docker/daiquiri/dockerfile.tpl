@@ -10,8 +10,6 @@ ENV INIT_FINISHED_FILE=${HOME}/run/init.finished
 
 ENV PATH=${PATH}:/home/dq/sh:/home/dq/.local/bin:${HOME}/bin:${HOME}/py:${HOME}/sh:/vol/tools/shed
 
-ENV PIP_BREAK_SYSTEM_PACKAGES=1
-
 RUN apt update -y
 RUN apt install -y \
   curl \
@@ -20,10 +18,8 @@ RUN apt install -y \
   git \
   jq \
   netcat-traditional \
-  nginx \
   python3 \
   python3-dev \
-  python3-pip \
   net-tools \
   procps \
   vim \
@@ -36,8 +32,7 @@ RUN apt install -y \
 
 RUN apt -y install gnupg2 wget vim
 
-
-ENV NVM_DIR="$HOME/.nvm"
+ENV NVM_DIR $HOME/.nvm
 RUN wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
 
 RUN echo "deb http://apt.postgresql.org/pub/repos/apt \
@@ -56,6 +51,9 @@ RUN mkdir ${HOME}/log ${HOME}/run
 RUN curl --output ${HOME}/sh/install_from_github.sh \
   https://raw.githubusercontent.com/triole/ghwfe/master/sh/install_from_github.sh
 RUN chmod +x ${HOME}/sh/install_from_github.sh
+
+RUN ${HOME}/sh/install_from_github.sh \
+  "caddyserver/caddy" "_linux_amd64.tar.gz" "${HOME}/bin"
 
 RUN ${HOME}/sh/install_from_github.sh \
   "triole/supervisord" "_linux_x86_64.tar.gz" "${HOME}/bin"
@@ -79,8 +77,13 @@ RUN chown -R ${USER}:${USER} /tmp
 RUN find /tmp -type f -executable -regex ".*\/custom_scripts\/build.*" \
   | sort | xargs -i /bin/bash {}
 
-RUN python3 -m pip install --upgrade pip
-RUN python3 -m pip install python-dotenv django gunicorn gevent
+RUN apt install -y python3 curl
+
+ENV UV_PROJECT_ENVIRONMENT="${HOME}/.venv"
+RUN curl -LsSf https://astral.sh/uv/install.sh | env UV_INSTALL_DIR="/home/dq/.local/bin" sh 
+RUN uv venv "${HOME}/.venv"
+RUN . "${HOME}/.venv/bin/activate" && uv pip install django gunicorn gevent
+
 RUN ln -sf /usr/bin/python3 /usr/bin/python
 
 # RUN apt install -y <ADDITIONAL_PACKAGES>

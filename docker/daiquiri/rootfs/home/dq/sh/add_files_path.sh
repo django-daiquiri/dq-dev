@@ -1,5 +1,4 @@
 #!/bin/bash
-
 sleep 5
 
 while true; do
@@ -11,4 +10,4 @@ done
 
 conf="${HOME}/conf/fixture_files_path.json"
 
-python "${HOME}/app/manage.py" loaddata "${conf}"
+uv run python3 "${HOME}/app/manage.py" loaddata "${conf}"

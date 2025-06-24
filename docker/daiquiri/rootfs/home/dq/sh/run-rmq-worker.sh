@@ -1,4 +1,5 @@
 #!/bin/bash
+source "${HOME}/.venv/bin/activate"
 
 if [[ "$(echo ${ASYNC} | tr '[:upper:]' '[:lower:]')" != "true" ]]; then
     exit 255

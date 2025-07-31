@@ -16,7 +16,7 @@ if [[ -f "${reqfile}" ]]; then
         uv pip install -e .
     else
         echo "Install app requirements"
-        uv pip install --extra daiquiri -e .
+        uv pip install -r ${reqfile} --extra daiquiri -e .
     fi
 else
     echo "cannot pip install, file does not exist: ${reqfile}"

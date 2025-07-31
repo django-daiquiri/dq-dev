@@ -33,7 +33,8 @@ RUN apt install -y \
 
 RUN apt -y install gnupg2 wget vim
 
-ENV NVM_DIR $HOME/.nvm
+ENV NVM_DIR="$HOME/.nvm"
+
 RUN wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
 
 RUN echo "deb http://apt.postgresql.org/pub/repos/apt \
@@ -80,7 +81,7 @@ RUN apt install -y python3 curl
 ENV UV_PROJECT_ENVIRONMENT="${HOME}/.venv"
 RUN curl -LsSf https://astral.sh/uv/install.sh | env UV_INSTALL_DIR="/home/dq/.local/bin" sh 
 RUN uv venv "${HOME}/.venv"
-RUN . "${HOME}/.venv/bin/activate" && uv pip install django gunicorn gevent
+RUN . "${HOME}/.venv/bin/activate" && uv pip install django gunicorn gevent python-dotenv
 
 RUN ln -sf /usr/bin/python3 /usr/bin/python
 

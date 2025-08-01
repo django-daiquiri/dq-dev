@@ -13,6 +13,7 @@ if [[ -z "$(ps aux | grep "[g]unicorn")" ]]; then
             --access-logfile=/dev/stdout \
             --worker-class gthread \
             --workers 2 \
+            --threads 8 \
             config.wsgi:application
     else
         # django dev server for development, has auto reload, does not cache

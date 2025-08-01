@@ -1,4 +1,5 @@
 #!/bin/bash
+source "${HOME}/.venv/bin/activate"
 
 if [[ -f "${HOME}/conf/nginx.conf" ]]; then
     nginx -c "${HOME}/conf/nginx.conf" -g "daemon off;"

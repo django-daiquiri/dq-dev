@@ -1,4 +1,5 @@
 #!/bin/bash
+source "${HOME}/.venv/bin/activate"
 
 if [[ ! -f "${INIT_FINISHED_FILE}" ]]; then
     exit 1
@@ -16,6 +17,6 @@ if [[ -z "$(ps aux | grep "[g]unicorn")" ]]; then
             config.wsgi:application
     else
         # django dev server for development, has auto reload, does not cache
-        python3 manage.py runserver 0.0.0.0:8000
+        uv run manage.py runserver 0.0.0.0:8000
     fi
 fi

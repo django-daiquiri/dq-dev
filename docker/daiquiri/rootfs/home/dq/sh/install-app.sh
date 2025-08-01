@@ -9,7 +9,6 @@ echo "current directory: $(pwd)"
 cd "${DQAPP}"
 
 if [[ -f "${reqfile}" ]]; then
-    
     # if the path to the local daiquiri repo exists then don't install it from the req
     if [[ -d "${DQSOURCE}" ]]; then
         echo "Install app requirements excluding daiquiri"

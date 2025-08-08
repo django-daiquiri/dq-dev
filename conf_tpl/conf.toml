@@ -41,6 +41,8 @@ proxy = true
 async = false
 enable_gunicorn = false
 auto_create_admin_user = true
+setup_science_db = false
+rebuild_science_db = true
 account_email_verification = "optional"
 crontab = "/home/dq/conf/crontab"
 
@@ -67,6 +69,7 @@ sendfile_backend = "django_sendfile.backends.nginx"
 tap_schema = "tap_schema"
 oai_schema = "oai_schema"
 tap_upload = "tap_upload"
+
 url_base = "<URL_PROTOCOL>://<URL_HOSTNAME>"
 site_url = "<URL_PROTOCOL>://<URL_HOSTNAME>"
 

@@ -41,3 +41,26 @@ fi
 echo "npm done"
 
 python manage.py collectstatic --no-input
+
+if [[ "${SETUP_SCIENCE_DB}" == "True" ]]; then
+
+    echo "- Create TAP schema"
+    psql $DATABASE_DATA -c "CREATE SCHEMA IF NOT EXISTS ${TAP_SCHEMA};"
+    psql $DATABASE_DATA -c "CREATE SCHEMA IF NOT EXISTS ${TAP_UPLOAD};"
+
+    echo "- Create OAI schema"
+    psql $DATABASE_DATA -c "CREATE SCHEMA IF NOT EXISTS ${OAI_SCHEMA};"
+
+    cd ~/app/
+    source "${UV_PROJECT_ENVIRONMENT}/bin/activate"
+    echo "- Setup TAP schema"
+    python manage.py migrate --database=tap
+
+    echo "- Setup OAI schema"
+    python manage.py migrate --database=oai
+
+    echo "- Adding TAP schema in the metadata"
+    python manage.py setup_tap_metadata
+
+fi
+

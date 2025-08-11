@@ -1,5 +1,4 @@
 #!/bin/bash
-echo "update_lunr_index.sh started at $(date)"
 
 mkdir -p "${HOME}/log"
 

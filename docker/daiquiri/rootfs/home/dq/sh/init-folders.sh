@@ -1,4 +1,5 @@
 #!/bin/bash
+echo "init-folders.sh started at $(date)"
 
 folder_env_var_list=(
   "ARCHIVE_BASE_PATH"

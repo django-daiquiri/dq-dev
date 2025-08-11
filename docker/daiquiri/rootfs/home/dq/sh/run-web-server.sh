@@ -1,5 +1,6 @@
 #!/bin/bash
 source "${HOME}/.venv/bin/activate"
+echo "run-web-server.sh started at $(date)"
 
 if [[ ! -f "${INIT_FINISHED_FILE}" ]]; then
     exit 1

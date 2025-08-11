@@ -1,5 +1,8 @@
 #!/bin/bash
+echo "add_files_path.sh started at $(date)"
+
 sleep 5
+source "${HOME}/.venv/bin/activate"
 
 while true; do
     if [[ -f "${INIT_FINISHED_FILE}" ]]; then

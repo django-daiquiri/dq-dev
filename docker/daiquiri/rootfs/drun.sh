@@ -8,5 +8,9 @@ fi
 
 ${HOME}/sh/install-app.sh
 
+echo "app installed"
+
 uv run python3 ${HOME}/py/render_supervisord_conf.py
+echo "supervisord conf rendered"
 ${HOME}/bin/supervisord -c "${HOME}/conf/supervisord.conf"
+echo "supervisord started"

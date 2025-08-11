@@ -1,5 +1,4 @@
 #!/bin/bash
-echo "healthcheck.sh started at $(date)"
 
 pgrep nginx || exit 1
 

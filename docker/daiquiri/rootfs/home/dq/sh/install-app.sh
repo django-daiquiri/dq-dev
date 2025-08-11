@@ -1,7 +1,5 @@
 #!/bin/bash
 
-echo "install-app.sh started at $(date)"
-
 source "${HOME}/.bashrc"
 source "${HOME}/.venv/bin/activate"
 
@@ -14,10 +12,10 @@ if [[ -f "${reqfile}" ]]; then
     # if the path to the local daiquiri repo exists then don't install it from the req
     if [[ -d "${DQSOURCE}" ]]; then
         echo "Install app requirements excluding daiquiri"
-        uv pip install -e .
+        uv pip install --group dev -e .
     else
         echo "Install app requirements"
-        uv pip install -r ${reqfile} --extra daiquiri -e .
+        uv pip install -r ${reqfile} --group dev --extra daiquiri -e .
     fi
 else
     echo "cannot pip install, file does not exist: ${reqfile}"

@@ -1,5 +1,4 @@
 #!/bin/bash
-echo "add_user.sh started at $(date)"
 
 groupadd "${GNAME}"
 if [[ ${UID} == 0 ]]; then

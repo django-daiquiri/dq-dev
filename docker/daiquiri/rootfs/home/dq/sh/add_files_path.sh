@@ -1,5 +1,4 @@
 #!/bin/bash
-echo "add_files_path.sh started at $(date)"
 
 sleep 5
 source "${HOME}/.venv/bin/activate"
@@ -13,4 +12,4 @@ done
 
 conf="${HOME}/conf/fixture_files_path.json"
 
-uv run python3 "${HOME}/app/manage.py" loaddata "${conf}"
+python "${HOME}/app/manage.py" loaddata "${conf}"

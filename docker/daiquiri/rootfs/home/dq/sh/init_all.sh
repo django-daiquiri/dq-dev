@@ -1,6 +1,4 @@
 #!/bin/bash
-echo "init_all.sh started at $(date)"
-
 source "${HOME}/.bashrc"
 source "${HOME}/.venv/bin/activate"
 
@@ -29,9 +27,9 @@ envsubst '${SENDFILE_URL} ${FILES_BASE_PATH} ${EXPOSED_PORT} ${DQAPP}' <"${HOME}
 ${HOME}/sh/init-folders.sh
 
 echo "executing custom scripts (up)"
-echo "lol" 
-# # execute custom scripts (up)
-# find /tmp -type f -executable -regex ".*\/custom_scripts\/up.*" |
-#   sort | xargs -i /bin/bash {}
+
+# execute custom scripts (up)
+find /tmp -type f -executable -regex ".*\/custom_scripts\/up.*" |
+  sort | xargs -i /bin/bash {}
 
 echo "finished at $(date)" >"${INIT_FINISHED_FILE}"

@@ -1,6 +1,5 @@
 #!/bin/bash
 source "${HOME}/.venv/bin/activate"
-echo "run-rmq-worker.sh started at $(date)"
 
 if [[ "$(echo ${ASYNC} | tr '[:upper:]' '[:lower:]')" != "true" ]]; then
     exit 255

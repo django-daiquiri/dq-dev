@@ -1,6 +1,4 @@
 #!/bin/bash
-echo "run-nginx.sh started at $(date)"
-
 source "${HOME}/.venv/bin/activate"
 
 while [ ! -f  "${INIT_FINISHED_FILE}" ]; do

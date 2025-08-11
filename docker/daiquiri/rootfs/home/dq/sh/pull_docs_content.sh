@@ -1,7 +1,5 @@
 #!/bin/bash
 
-echo "pull_docs_content.sh started at $(date)"
-
 export GIT_TERMINAL_PROMPT=0
 content_dir="${HOME}/docs"
 

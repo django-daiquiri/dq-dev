@@ -1,7 +1,4 @@
 #!/bin/bash
-
-echo "install-local-daiquiri.sh started at $(date)"
-
 source "${HOME}/.bashrc"
 source "${HOME}/.venv/bin/activate"
 

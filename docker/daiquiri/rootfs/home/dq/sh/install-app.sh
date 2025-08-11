@@ -12,10 +12,10 @@ if [[ -f "${reqfile}" ]]; then
     # if the path to the local daiquiri repo exists then don't install it from the req
     if [[ -d "${DQSOURCE}" ]]; then
         echo "Install app requirements excluding daiquiri"
-        uv pip install --group dev -e .
+        uv pip install -e .
     else
         echo "Install app requirements"
-        uv pip install -r ${reqfile} --group dev --extra daiquiri -e .
+        uv pip install -r ${reqfile} --extra daiquiri -e .
     fi
 else
     echo "cannot pip install, file does not exist: ${reqfile}"

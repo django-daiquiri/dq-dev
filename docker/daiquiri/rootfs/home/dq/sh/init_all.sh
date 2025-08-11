@@ -29,7 +29,15 @@ ${HOME}/sh/init-folders.sh
 echo "executing custom scripts (up)"
 
 # execute custom scripts (up)
-find /tmp -type f -executable -regex ".*\/custom_scripts\/up.*" |
-  sort | xargs -i /bin/bash {}
+echo "Looking for custom scripts to execute..."
+CUSTOM_SCRIPTS=$(find /tmp -type f -executable -regex ".*\/custom_scripts\/up.*" | sort)
+if [ -n "$CUSTOM_SCRIPTS" ]; then
+  echo "Found custom scripts to execute:"
+  echo "$CUSTOM_SCRIPTS" | sed 's/^/  /'
+  echo "Executing custom scripts..."
+  echo "$CUSTOM_SCRIPTS" | xargs -i /bin/bash {}
+else
+  echo "No custom scripts found to execute."
+fi
 
 echo "finished at $(date)" >"${INIT_FINISHED_FILE}"

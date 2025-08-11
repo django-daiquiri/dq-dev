@@ -162,15 +162,25 @@ def copy_custom_scripts(cs_conf: dict, basedir: Path, active_app: str):
             if dockdir.is_dir():
                 target_folder = dockdir / 'rootfs' / 'tmp' / 'custom_scripts' / typ
                 source_folder = Path(expand(cs_conf[typ][con], active_app))
+
+                if not source_folder.is_dir():
+                    if source_folder.exists():
+                        print(
+                            f'You defined a custom script for {typ} and {con} but {source_folder} is not a directory. Check your conf.toml'
+                        )
+                        sys.exit(1)
+                    else:
+                        print(
+                            f'You defined a custom script for {typ} and {con} but {source_folder} does not exist. Check your conf.toml'
+                        )
+                        sys.exit(1)
+
                 if source_folder.is_dir():
                     files = listfiles_only(source_folder)
                     if len(files) > 0:
-                        print(
-                            '\nAdd custom scripts to container ' + col.gre(dockdir.name)
-                        )
+                        print('\nAdd custom scripts to container ' + col.gre(dockdir.name))
                     for file in files:
                         copy_file(file, target_folder)
-    print('')
 
 
 def expand(s: str, active_app: str) -> str:

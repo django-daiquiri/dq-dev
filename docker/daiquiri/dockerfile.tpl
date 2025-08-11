@@ -12,26 +12,27 @@ ENV PATH=${PATH}:/home/dq/sh:/home/dq/.local/bin:${HOME}/bin:${HOME}/py:${HOME}/
 
 RUN apt update -y
 RUN apt install -y \
+  build-essential \
   curl \
   file \
   gettext \
   git \
+  gnupg2 \
   jq \
+  libssl-dev \
+  libxml2-dev \
+  libxslt-dev \
+  micro \
   netcat-traditional \
+  net-tools \
   nginx \
   python3 \
   python3-dev \
-  net-tools \
   procps \
   vim \
-  micro \
-  libxml2-dev \
-  libxslt-dev \
-  zlib1g-dev \
-  build-essential \
-  libssl-dev
-
-RUN apt -y install gnupg2 wget vim
+  wget \
+  vim \
+  zlib1g-dev 
 
 ENV NVM_DIR="$HOME/.nvm"
 
@@ -81,7 +82,7 @@ RUN apt install -y python3 curl
 ENV UV_PROJECT_ENVIRONMENT="${HOME}/.venv"
 RUN curl -LsSf https://astral.sh/uv/install.sh | env UV_INSTALL_DIR="/home/dq/.local/bin" sh 
 RUN uv venv "${HOME}/.venv"
-RUN . "${HOME}/.venv/bin/activate" && uv pip install django gunicorn gevent python-dotenv
+RUN . "${HOME}/.venv/bin/activate" && uv pip install gunicorn gevent python-dotenv
 
 RUN ln -sf /usr/bin/python3 /usr/bin/python
 

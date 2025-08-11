@@ -1,6 +1,6 @@
 #!/bin/bash
-
 source "${HOME}/.bashrc"
+source "${HOME}/.venv/bin/activate"
 
 if [[ -f "${INIT_FINISHED_FILE}" ]]; then
   exit
@@ -12,6 +12,7 @@ cd "${DQAPP}" || exit 1
 
 sfil="${HOME}/tpl/wsgi.py"
 tfil="${DQAPP}/config/wsgi.py"
+
 if [[ ! -f "${tfil}" ]]; then
   copy -f "${sfil}" "${tfil}"
 fi
@@ -24,6 +25,8 @@ mkdir -p /tmp/nginx/client_body \
 envsubst '${SENDFILE_URL} ${FILES_BASE_PATH} ${EXPOSED_PORT} ${DQAPP}' <"${HOME}/tpl/nginx.conf" >"${HOME}/conf/nginx.conf"
 
 ${HOME}/sh/init-folders.sh
+
+echo "executing custom scripts (up)"
 
 # execute custom scripts (up)
 find /tmp -type f -executable -regex ".*\/custom_scripts\/up.*" |

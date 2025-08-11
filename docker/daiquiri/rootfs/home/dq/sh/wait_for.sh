@@ -1,4 +1,5 @@
 #!/bin/bash
+echo "wait_for.sh started at $(date)"
 
 check_cmd="${1}"
 max_wait="${2}"

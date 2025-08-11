@@ -4,9 +4,9 @@ import re
 import secrets
 import string
 import sys
-from os.path import join as pj
+from pathlib import Path
 
-sys.path.append(pj(os.environ["HOME"], "app"))
+sys.path.append(str(Path(os.environ["HOME"])/ "app"))
 
 from django.conf import settings
 from dotenv import load_dotenv
@@ -15,9 +15,9 @@ from dotenv import load_dotenv
 class SupervisordConfRenderer:
     def __init__(self):
         print("start to render supervisord conf")
-        self.home = os.environ["HOME"]
-        self.spv_tpl_path = pj(self.home, "tpl/supervisord.conf")
-        self.spv_conf_path = pj(self.home, "conf/supervisord.conf")
+        self.home = Path(os.environ["HOME"])
+        self.spv_tpl_path = self.home / "tpl/supervisord.conf"
+        self.spv_conf_path = self.home / "conf/supervisord.conf"
         self.spv_conf = self.read_template()
         self.is_async = self.to_bool(os.environ["ASYNC"])
         if self.is_async:
@@ -137,3 +137,4 @@ if __name__ == "__main__":
                 scr.spv_conf.extend(en)
     scr.add_to_supervisord_conf_from_env_var()
     scr.save_config()
+    print("done")

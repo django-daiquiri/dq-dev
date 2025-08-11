@@ -24,6 +24,8 @@ fi
 python manage.py makemigrations
 python manage.py migrate
 
+echo "makemigrations completed"
+
 if [[ "$(echo ${AUTO_CREATE_ADMIN_USER} | tr '[:upper:]' '[:lower:]')" == "true" ]]; then
     # silent because of the error message that wp admin user already exists
     # necessary to create the daiquiri admin user
@@ -35,5 +37,7 @@ if [[ -d "$DQSOURCE" ]] && [[ -f "${DQAPP}/package.json" ]]; then
     npm link ${DQSOURCE}
     npm run build
 fi
+
+echo "npm done"
 
 python manage.py collectstatic --no-input

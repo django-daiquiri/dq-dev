@@ -1,7 +1,7 @@
 #!/bin/bash
 
-source "${HOME}/.bashrc"
-source "${HOME}/.venv/bin/activate"
+. "${HOME}/.bashrc"
+. "${HOME}/.venv/bin/activate"
 
 reqfile="${DQAPP}/pyproject.toml"
 echo "current directory: $(pwd)"
@@ -44,6 +44,8 @@ python manage.py collectstatic --no-input
 
 if [[ "${SETUP_SCIENCE_DB}" == "True" ]]; then
 
+    echo " --- SETUP SCIENCE DB ---"
+
     echo "- Create TAP schema"
     psql $DATABASE_DATA -c "CREATE SCHEMA IF NOT EXISTS ${TAP_SCHEMA};"
     psql $DATABASE_DATA -c "CREATE SCHEMA IF NOT EXISTS ${TAP_UPLOAD};"
@@ -61,6 +63,38 @@ if [[ "${SETUP_SCIENCE_DB}" == "True" ]]; then
 
     echo "- Adding TAP schema in the metadata"
     python manage.py setup_tap_metadata
+
+fi
+
+
+
+if [[ "${REBUILD_SCIENCE_DB}" == "True" ]]; then
+
+    echo " --- REBUILD DATALINK, TAP, OAI ---"
+
+    echo "- Make migrations"
+    python manage.py migrate
+    echo "  [Done]"
+
+    echo "- Setup TAP schema"
+    python manage.py migrate --database=tap
+    echo "  [Done]"
+
+    echo "- Setup OAI schema"
+    python manage.py migrate --database=oai
+    echo "  [Done]" 
+
+    echo "- Update TAP schema"
+    python manage.py rebuild_tap_schema
+    echo "  [Done]"
+
+    echo "- Update datalink table"
+    python manage.py rebuild_datalink_table
+    echo "  [Done]"
+
+    echo "- Update OAI schema"
+    python manage.py rebuild_oai_schema --delete
+    echo "  [Done]"
 
 fi
 

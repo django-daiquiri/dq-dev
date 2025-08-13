@@ -1,4 +1,4 @@
-FROM debian:latest
+FROM debian:bookworm
 
 ENV USER=dq
 ENV UID=<UID>
@@ -38,10 +38,10 @@ ENV NVM_DIR="$HOME/.nvm"
 
 RUN wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
 
-RUN echo "deb http://apt.postgresql.org/pub/repos/apt \
+RUN echo "deb [signed-by=/usr/share/keyrings/postgresql-keyring.gpg] http://apt.postgresql.org/pub/repos/apt \
   $(cat /etc/os-release | grep -Po "(?<=VERSION_CODENAME=).*")-pgdg main" \
   > /etc/apt/sources.list.d/pgdg.list
-RUN wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add
+RUN wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor -o /usr/share/keyrings/postgresql-keyring.gpg
 RUN apt -y update && apt -y install postgresql-client
 
 COPY ./rootfs /

@@ -1,1 +1,3 @@
 # min hour dom mon dow command
+0 3 * * * ${HOME}/sh/archive-jobs.sh
+0 3 * * * ${HOME}/sh/cleanup-download-files.sh

@@ -1,9 +1,8 @@
-FROM debian:bookworm
+FROM debian:trixie
 
 ENV USER=dq
 ENV UID=<UID>
 ENV GNAME=dq
-# ENV GID=<GID>
 ENV HOME=/home/dq
 
 ENV INIT_FINISHED_FILE=${HOME}/run/init.finished
@@ -81,7 +80,7 @@ RUN apt install -y python3 curl
 
 ENV UV_PROJECT_ENVIRONMENT="${HOME}/.venv"
 RUN curl -LsSf https://astral.sh/uv/install.sh | env UV_INSTALL_DIR="/home/dq/.local/bin" sh 
-RUN uv venv "${HOME}/.venv"
+RUN uv venv "${HOME}/.venv" --python 3.13
 RUN . "${HOME}/.venv/bin/activate" && uv pip install gunicorn gevent python-dotenv
 
 RUN ln -sf /usr/bin/python3 /usr/bin/python

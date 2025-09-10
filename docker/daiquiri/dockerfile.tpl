@@ -35,7 +35,7 @@ RUN apt install -y \
 
 ENV NVM_DIR="$HOME/.nvm"
 
-RUN wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+RUN wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
 
 RUN echo "deb [signed-by=/usr/share/keyrings/postgresql-keyring.gpg] http://apt.postgresql.org/pub/repos/apt \
   $(cat /etc/os-release | grep -Po "(?<=VERSION_CODENAME=).*")-pgdg main" \

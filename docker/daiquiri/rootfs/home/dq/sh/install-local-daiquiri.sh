@@ -5,7 +5,7 @@ source "${HOME}/.venv/bin/activate"
 if [[ -d "$DQSOURCE" ]]; then
     echo "Installing local daiquiri"
     cd "${DQSOURCE}"
-    uv pip install -e .[postgres,dev]
+    uv pip install -e .[postgres]
 
     nvm install
     npm ci

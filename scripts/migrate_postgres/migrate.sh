@@ -9,6 +9,11 @@ countdown() {
 }
 
 
+echo "Enter the username for the pgapp (default: daiquiri_app)"
+read -p "PGAPP username: " PGAPP_USER
+PGAPP_USER=$(echo "$PGAPP_USER" | xargs)
+PGAPP_USER=${PGAPP_USER:-daiquiri_app}
+
 echo "Enter the path to your old PostgreSQL 13 database directory:"
 read -p "Old database path: " OLD_DB_PATH
 
@@ -32,16 +37,16 @@ fi
 
 docker compose up pg13 -d
 countdown 5 "Waiting for pg13 to start..."
-docker exec pg13 pg_dumpall -U daiquiri_app -f /transfer/pg13.sql
+docker exec pg13 pg_dumpall -U $PGAPP_USER -f /transfer/pg13.sql
 docker compose down
 
 
 docker compose up pg17 -d
 countdown 10 "Waiting for pg17 to start..."
-docker exec  pg17 psql -c "CREATE ROLE daiquiri_app SUPERUSER LOGIN;"
-docker exec  pg17 psql -d postgres -c "CREATE DATABASE daiquiri_app OWNER daiquiri_app;"
-docker exec pg17 psql -U daiquiri_app -f /transfer/pg13.sql
-docker exec  pg17 psql -U daiquiri_app -d daiquiri_app -c "ALTER ROLE daiquiri_app WITH LOGIN PASSWORD 'daiquiri_app';"
+docker exec  pg17 psql -c "CREATE ROLE ${PGAPP_USER} SUPERUSER LOGIN;"
+docker exec  pg17 psql -d postgres -c "CREATE DATABASE daiquiri_app OWNER ${PGAPP_USER};"
+docker exec pg17 psql -U ${PGAPP_USER} -f /transfer/pg13.sql
+docker exec  pg17 psql -U ${PGAPP_USER} -d daiquiri_app -c "ALTER ROLE ${PGAPP_USER} WITH LOGIN PASSWORD 'daiquiri_app';"
 docker compose down
 
 

@@ -17,3 +17,4 @@ poetry.lock
 
 dq_dev.egg-info/
 uv.lock
+build/

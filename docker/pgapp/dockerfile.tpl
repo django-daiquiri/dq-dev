@@ -12,3 +12,5 @@ RUN find /tmp/custom_scripts/build -type f -executable | sort | xargs -i /bin/ba
 # RUN apt install -y <ADDITIONAL_PACKAGES>
 
 RUN sed -i -e 's/^\(postgres:[^:]\):[0-9]*:[0-9]*:/\1:<UID>:<GID>:/' /etc/passwd
+
+CMD ["postgres", "-c", "log_checkpoints=off"]

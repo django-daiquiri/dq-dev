@@ -66,8 +66,9 @@ Following directories should be present for a default app setup.
 mkdir dq-project
 cd dq-project
 
-# clones daiquiri source into folder daiquiri
-git clone git@github.com:django-daiquiri/daiquiri.git
+# clones daiquiri source into folder daiquiri if you want to make changes in Daiquiri
+# otherwise daiquiri is pip installed
+# git clone git@github.com:django-daiquiri/daiquiri.git
 
 # clones default app into app folder
 git clone git@github.com:django-daiquiri/app.git

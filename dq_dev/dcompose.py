@@ -160,7 +160,11 @@ class DCompose:
                 self.dcyaml['services'][c]['ulimits'] = {
                     'nofile': {'soft': 65536, 'hard': 65536}
                 }
-                self.dcyaml['services'][c]['restart'] = 'always'
+                release = (
+                    service == 'daiquiri'
+                    and self.conf['conf']['env'][service].get('build_release') == '1'
+                )
+                self.dcyaml['services'][c]['restart'] = 'no' if release else 'always'
 
     # depends on
     def add_depends_on(self):

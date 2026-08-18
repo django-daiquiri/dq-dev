@@ -33,6 +33,11 @@ parser.add_argument(
     help="build a profile's containers without using cache, exit when done",
 )
 parser.add_argument(
+    "--build-release",
+    action="store_true",
+    help="build and check a Daiquiri release, then stop the active profile",
+)
+parser.add_argument(
     "-r",
     "--run",
     type=str,
@@ -165,6 +170,25 @@ def main():
 
     if len(sys.argv) <= 1 or not prof.is_active():
         prof.list()
+        x()
+
+    if args.build_release:
+        conf["conf"]["env"]["daiquiri"]["build_release"] = "1"
+        dco.render_dc_yaml(conf["args"]["run"])
+        dco.render_dockerfile_templates()
+        run = Runner(conf)
+        try:
+            run.run_compose(
+                [
+                    "up",
+                    "--build",
+                    "--abort-on-container-exit",
+                    "--exit-code-from",
+                    dco.nam_img("daiquiri"),
+                ]
+            )
+        finally:
+            run.stop()
         x()
 
     if args.display_profile is not None:

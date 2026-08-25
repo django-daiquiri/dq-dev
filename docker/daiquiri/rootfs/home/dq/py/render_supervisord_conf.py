@@ -102,6 +102,18 @@ class SupervisordConfRenderer:
                     self.spv_conf.append(substr)
             self.spv_conf.append("")
 
+    def add_build_release_program(self):
+        if os.getenv("BUILD_RELEASE") != "1":
+            return
+        self.spv_conf.extend(
+            [
+                "",
+                "[program:build_release]",
+                f"command = {self.home}/sh/build-release.sh",
+                "autorestart = false",
+            ]
+        )
+
     def rxfind(self, rx, string, group=0, ignoreCase=False):
         r = None
         if ignoreCase is True:
@@ -136,5 +148,6 @@ if __name__ == "__main__":
                 print("add queue to spv conf: %s" % en[1:])
                 scr.spv_conf.extend(en)
     scr.add_to_supervisord_conf_from_env_var()
+    scr.add_build_release_program()
     scr.save_config()
     print("done")

@@ -14,9 +14,6 @@ RUN mkdir /src
 RUN cd /src ; GIT_SSL_NO_VERIFY=1 git clone --depth 1 --branch 1.5.2 https://github.com/postgrespro/pgsphere.git;
 RUN cd /src/pgsphere; make USE_HEALPIX=0
 RUN cd /src/pgsphere; make USE_HEALPIX=0 install
-# RUN cd /src ; GIT_SSL_NO_VERIFY=1 git clone -b aiprdbms16-dev https://github.com/kimakan/pgsphere.git
-# RUN cd /src/pgsphere; gmake USE_PGXS=1 PG_CONFIG=/usr/bin/pg_config
-# RUN cd /src/pgsphere; gmake USE_PGXS=1 PG_CONFIG=/usr/bin/pg_config install
 RUN rm -fr /src
 # Clean up container
 RUN apt remove gcc make postgresql-server-dev-16 bison flex -y

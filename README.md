@@ -2,16 +2,7 @@
 
 <!-- toc -->
 
-- [Overview](#overview)
-- [Setup](#setup)
-- [How to use](#how-to-use)
-- [From scratch](#from-scratch)
-- [Tech background](#tech-background)
-  * [Tests](#tests)
-  * [CLI Args](#cli-args)
-
-<!-- tocstop -->
-
+- [New pgSphere](#new-pgsphere)
 - [Overview](#overview)
 - [Setup](#setup)
 - [How to use](#how-to-use)
@@ -22,100 +13,199 @@
 
 <!-- /toc -->
 
+## New pgSphere
+
+The `pgdata` image includes pgSphere 1.5.2. If you are reusing a database created
+with an older pgSphere version, update the extension after rebuilding and
+starting the profile with the updated image.
+
+Enter the Daiquiri container, replacing `<profile_name>` with your profile name:
+
+```bash
+docker exec -it dqdev-daiquiri-<profile_name> bash
+```
+
+Then connect to the scientific database using `DATABASE_DATA` and update the extension:
+
+```bash
+psql "$DATABASE_DATA" -c "ALTER EXTENSION pg_sphere UPDATE TO '1.5.2';"
+```
+
+Fresh databases initialize the extension automatically.
+
 ## Overview
 
-A toolset for [daiquiri](https://github.com/django-daiquiri/daiquiri) docker containerization. It brings quite a few configuration options that can be found looking into the toml files in the `conf` folder. An abstraction layer that is written in python aims to provide an easier access to all the different functions supporting multiple profiles and other things.
+A Python toolset for managing [Daiquiri](https://github.com/django-daiquiri/daiquiri)
+containers with Docker Compose. It supports multiple profiles, each with its own
+configuration, containers, and network. Configuration templates are in
+`conf_tpl/conf.toml` and `conf_tpl/secrets.toml`.
+
+By default, a profile enables the Daiquiri container, an application database
+(`pgapp`), and a scientific database (`pgdata`). RabbitMQ is optional and disabled
+by default, as is asynchronous processing.
 
 ## Setup
 
-You need [docker](https://www.docker.com/) and [docker compose](https://github.com/docker/compose/releases).
+You need Python 3.11 or newer, [Docker Engine](https://www.docker.com/), and
+[Docker Compose v2](https://github.com/docker/compose), available as `docker compose`.
 
-dq-dev can be installed by simply cloning the repo and issuing:
+From a cloned checkout, install the Python dependencies, preferably in an
+activated virtual environment:
 
 ```bash
 cd dq-dev
-pip install .
+python -m pip install .
 ```
 
 ## How to use
 
-Interaction is done via the `manage.py` script. When using poetry, this is also accessible with the `dqpm` command. You can call `-h` for help.
+Run `python manage.py` from the `dq-dev` directory. Use `python manage.py -h` for help.
 
-A workflow could be
+A typical workflow is:
 
 ```bash
 # create a new profile
-python manage.py [dqpm] -c newprof
+python manage.py -c newprof
+
+# configure host paths and credentials before running it
+${EDITOR:-vi} usr/profiles/newprof/conf.toml usr/profiles/newprof/secrets.toml
 
 # set it to active
-python manage.py [dqpm] -s newprof
+python manage.py -s newprof
 
 # and run it
-python manage.py [dqpm] -r
+python manage.py -r
 ```
 
-Note that `-r` can also take a profile name as argument. But if none given the active profile will be used for the action. Same for other commands. The idea behind the `active profile` is that one does not have to pass the profile name as argument to the command one wants to run.
+Profiles are saved in `usr/profiles/<profile_name>/`. Creating a profile copies
+`conf.toml` and `secrets.toml` from `conf_tpl/`. Configure these files for your app;
+the [From scratch](#from-scratch) section shows the settings for the default app.
 
-Profiles are saved in `usr/profiles/PROFILENAME`. Make sure you edit the `conf.yaml` there to adjust the settings you want to use.
+The active profile is recorded in `usr/profiles/active.toml`. Select it explicitly
+with `-s <profile_name>` before running build, run, stop, or down commands.
+Running without arguments lists profiles.
+
+`-r` builds and starts the containers, then follows their logs. Pressing `<Ctrl>C`
+ends log following; the containers keep running. Use `-p` to stop them or `-d` to
+stop and remove them and their Docker volumes.
 
 ## From scratch
 
-Following directories should be present for a default app setup.
+For a default app using Daiquiri installed from PyPI inside the container:
 
 ```bash
 mkdir dq-project
 cd dq-project
 
-# clones daiquiri source into folder daiquiri if you want to make changes in Daiquiri
-# otherwise daiquiri is pip installed
-# git clone git@github.com:django-daiquiri/daiquiri.git
+# clone the default app into the app folder
+git clone https://github.com/django-daiquiri/app.git
 
-# clones default app into app folder
-git clone git@github.com:django-daiquiri/app.git
-
-# clones the dq-dev setup into dq-dev folder
+# clone dq-dev
 git clone https://github.com/django-daiquiri/dq-dev.git
+
+cd dq-dev
+python -m pip install .
+python manage.py -c myapp
+${EDITOR:-vi} usr/profiles/myapp/conf.toml usr/profiles/myapp/secrets.toml
 ```
 
-Edit the configuration for the dq-dev setup:
+In the generated `conf.toml`, update the existing entries below and keep the
+remaining template settings. Replace the example host path with the absolute
+path to your app checkout. Keep `active_app = "dq_app"` at the top of the file
+and the container's `dq_app` mount point as `/home/dq/app`.
+
+```toml
+[folders_on_host]
+dq_app = "/absolute/path/to/dq-project/app"
+# dq_source = "<HOME>/srv/daiquiri"
+
+[docker_volume_mountpoints]
+dq_app = "/home/dq/app"
+# dq_source = "/home/dq/source"
+
+[enable_volumes]
+pgapp = false
+pgdata = false
+docs = false
+
+[env.daiquiri]
+docs_git_url = ""
+```
+
+**Comment out both `dq_source` entries** when using the PyPI package. The
+container installs Daiquiri through the app's `daiquiri` extra.
+
+For application content from a Git repository, set `enable_volumes.docs = true`,
+configure `folders_on_host.docs`, and set `env.daiquiri.docs_git_url` to the
+repository URL. Put any content-repository credentials in the `[daiquiri]`
+section of `secrets.toml`.
+
+To persist database data on the host, set `pgapp = true` and `pgdata = true` in
+`[enable_volumes]` before the first run. Their data will be stored in
+`usr/profiles/myapp/pgapp/` and `usr/profiles/myapp/pgdata/`. These host directories
+remain after `-d`.
+
+Activate the profile and start it:
 
 ```bash
-cd dq-dev
-your-favorite-editor tpl/conf.yaml
+python manage.py -s myapp
+python manage.py -r
 ```
 
-You can have multiple apps on the system. Active app is set via `active_app` entry, `daiquiri` is the default app. Make sure, to check the paths n `folders_on_host` section pointing them to your directories. In case it is needed, make the DB persistent in the `enable_volumes` section.
+After initialization, the instance is available at `http://localhost:9280`.
+If you change the exposed Daiquiri port, update `env.daiquiri.url_hostname` to
+match it.
 
-Set and activate the profile as shown in the previous section. Run the setup.
+For framework development, optionally clone
+`https://github.com/django-daiquiri/daiquiri.git` and enable both source entries:
 
-The instance will be available on `localhost:9280` for the default settings.
+```toml
+[folders_on_host]
+dq_source = "/absolute/path/to/daiquiri"
+
+[docker_volume_mountpoints]
+dq_source = "/home/dq/source"
+```
+
+The container then installs the mounted Daiquiri checkout in editable mode and
+builds its frontend assets.
 
 ## Tech background
 
-We use [caddy](https://github.com/caddyserver/caddy) as http server and reverse proxy. Usually caddy is mounted into the daiquiri docker via the `shed` volume. If caddy does exist there, it will be used. If not the latest caddy will be pulled from github automatically.
+The Daiquiri container uses Nginx as its HTTP server and reverse proxy. It serves
+static assets and protected downloads, and forwards application requests to
+port 8000. By default, Django's development server runs on that port; setting
+`env.daiquiri.enable_gunicorn = true` selects Gunicorn. Supervisord manages the
+container's processes.
 
 ### Tests
 
-In the mainfolder is a python script `request_test.py` that fires some simple requests at Daiquiri. It helps to check proxy configurations. Try `python request_test.py -h` to find out what it can do.
+The tests are currently outdated and will be updated in the near future.
 
 ### CLI Args
 
-```go mdox-exec="dqpm -h"
-usage: dqpm [-h] [-b [BUILD ...]] [-bnc [BUILD_NO_CACHE ...]]
-                 [-r [RUN ...]] [-p [STOP ...]] [-d [DOWN ...]] [-rmi] [-rmn]
-                 [-g [TAIL_LOGS ...]] [-c CREATE_PROFILE] [-s SET_PROFILE]
-                 [-e [RENDER ...]] [-a [DISPLAY_PROFILE ...]]
-                 [--list_snapshots] [--save_snapshot [SAVE_SNAPSHOT ...]]
+The parser help for `python manage.py -h`:
+
+```text
+usage: manage.py [-h] [-b [BUILD ...]] [-bnc [BUILD_NO_CACHE ...]]
+                 [--build-release] [-r [RUN ...]] [-p [STOP ...]]
+                 [-d [DOWN ...]] [-rmi] [-rmn] [-g [TAIL_LOGS ...]]
+                 [-c CREATE_PROFILE] [-s SET_PROFILE] [-e [RENDER ...]]
+                 [-a [DISPLAY_PROFILE ...]] [--list_snapshots]
+                 [--save_snapshot [SAVE_SNAPSHOT ...]]
                  [--restore_snapshot [RESTORE_SNAPSHOT ...]] [-n]
 
-manage.py: dq-dev, daiquiri docker compose dev setup
+manage.py: daiquiri docker compose dev setup
 
 options:
   -h, --help            show this help message and exit
   -b [BUILD ...], --build [BUILD ...]
                         build a profile's containers, exit when done
   -bnc [BUILD_NO_CACHE ...], --build_no_cache [BUILD_NO_CACHE ...]
-                        build a profile's containers without using cache, exit when done
+                        build a profile's containers without using cache, exit
+                        when done
+  --build-release       build and check a Daiquiri release, then stop the
+                        active profile
   -r [RUN ...], --run [RUN ...]
                         run a profile's containers, build if necessary
   -p [STOP ...], --stop [STOP ...]
@@ -147,5 +237,26 @@ options:
   -n, --dry_run         do not run any docker-compose commands nor save
                         rendered docker-compose.yaml, just print them
 
-If used without any arguments, the profile list is displayed
+If used without arg, profile list is displayed
 ```
+
+`--build-release` requires an active profile with both `dq_source` entries
+enabled. It starts the profile, waits for initialization, clears the source
+checkout's `dist/` directory, installs release dependencies, runs
+`daiquiri-admin build` and `twine check dist/*`, then stops the active profile.
+Artifacts are written to `dist/` in the mounted source checkout. See the framework's
+[release documentation](https://django-daiquiri.github.io/docs/release/) for the
+full maintainer workflow.
+
+Snapshot commands require a name, such as `--save_snapshot before_update` or
+`--restore_snapshot before_update`. They save ZIP archives in `usr/snapshots/`
+and restore files to their original profile path. The intended contents are the
+profile directory, including configuration, secrets, and any database data
+persisted inside it. The current relative-path handling can produce empty
+archives; check the archive contents before relying on a snapshot.
+
+`-n` skips Docker commands and writing the rendered Compose YAML. Initialization,
+Dockerfile rendering, and profile or snapshot operations can still change local
+files.
+
+Image removal with `-rmi` is currently unreliable.
